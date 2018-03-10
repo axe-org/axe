@@ -7,17 +7,6 @@ Axe is all the reinforcement this army needs.
 * TODO list
 * 日志打印问题。
 
-# 修改内容 
-
-1. 修复一个小bug [15492](https://github.com/facebook/react-native/issues/15492)
-2. 重新提交podspec ，命名为 `MXReact` 。大家可以通过 
-
-		pod 'MXReact'
-		
-	的方式去安装`react` ,而不是通过`npm`。
-
-
-
 # 开始
 
 ## 路由
@@ -59,3 +48,14 @@ Axe is all the reinforcement this army needs.
 * 扩展2 ： react-native支持 
 * 扩展3 ： 离线包支持
 * 模块配置模块
+
+
+## 扩展 
+
+#### TabBarViewController
+
+提供基础的 TabBarViewController。
+
+提供注册机制。 支持离线包形式的 h5和react-native的注册。
+
+* 考虑 要不要做 替换， 即将直接注册过来的路由进行替换。

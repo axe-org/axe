@@ -6,5 +6,10 @@ target 'Demo' do
   # use_frameworks!
 
   # Pods for Demo
-  pod 'Axe' , :path => '../../Axe.podspec'
+  pod 'Axe' , :path => '../../Axe.podspec' , :subspecs => [
+    'Core',
+    'TabBarController',
+    'Html'
+    ]
+  #pod 'MXReact', :path => '/Users/luoxianming/git/react-native/MXReact.podspec'
 end

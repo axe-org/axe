@@ -107,7 +107,3 @@ typedef UIViewController *(^AXEProtoclRouteForVCBlock)(NSString *sourceURL,NSDic
 // 默认protocol名称
 extern NSString *AXERouterDefaultProtocolName;
 
-/**
-  修改 axe 默认协议名称。
- */
-void setAXERouterCustomProtocolName(NSString *name);

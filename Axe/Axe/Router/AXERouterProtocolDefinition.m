@@ -36,7 +36,7 @@
                sourceURL:(NSString *)sourceURL {
     _calledTime ++;
     dispatch_async(dispatch_get_main_queue(), ^{
-        _block(fromVC,params,callbackBlock,sourceURL);
+        self->_block(fromVC,params,callbackBlock,sourceURL);
     });
 }
 

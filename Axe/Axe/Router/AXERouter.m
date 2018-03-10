@@ -115,7 +115,7 @@ static NSTimeInterval const RouteMinInterval = 1;
     [_preprocesses enumerateObjectsUsingBlock:^(AXERouterPreprocessBlock  _Nonnull block, NSUInteger idx, BOOL * _Nonnull stop) {
         block(request);
     }];
-    if ([request invalid]) {
+    if ([request checkRequestIsValid]) {
         [self routeRequest:request withCallBack:(AXERouterCallbackBlock)block];
     }
 }
@@ -153,7 +153,7 @@ static NSTimeInterval const RouteMinInterval = 1;
     [_preprocesses enumerateObjectsUsingBlock:^(AXERouterPreprocessBlock  _Nonnull block, NSUInteger idx, BOOL * _Nonnull stop) {
         block(request);
     }];
-    if ([request invalid]) {
+    if ([request checkRequestIsValid]) {
         if ([request.protocol isEqualToString:AXERouterDefaultProtocolName]) {
             // 如果是axe协议
             AXERouterDefinition *definition = _vcRoutes[request.pagePath];
@@ -191,8 +191,3 @@ static NSTimeInterval const RouteMinInterval = 1;
 
 // 默认协议名称为 axe 。
 NSString *AXERouterDefaultProtocolName = @"axe";
-void setAXERouterCustomProtocolName(NSString *name) {
-    NSCParameterAssert([name isKindOfClass:[NSString class]] && ![name isEqualToString:@""]);
-    
-    AXERouterDefaultProtocolName = [name copy];
-}

@@ -187,7 +187,7 @@ NSInteger const AXEEventDefaultPriority = 1;
                     // 序列执行先记录一下。
                     [asyncListeners addObject:listeners];
                 }else {
-                    dispatch_async(_concurrentQueue, ^{
+                    dispatch_async(self->_concurrentQueue, ^{
                         listener.handler(userInfo);
                     });
                 }

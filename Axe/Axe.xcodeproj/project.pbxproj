@@ -35,6 +35,12 @@
 		283B89D020523C9800681FA0 /* AXERouterProtocolDefinition.h in Headers */ = {isa = PBXBuildFile; fileRef = 283B89CE20523C9800681FA0 /* AXERouterProtocolDefinition.h */; };
 		283B89D120523C9800681FA0 /* AXERouterProtocolDefinition.m in Sources */ = {isa = PBXBuildFile; fileRef = 283B89CF20523C9800681FA0 /* AXERouterProtocolDefinition.m */; };
 		283B89D420527DF800681FA0 /* AXERouter+list.h in Headers */ = {isa = PBXBuildFile; fileRef = 283B89D320527DF800681FA0 /* AXERouter+list.h */; };
+		283B8AC22053C3DE00681FA0 /* AXEWebViewModule.h in Headers */ = {isa = PBXBuildFile; fileRef = 283B8AC02053C3DE00681FA0 /* AXEWebViewModule.h */; };
+		283B8AC32053C3DE00681FA0 /* AXEWebViewModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 283B8AC12053C3DE00681FA0 /* AXEWebViewModule.m */; };
+		283B8AC92053C42700681FA0 /* AXETabBarItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 283B8AC52053C42700681FA0 /* AXETabBarItem.h */; };
+		283B8ACA2053C42700681FA0 /* AXETabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 283B8AC62053C42700681FA0 /* AXETabBarController.m */; };
+		283B8ACB2053C42700681FA0 /* AXETabBarItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 283B8AC72053C42700681FA0 /* AXETabBarItem.m */; };
+		283B8ACC2053C42700681FA0 /* AXETabBarController.h in Headers */ = {isa = PBXBuildFile; fileRef = 283B8AC82053C42700681FA0 /* AXETabBarController.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -81,6 +87,12 @@
 		283B89CF20523C9800681FA0 /* AXERouterProtocolDefinition.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AXERouterProtocolDefinition.m; sourceTree = "<group>"; };
 		283B89D220527A0000681FA0 /* AXEDefines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AXEDefines.h; sourceTree = "<group>"; };
 		283B89D320527DF800681FA0 /* AXERouter+list.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AXERouter+list.h"; sourceTree = "<group>"; };
+		283B8AC02053C3DE00681FA0 /* AXEWebViewModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AXEWebViewModule.h; sourceTree = "<group>"; };
+		283B8AC12053C3DE00681FA0 /* AXEWebViewModule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AXEWebViewModule.m; sourceTree = "<group>"; };
+		283B8AC52053C42700681FA0 /* AXETabBarItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AXETabBarItem.h; sourceTree = "<group>"; };
+		283B8AC62053C42700681FA0 /* AXETabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AXETabBarController.m; sourceTree = "<group>"; };
+		283B8AC72053C42700681FA0 /* AXETabBarItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AXETabBarItem.m; sourceTree = "<group>"; };
+		283B8AC82053C42700681FA0 /* AXETabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AXETabBarController.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -193,32 +205,54 @@
 		283B899520502CA000681FA0 /* Extension */ = {
 			isa = PBXGroup;
 			children = (
-				283B899620502CA000681FA0 /* OfflinePackage */,
-				283B899720502CA000681FA0 /* Html */,
-				283B899820502CA000681FA0 /* React */,
+				283B8AC42053C42700681FA0 /* TabBarController */,
+				283B8A9C20539E6900681FA0 /* Html */,
+				283B8A9A20539E6900681FA0 /* OfflineHtml */,
+				283B8A9920539E6900681FA0 /* OfflineReact */,
+				283B8A9820539E6900681FA0 /* React */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
 		};
-		283B899620502CA000681FA0 /* OfflinePackage */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = OfflinePackage;
-			sourceTree = "<group>";
-		};
-		283B899720502CA000681FA0 /* Html */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Html;
-			sourceTree = "<group>";
-		};
-		283B899820502CA000681FA0 /* React */ = {
+		283B8A9820539E6900681FA0 /* React */ = {
 			isa = PBXGroup;
 			children = (
 			);
 			path = React;
+			sourceTree = "<group>";
+		};
+		283B8A9920539E6900681FA0 /* OfflineReact */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = OfflineReact;
+			sourceTree = "<group>";
+		};
+		283B8A9A20539E6900681FA0 /* OfflineHtml */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = OfflineHtml;
+			sourceTree = "<group>";
+		};
+		283B8A9C20539E6900681FA0 /* Html */ = {
+			isa = PBXGroup;
+			children = (
+				283B8AC02053C3DE00681FA0 /* AXEWebViewModule.h */,
+				283B8AC12053C3DE00681FA0 /* AXEWebViewModule.m */,
+			);
+			path = Html;
+			sourceTree = "<group>";
+		};
+		283B8AC42053C42700681FA0 /* TabBarController */ = {
+			isa = PBXGroup;
+			children = (
+				283B8AC52053C42700681FA0 /* AXETabBarItem.h */,
+				283B8AC62053C42700681FA0 /* AXETabBarController.m */,
+				283B8AC72053C42700681FA0 /* AXETabBarItem.m */,
+				283B8AC82053C42700681FA0 /* AXETabBarController.h */,
+			);
+			path = TabBarController;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -234,6 +268,7 @@
 				283B89AF205125D800681FA0 /* AXEEventListener.h in Headers */,
 				283B89BC20517C6700681FA0 /* AXEEXTScope.h in Headers */,
 				283B89C42052290800681FA0 /* AXERouterDefinition.h in Headers */,
+				283B8AC92053C42700681FA0 /* AXETabBarItem.h in Headers */,
 				283B89A72051218900681FA0 /* AXEAutoreleaseEvent.h in Headers */,
 				283B89C820522B0800681FA0 /* UIViewController+AXERouter.h in Headers */,
 				283B89B720516CF600681FA0 /* AXEEventUserInterfaceState.h in Headers */,
@@ -243,6 +278,8 @@
 				283B89BB20517C6700681FA0 /* AXEmetamacros.h in Headers */,
 				283B898920502B4F00681FA0 /* Axe.h in Headers */,
 				283B89A320502E2C00681FA0 /* AXEData.h in Headers */,
+				283B8AC22053C3DE00681FA0 /* AXEWebViewModule.h in Headers */,
+				283B8ACC2053C42700681FA0 /* AXETabBarController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -346,15 +383,18 @@
 			files = (
 				283B89C52052290800681FA0 /* AXERouterDefinition.m in Sources */,
 				283B89A420502E2C00681FA0 /* AXEData.m in Sources */,
+				283B8AC32053C3DE00681FA0 /* AXEWebViewModule.m in Sources */,
 				283B899C20502CBB00681FA0 /* AXERouter.m in Sources */,
 				283B89A82051218900681FA0 /* AXEAutoreleaseEvent.m in Sources */,
 				283B89B0205125D800681FA0 /* AXEEventListener.m in Sources */,
 				283B89B42051261600681FA0 /* AXEModuleInitializer.m in Sources */,
+				283B8ACA2053C42700681FA0 /* AXETabBarController.m in Sources */,
 				283B89C920522B0800681FA0 /* UIViewController+AXERouter.m in Sources */,
 				283B89D120523C9800681FA0 /* AXERouterProtocolDefinition.m in Sources */,
 				283B89C1205228C600681FA0 /* AXERouterRequest.m in Sources */,
 				283B89B820516CF600681FA0 /* AXEEventUserInterfaceState.m in Sources */,
 				283B89A020502DC100681FA0 /* AXEEvent.m in Sources */,
+				283B8ACB2053C42700681FA0 /* AXETabBarItem.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

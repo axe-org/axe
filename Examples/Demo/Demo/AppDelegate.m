@@ -7,6 +7,11 @@
 //
 
 #import "AppDelegate.h"
+#import "AXETabBarController.h"
+
+#import "ViewController.h"
+
+#import "Axe.h"
 
 @interface AppDelegate ()
 
@@ -17,6 +22,31 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
+    [[AXERouter sharedRouter] registerPagePath:@"a" withRouterForVCBlock:^UIViewController *(NSDictionary *params) {
+        ViewController *vc = [[ViewController alloc] init];
+        UINavigationController *nv = [[UINavigationController alloc] initWithRootViewController:vc];
+        return nv;
+    }];
+    
+    [[AXERouter sharedRouter] registerPagePath:@"b" withRouterForVCBlock:^UIViewController *(NSDictionary *params) {
+        ViewController *vc = [[ViewController alloc] init];
+        return vc;
+    }];
+    
+    AXETabBarItem *itema = [AXETabBarItem itemWithPagePath:@"A" routURL:@"axe://a"];
+    itema.title = @"A";
+    [AXETabBarController registerTabBarItem:itema];
+    
+    AXETabBarItem *itemb = [AXETabBarItem itemWithPagePath:@"B" routURL:@"axe://b"];
+    itemb.title = @"B";
+    [AXETabBarController registerTabBarItem:itemb];
+    
+    self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    AXETabBarController *rootViewController = [AXETabBarController AXETabBarController];
+    self.window.rootViewController = rootViewController;
+    [self.window makeKeyAndVisible];
+    
     return YES;
 }
 

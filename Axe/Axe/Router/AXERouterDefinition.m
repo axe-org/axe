@@ -35,7 +35,7 @@
            callbackBlock:(AXERouterCallbackBlock)callbackBlock {
     _calledTime ++ ;
     dispatch_async(dispatch_get_main_queue(), ^{
-        _block(fromVC,params,callbackBlock);
+        self->_block(fromVC,params,callbackBlock);
     });
 }
 
