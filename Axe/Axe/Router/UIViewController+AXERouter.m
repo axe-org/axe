@@ -8,6 +8,14 @@
 
 #import "UIViewController+AXERouter.h"
 
-@implementation UIViewController_AXERouter
+@implementation UIViewController(AXERouter)
+
+- (void)routeURL:(NSString *)url withParams:(NSDictionary *)params finishBlock:(AXERouterCallbackBlock)block {
+    return [[AXERouter sharedRouter] routeURL:url fromViewController:self withParams:params finishBlock:block];
+}
+
+- (void)routeURL:(NSString *)url {
+    return [[AXERouter sharedRouter] routeURL:url fromViewController:self];
+}
 
 @end

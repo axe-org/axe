@@ -1,14 +1,14 @@
 //
-//  AXEAutoRemoveEvent.m
+//  AXEAutoreleaseEvent.m
 //  Axe
 //
 //  Created by 罗贤明 on 2018/3/8.
 //  Copyright © 2018年 罗贤明. All rights reserved.
 //
 
-#import "AXEAutoRemoveEvent.h"
+#import "AXEAutoreleaseEvent.h"
 
-@implementation AXEAutoRemoveEvent
+@implementation AXEAutoreleaseEvent
 
 + (id<AXEListenerDisposable>)registerListenerForEventName:(NSString *)name
                                                   handler:(AXEEventHandlerBlock)handler {

@@ -7,7 +7,24 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "AXERouter.h"
 
+/**
+  路由的配置。 每个配置生成一个definition.
+ */
 @interface AXERouterDefinition : NSObject
+
+// 路由跳转的定义
++ (instancetype)definitionWithPagePath:(NSString *)path block:(AXERouterBlock)block;
+
+- (void)excuteWithFromVC:(UIViewController *)fromVC
+                  params:(NSDictionary *)params
+           callbackBlock:(AXERouterCallbackBlock)callbackBlock;
+
+// 返回ViewController的路由定义
++ (instancetype)definitionWithPagePath:(NSString *)path routeForVCBlock:(AXERouteForVCBlock)block;
+
+- (UIViewController *)getViewControllerWithParams:(NSDictionary *)params;
+
 
 @end

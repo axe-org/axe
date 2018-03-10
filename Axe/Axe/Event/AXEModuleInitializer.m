@@ -8,6 +8,36 @@
 
 #import "AXEModuleInitializer.h"
 
-@implementation AXEModuleInitializer
+NSString *const AXEEventModulesBeginInitializing = @"AXEEventModulesBeginInitializing";
+
+static NSMutableArray *registeredModules;
+
+@implementation AXEModuleInitializerManager
+
+
++ (void)registerModuleInitializer:(Class)initializer {
+    NSParameterAssert(initializer);
+    if ([initializer conformsToProtocol:@protocol(AXEModuleInitializer)]) {
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            registeredModules = [[NSMutableArray alloc] init];
+        });
+        [registeredModules addObject:initializer];
+    }else {
+        NSLog(@"模块初始程序 必须实现协议 AXEModuleInitializer , 当前类%@不支持",NSStringFromClass(initializer));
+    }
+}
+
+
++ (void)initializeModules {
+    for (Class cls in registeredModules) {
+        id<AXEModuleInitializer> initializer = [[cls alloc] init];
+        [initializer AEXInitialize];
+    }
+    [AXEEvent postEventName:AXEEventModulesBeginInitializing];
+}
 
 @end
+
+
+

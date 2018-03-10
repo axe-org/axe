@@ -7,7 +7,26 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "AXERouter.h"
 
+
+/**
+  协议路由的定义
+ */
 @interface AXERouterProtocolDefinition : NSObject
+
+// 跳转路由
++ (instancetype)definitionWithProtocol:(NSString *)protocol block:(AXEProtoclRouterBlock)block;
+
+- (void)excuteWithFromVC:(UIViewController *)fromVC
+                  params:(NSDictionary *)params
+           callbackBlock:(AXERouterCallbackBlock)callbackBlock
+               sourceURL:(NSString *)sourceURL;
+
+// 返回VC路由
++ (instancetype)definitionWithProtocol:(NSString *)protocol routeForVCBlock:(AXEProtoclRouteForVCBlock)block;
+
+- (UIViewController *)getViewControllerWithParams:(NSDictionary *)params
+                                        sourceURL:(NSString *)sourceURL;
 
 @end

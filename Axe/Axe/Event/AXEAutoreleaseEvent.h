@@ -1,5 +1,5 @@
 //
-//  AXEAutoRemoveEvent.h
+//  AXEAutoreleaseEvent.h
 //  Axe
 //
 //  Created by 罗贤明 on 2018/3/8.
@@ -12,7 +12,7 @@
 /**
  AXEEvent 的派生类， 提供了简单的 自动释放的事件监听， 在事件执行一次后，会自动取消监听。
  */
-@interface AXEAutoRemoveEvent : AXEEvent
+@interface AXEAutoreleaseEvent : AXEEvent
 
 
 /**

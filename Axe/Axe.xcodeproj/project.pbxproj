@@ -10,6 +10,31 @@
 		283B898220502B4F00681FA0 /* Axe.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 283B897820502B4F00681FA0 /* Axe.framework */; };
 		283B898720502B4F00681FA0 /* AxeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 283B898620502B4F00681FA0 /* AxeTests.m */; };
 		283B898920502B4F00681FA0 /* Axe.h in Headers */ = {isa = PBXBuildFile; fileRef = 283B897B20502B4F00681FA0 /* Axe.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		283B899B20502CBB00681FA0 /* AXERouter.h in Headers */ = {isa = PBXBuildFile; fileRef = 283B899920502CBB00681FA0 /* AXERouter.h */; };
+		283B899C20502CBB00681FA0 /* AXERouter.m in Sources */ = {isa = PBXBuildFile; fileRef = 283B899A20502CBB00681FA0 /* AXERouter.m */; };
+		283B899F20502DC100681FA0 /* AXEEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 283B899D20502DC100681FA0 /* AXEEvent.h */; };
+		283B89A020502DC100681FA0 /* AXEEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 283B899E20502DC100681FA0 /* AXEEvent.m */; };
+		283B89A320502E2C00681FA0 /* AXEData.h in Headers */ = {isa = PBXBuildFile; fileRef = 283B89A120502E2C00681FA0 /* AXEData.h */; };
+		283B89A420502E2C00681FA0 /* AXEData.m in Sources */ = {isa = PBXBuildFile; fileRef = 283B89A220502E2C00681FA0 /* AXEData.m */; };
+		283B89A72051218900681FA0 /* AXEAutoreleaseEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 283B89A52051218900681FA0 /* AXEAutoreleaseEvent.h */; };
+		283B89A82051218900681FA0 /* AXEAutoreleaseEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 283B89A62051218900681FA0 /* AXEAutoreleaseEvent.m */; };
+		283B89AF205125D800681FA0 /* AXEEventListener.h in Headers */ = {isa = PBXBuildFile; fileRef = 283B89AD205125D800681FA0 /* AXEEventListener.h */; };
+		283B89B0205125D800681FA0 /* AXEEventListener.m in Sources */ = {isa = PBXBuildFile; fileRef = 283B89AE205125D800681FA0 /* AXEEventListener.m */; };
+		283B89B32051261600681FA0 /* AXEModuleInitializer.h in Headers */ = {isa = PBXBuildFile; fileRef = 283B89B12051261600681FA0 /* AXEModuleInitializer.h */; };
+		283B89B42051261600681FA0 /* AXEModuleInitializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 283B89B22051261600681FA0 /* AXEModuleInitializer.m */; };
+		283B89B720516CF600681FA0 /* AXEEventUserInterfaceState.h in Headers */ = {isa = PBXBuildFile; fileRef = 283B89B520516CF600681FA0 /* AXEEventUserInterfaceState.h */; };
+		283B89B820516CF600681FA0 /* AXEEventUserInterfaceState.m in Sources */ = {isa = PBXBuildFile; fileRef = 283B89B620516CF600681FA0 /* AXEEventUserInterfaceState.m */; };
+		283B89BB20517C6700681FA0 /* AXEmetamacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 283B89B920517C6600681FA0 /* AXEmetamacros.h */; };
+		283B89BC20517C6700681FA0 /* AXEEXTScope.h in Headers */ = {isa = PBXBuildFile; fileRef = 283B89BA20517C6700681FA0 /* AXEEXTScope.h */; };
+		283B89C0205228C600681FA0 /* AXERouterRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 283B89BE205228C600681FA0 /* AXERouterRequest.h */; };
+		283B89C1205228C600681FA0 /* AXERouterRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 283B89BF205228C600681FA0 /* AXERouterRequest.m */; };
+		283B89C42052290800681FA0 /* AXERouterDefinition.h in Headers */ = {isa = PBXBuildFile; fileRef = 283B89C22052290800681FA0 /* AXERouterDefinition.h */; };
+		283B89C52052290800681FA0 /* AXERouterDefinition.m in Sources */ = {isa = PBXBuildFile; fileRef = 283B89C32052290800681FA0 /* AXERouterDefinition.m */; };
+		283B89C820522B0800681FA0 /* UIViewController+AXERouter.h in Headers */ = {isa = PBXBuildFile; fileRef = 283B89C620522B0800681FA0 /* UIViewController+AXERouter.h */; };
+		283B89C920522B0800681FA0 /* UIViewController+AXERouter.m in Sources */ = {isa = PBXBuildFile; fileRef = 283B89C720522B0800681FA0 /* UIViewController+AXERouter.m */; };
+		283B89D020523C9800681FA0 /* AXERouterProtocolDefinition.h in Headers */ = {isa = PBXBuildFile; fileRef = 283B89CE20523C9800681FA0 /* AXERouterProtocolDefinition.h */; };
+		283B89D120523C9800681FA0 /* AXERouterProtocolDefinition.m in Sources */ = {isa = PBXBuildFile; fileRef = 283B89CF20523C9800681FA0 /* AXERouterProtocolDefinition.m */; };
+		283B89D420527DF800681FA0 /* AXERouter+list.h in Headers */ = {isa = PBXBuildFile; fileRef = 283B89D320527DF800681FA0 /* AXERouter+list.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,6 +54,33 @@
 		283B898120502B4F00681FA0 /* AxeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AxeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		283B898620502B4F00681FA0 /* AxeTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AxeTests.m; sourceTree = "<group>"; };
 		283B898820502B4F00681FA0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		283B899920502CBB00681FA0 /* AXERouter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AXERouter.h; sourceTree = "<group>"; };
+		283B899A20502CBB00681FA0 /* AXERouter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AXERouter.m; sourceTree = "<group>"; };
+		283B899D20502DC100681FA0 /* AXEEvent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AXEEvent.h; sourceTree = "<group>"; };
+		283B899E20502DC100681FA0 /* AXEEvent.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AXEEvent.m; sourceTree = "<group>"; };
+		283B89A120502E2C00681FA0 /* AXEData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AXEData.h; sourceTree = "<group>"; };
+		283B89A220502E2C00681FA0 /* AXEData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AXEData.m; sourceTree = "<group>"; };
+		283B89A52051218900681FA0 /* AXEAutoreleaseEvent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AXEAutoreleaseEvent.h; sourceTree = "<group>"; };
+		283B89A62051218900681FA0 /* AXEAutoreleaseEvent.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AXEAutoreleaseEvent.m; sourceTree = "<group>"; };
+		283B89AD205125D800681FA0 /* AXEEventListener.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AXEEventListener.h; sourceTree = "<group>"; };
+		283B89AE205125D800681FA0 /* AXEEventListener.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AXEEventListener.m; sourceTree = "<group>"; };
+		283B89B12051261600681FA0 /* AXEModuleInitializer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AXEModuleInitializer.h; sourceTree = "<group>"; };
+		283B89B22051261600681FA0 /* AXEModuleInitializer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AXEModuleInitializer.m; sourceTree = "<group>"; };
+		283B89B520516CF600681FA0 /* AXEEventUserInterfaceState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AXEEventUserInterfaceState.h; sourceTree = "<group>"; };
+		283B89B620516CF600681FA0 /* AXEEventUserInterfaceState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AXEEventUserInterfaceState.m; sourceTree = "<group>"; };
+		283B89B920517C6600681FA0 /* AXEmetamacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AXEmetamacros.h; sourceTree = "<group>"; };
+		283B89BA20517C6700681FA0 /* AXEEXTScope.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AXEEXTScope.h; sourceTree = "<group>"; };
+		283B89BD205183C000681FA0 /* AXEEventUserInterfaceState+Event.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AXEEventUserInterfaceState+Event.h"; sourceTree = "<group>"; };
+		283B89BE205228C600681FA0 /* AXERouterRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AXERouterRequest.h; sourceTree = "<group>"; };
+		283B89BF205228C600681FA0 /* AXERouterRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AXERouterRequest.m; sourceTree = "<group>"; };
+		283B89C22052290800681FA0 /* AXERouterDefinition.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AXERouterDefinition.h; sourceTree = "<group>"; };
+		283B89C32052290800681FA0 /* AXERouterDefinition.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AXERouterDefinition.m; sourceTree = "<group>"; };
+		283B89C620522B0800681FA0 /* UIViewController+AXERouter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIViewController+AXERouter.h"; sourceTree = "<group>"; };
+		283B89C720522B0800681FA0 /* UIViewController+AXERouter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+AXERouter.m"; sourceTree = "<group>"; };
+		283B89CE20523C9800681FA0 /* AXERouterProtocolDefinition.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AXERouterProtocolDefinition.h; sourceTree = "<group>"; };
+		283B89CF20523C9800681FA0 /* AXERouterProtocolDefinition.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AXERouterProtocolDefinition.m; sourceTree = "<group>"; };
+		283B89D220527A0000681FA0 /* AXEDefines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AXEDefines.h; sourceTree = "<group>"; };
+		283B89D320527DF800681FA0 /* AXERouter+list.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AXERouter+list.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +106,7 @@
 			isa = PBXGroup;
 			children = (
 				283B897A20502B4F00681FA0 /* Axe */,
+				283B899520502CA000681FA0 /* Extension */,
 				283B898520502B4F00681FA0 /* AxeTests */,
 				283B897920502B4F00681FA0 /* Products */,
 			);
@@ -71,7 +124,11 @@
 		283B897A20502B4F00681FA0 /* Axe */ = {
 			isa = PBXGroup;
 			children = (
+				283B899320502C0300681FA0 /* Data */,
+				283B899420502C0300681FA0 /* Event */,
+				283B899220502C0300681FA0 /* Router */,
 				283B897B20502B4F00681FA0 /* Axe.h */,
+				283B89D220527A0000681FA0 /* AXEDefines.h */,
 				283B897C20502B4F00681FA0 /* Info.plist */,
 			);
 			path = Axe;
@@ -86,6 +143,84 @@
 			path = AxeTests;
 			sourceTree = "<group>";
 		};
+		283B899220502C0300681FA0 /* Router */ = {
+			isa = PBXGroup;
+			children = (
+				283B89D320527DF800681FA0 /* AXERouter+list.h */,
+				283B899920502CBB00681FA0 /* AXERouter.h */,
+				283B899A20502CBB00681FA0 /* AXERouter.m */,
+				283B89BE205228C600681FA0 /* AXERouterRequest.h */,
+				283B89BF205228C600681FA0 /* AXERouterRequest.m */,
+				283B89C22052290800681FA0 /* AXERouterDefinition.h */,
+				283B89C32052290800681FA0 /* AXERouterDefinition.m */,
+				283B89C620522B0800681FA0 /* UIViewController+AXERouter.h */,
+				283B89C720522B0800681FA0 /* UIViewController+AXERouter.m */,
+				283B89CE20523C9800681FA0 /* AXERouterProtocolDefinition.h */,
+				283B89CF20523C9800681FA0 /* AXERouterProtocolDefinition.m */,
+			);
+			path = Router;
+			sourceTree = "<group>";
+		};
+		283B899320502C0300681FA0 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				283B89A120502E2C00681FA0 /* AXEData.h */,
+				283B89A220502E2C00681FA0 /* AXEData.m */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		283B899420502C0300681FA0 /* Event */ = {
+			isa = PBXGroup;
+			children = (
+				283B89BA20517C6700681FA0 /* AXEEXTScope.h */,
+				283B89B920517C6600681FA0 /* AXEmetamacros.h */,
+				283B89B520516CF600681FA0 /* AXEEventUserInterfaceState.h */,
+				283B89B620516CF600681FA0 /* AXEEventUserInterfaceState.m */,
+				283B899D20502DC100681FA0 /* AXEEvent.h */,
+				283B899E20502DC100681FA0 /* AXEEvent.m */,
+				283B89A52051218900681FA0 /* AXEAutoreleaseEvent.h */,
+				283B89A62051218900681FA0 /* AXEAutoreleaseEvent.m */,
+				283B89AD205125D800681FA0 /* AXEEventListener.h */,
+				283B89AE205125D800681FA0 /* AXEEventListener.m */,
+				283B89B12051261600681FA0 /* AXEModuleInitializer.h */,
+				283B89B22051261600681FA0 /* AXEModuleInitializer.m */,
+				283B89BD205183C000681FA0 /* AXEEventUserInterfaceState+Event.h */,
+			);
+			path = Event;
+			sourceTree = "<group>";
+		};
+		283B899520502CA000681FA0 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				283B899620502CA000681FA0 /* OfflinePackage */,
+				283B899720502CA000681FA0 /* Html */,
+				283B899820502CA000681FA0 /* React */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
+		283B899620502CA000681FA0 /* OfflinePackage */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = OfflinePackage;
+			sourceTree = "<group>";
+		};
+		283B899720502CA000681FA0 /* Html */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Html;
+			sourceTree = "<group>";
+		};
+		283B899820502CA000681FA0 /* React */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = React;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -93,7 +228,21 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				283B89D420527DF800681FA0 /* AXERouter+list.h in Headers */,
+				283B899F20502DC100681FA0 /* AXEEvent.h in Headers */,
+				283B89D020523C9800681FA0 /* AXERouterProtocolDefinition.h in Headers */,
+				283B89AF205125D800681FA0 /* AXEEventListener.h in Headers */,
+				283B89BC20517C6700681FA0 /* AXEEXTScope.h in Headers */,
+				283B89C42052290800681FA0 /* AXERouterDefinition.h in Headers */,
+				283B89A72051218900681FA0 /* AXEAutoreleaseEvent.h in Headers */,
+				283B89C820522B0800681FA0 /* UIViewController+AXERouter.h in Headers */,
+				283B89B720516CF600681FA0 /* AXEEventUserInterfaceState.h in Headers */,
+				283B899B20502CBB00681FA0 /* AXERouter.h in Headers */,
+				283B89B32051261600681FA0 /* AXEModuleInitializer.h in Headers */,
+				283B89C0205228C600681FA0 /* AXERouterRequest.h in Headers */,
+				283B89BB20517C6700681FA0 /* AXEmetamacros.h in Headers */,
 				283B898920502B4F00681FA0 /* Axe.h in Headers */,
+				283B89A320502E2C00681FA0 /* AXEData.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -195,6 +344,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				283B89C52052290800681FA0 /* AXERouterDefinition.m in Sources */,
+				283B89A420502E2C00681FA0 /* AXEData.m in Sources */,
+				283B899C20502CBB00681FA0 /* AXERouter.m in Sources */,
+				283B89A82051218900681FA0 /* AXEAutoreleaseEvent.m in Sources */,
+				283B89B0205125D800681FA0 /* AXEEventListener.m in Sources */,
+				283B89B42051261600681FA0 /* AXEModuleInitializer.m in Sources */,
+				283B89C920522B0800681FA0 /* UIViewController+AXERouter.m in Sources */,
+				283B89D120523C9800681FA0 /* AXERouterProtocolDefinition.m in Sources */,
+				283B89C1205228C600681FA0 /* AXERouterRequest.m in Sources */,
+				283B89B820516CF600681FA0 /* AXEEventUserInterfaceState.m in Sources */,
+				283B89A020502DC100681FA0 /* AXEEvent.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -339,7 +499,9 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = Axe/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = mh_dylib;
 				PRODUCT_BUNDLE_IDENTIFIER = org.Axe;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -359,7 +521,9 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = Axe/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = mh_dylib;
 				PRODUCT_BUNDLE_IDENTIFIER = org.Axe;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
