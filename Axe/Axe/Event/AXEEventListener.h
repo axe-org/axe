@@ -31,7 +31,7 @@
 /**
   回调block
  */
-@property (nonatomic,copy) void (^handler)(NSDictionary *);
+@property (nonatomic,copy) AXEEventHandlerBlock handler;
 
 
 /**

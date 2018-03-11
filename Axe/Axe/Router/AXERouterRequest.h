@@ -61,7 +61,7 @@
 /**
   参数
  */
-@property (nonatomic,copy) NSDictionary *params;
+@property (nonatomic,readonly,strong) AXEData *params;
 
 /**
   所在页面.
@@ -70,7 +70,7 @@
 
 // 工厂方法。
 + (instancetype)requestWithSourceURL:(NSString *)sourceURL
-                              params:(NSDictionary *)params
+                              params:(AXEData *)params
                               fromVC:(UIViewController *)fromVC;
 
 /**

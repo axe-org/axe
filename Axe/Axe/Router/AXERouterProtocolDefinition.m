@@ -31,7 +31,7 @@
 }
 
 - (void)excuteWithFromVC:(UIViewController *)fromVC
-                  params:(NSDictionary *)params
+                  params:(AXEData *)params
            callbackBlock:(AXERouterCallbackBlock)callbackBlock
                sourceURL:(NSString *)sourceURL {
     _calledTime ++;
@@ -54,7 +54,7 @@
     return definition;
 }
 
-- (UIViewController *)getViewControllerWithParams:(NSDictionary *)params
+- (UIViewController *)getViewControllerWithParams:(AXEData *)params
                                         sourceURL:(NSString *)sourceURL {
     _calledTime ++;
     return _getVCBlock(sourceURL,params);

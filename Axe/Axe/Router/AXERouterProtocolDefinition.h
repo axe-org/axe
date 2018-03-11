@@ -19,14 +19,14 @@
 + (instancetype)definitionWithProtocol:(NSString *)protocol block:(AXEProtoclRouterBlock)block;
 
 - (void)excuteWithFromVC:(UIViewController *)fromVC
-                  params:(NSDictionary *)params
+                  params:(AXEData *)params
            callbackBlock:(AXERouterCallbackBlock)callbackBlock
                sourceURL:(NSString *)sourceURL;
 
 // 返回VC路由
 + (instancetype)definitionWithProtocol:(NSString *)protocol routeForVCBlock:(AXEProtoclRouteForVCBlock)block;
 
-- (UIViewController *)getViewControllerWithParams:(NSDictionary *)params
+- (UIViewController *)getViewControllerWithParams:(AXEData *)params
                                         sourceURL:(NSString *)sourceURL;
 
 @end

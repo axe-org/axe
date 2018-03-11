@@ -23,7 +23,7 @@
                                                      priority:(NSInteger)priority {
     id<AXEListenerDisposable> disposable;
     AXEEventHandlerBlock internalHandler = [handler copy];
-    disposable = [AXEEvent registerSyncListenerForEventName:name handler:^(NSDictionary *info) {
+    disposable = [AXEEvent registerSyncListenerForEventName:name handler:^(AXEData *info) {
         internalHandler(info);
         [disposable dispose];
     } priority:priority];
@@ -38,7 +38,7 @@
                                                  inSerialQueue:(BOOL)isSerial {
     id<AXEListenerDisposable> disposable;
     AXEEventHandlerBlock internalHandler = [handler copy];
-    disposable = [AXEEvent registerAsyncListenerForEventName:name handler:^(NSDictionary *info) {
+    disposable = [AXEEvent registerAsyncListenerForEventName:name handler:^(AXEData *info) {
         internalHandler(info);
         [disposable dispose];
     } priority:priority inSerialQueue:isSerial];
@@ -52,7 +52,7 @@
                                               inUIContainer:(id<AXEEventUserInterfaceContainer>)container {
     id<AXEListenerDisposable> disposable;
     AXEEventHandlerBlock internalHandler = [handler copy];
-    disposable = [AXEEvent registerUIListenerForEventName:name handler:^(NSDictionary *info) {
+    disposable = [AXEEvent registerUIListenerForEventName:name handler:^(AXEData *info) {
         internalHandler(info);
         [disposable dispose];
     } priority:priority inUIContainer:container];

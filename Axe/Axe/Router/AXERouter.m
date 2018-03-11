@@ -97,10 +97,10 @@
 
 static NSTimeInterval const RouteMinInterval = 1;
 
-- (void)routeURL:(NSString *)url fromViewController:(UIViewController *)fromVC withParams:(NSDictionary *)params finishBlock:(AXERouterCallbackBlock)block {
+- (void)routeURL:(NSString *)url fromViewController:(UIViewController *)fromVC withParams:(AXEData *)params finishBlock:(AXERouterCallbackBlock)block {
     NSParameterAssert([url isKindOfClass:[NSString class]]);
     NSParameterAssert([fromVC isKindOfClass:[UIViewController class]]);
-    NSParameterAssert(!params || [params isKindOfClass:[NSDictionary class]]);
+    NSParameterAssert(!params || [params isKindOfClass:[AXEData class]]);
     
     static NSTimeInterval lastRouteTime = 0;
     NSTimeInterval now = [[NSDate date] timeIntervalSince1970];
@@ -145,7 +145,7 @@ static NSTimeInterval const RouteMinInterval = 1;
     return [self routeURL:url fromViewController:vc withParams:nil finishBlock:nil];
 }
 
-- (UIViewController *)viewControllerForRouterURL:(NSString *)url params:(NSDictionary *)params {
+- (UIViewController *)viewControllerForRouterURL:(NSString *)url params:(AXEData *)params {
     NSParameterAssert([url isKindOfClass:[NSString class]]);
     NSParameterAssert(!params || [params isKindOfClass:[NSDictionary class]]);
     

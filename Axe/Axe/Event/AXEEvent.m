@@ -146,17 +146,17 @@ NSInteger const AXEEventDefaultPriority = 1;
 + (void)postEventName:(NSString *)name {
     NSParameterAssert([name isKindOfClass:[NSString class]]);
     
-    [[AXEEvent sharedInstance] dispatchEventName:name userInfo:nil];
+    [[AXEEvent sharedInstance] dispatchEventName:name withPayload:nil];
 }
 
-+ (void)postEventName:(NSString *)name userInfo:(NSDictionary *)userInfo {
++ (void)postEventName:(NSString *)name withPayload:(AXEData *)payload {
     NSParameterAssert([name isKindOfClass:[NSString class]]);
-    NSParameterAssert(!userInfo || [userInfo isKindOfClass:[NSDictionary class]]);
+    NSParameterAssert(!payload || [payload isKindOfClass:[AXEData class]]);
     
-    [[AXEEvent sharedInstance] dispatchEventName:name userInfo:userInfo];
+    [[AXEEvent sharedInstance] dispatchEventName:name withPayload:payload];
 }
 
-- (void)dispatchEventName:(NSString *)name userInfo:(NSDictionary *)userInfo {
+- (void)dispatchEventName:(NSString *)name withPayload:(AXEData *)payload {
     AXEEventListenerPriorityQueue *listeners = _listeners[name];
     if (listeners) {
         AXELogTrace(@"发送事件 %@ 。" , name);
@@ -170,7 +170,7 @@ NSInteger const AXEEventDefaultPriority = 1;
                 }else {
                     // UI线程事件处理。
                     dispatch_block_t block= ^{
-                        listener.handler(userInfo);
+                        listener.handler(payload);
                     };
                     if (listener.containerState.inFront) {
                         dispatch_async(dispatch_get_main_queue(), block);
@@ -180,7 +180,7 @@ NSInteger const AXEEventDefaultPriority = 1;
                 }
             }else if (!listener.asynchronous) {
                 // 同步执行。
-                listener.handler(userInfo);
+                listener.handler(payload);
             }else {
                 // 异步执行。
                 if (listener.serial) {
@@ -188,7 +188,7 @@ NSInteger const AXEEventDefaultPriority = 1;
                     [asyncListeners addObject:listeners];
                 }else {
                     dispatch_async(self->_concurrentQueue, ^{
-                        listener.handler(userInfo);
+                        listener.handler(payload);
                     });
                 }
             }
@@ -197,7 +197,7 @@ NSInteger const AXEEventDefaultPriority = 1;
             dispatch_queue_t queue = [self getSerailQueue];
             dispatch_async(queue, ^{
                 [asyncListeners enumerateObjectsUsingBlock:^(AXEEventListener *listener, NSUInteger idx, BOOL * _Nonnull stop) {
-                    listener.handler(userInfo);
+                    listener.handler(payload);
                 }];
             });
         }
@@ -219,24 +219,34 @@ NSInteger const AXEEventDefaultPriority = 1;
 + (void)translateNotification:(NSString *)notificationName {
     NSParameterAssert([notificationName isKindOfClass:[NSString class]]);
     
-    [[NSNotificationCenter defaultCenter] addObserver:[AXEEvent sharedInstance]
+    [[AXEEvent sharedInstance] translateNotification:notificationName];
+}
+
+- (void)translateNotification:(NSString *)notificationName {
+    [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(dispatchNotification:)
                                                  name:notificationName
                                                object:nil];
 }
 
+
 - (void)dispatchNotification:(NSNotification *)notification {
-    [[AXEEvent sharedInstance] dispatchEventName:notification.name userInfo:notification.userInfo];
+    AXEData *data;
+    if ([notification.userInfo isKindOfClass:[NSDictionary class]]) {
+        data = [AXEData dataForTransmission];
+        [data setData:notification.userInfo forKey:AXEEventNotificationUserInfoKey];
+    }
+    [[AXEEvent sharedInstance] dispatchEventName:notification.name withPayload:data];
 }
 
 - (void)setupDefaultUIEvent {
-    [AXEEvent translateNotification:UIApplicationDidEnterBackgroundNotification];
-    [AXEEvent translateNotification:UIApplicationWillEnterForegroundNotification];
-    [AXEEvent translateNotification:UIApplicationDidBecomeActiveNotification];
-    [AXEEvent translateNotification:UIApplicationWillResignActiveNotification];
-    [AXEEvent translateNotification:UIApplicationWillTerminateNotification];
+    [self translateNotification:UIApplicationDidEnterBackgroundNotification];
+    [self translateNotification:UIApplicationWillEnterForegroundNotification];
+    [self translateNotification:UIApplicationDidBecomeActiveNotification];
+    [self translateNotification:UIApplicationWillResignActiveNotification];
+    [self translateNotification:UIApplicationWillTerminateNotification];
 }
 @end
 
-
+NSString *const AXEEventNotificationUserInfoKey = @"userInfo";
 

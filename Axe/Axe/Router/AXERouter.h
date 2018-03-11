@@ -8,18 +8,19 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import "AXEData.h"
 
 
 // 回调block
-typedef void (^AXERouterCallbackBlock)(NSDictionary *payload);
+typedef void (^AXERouterCallbackBlock)(AXEData *payload);
 // 路由block
-typedef void (^AXERouterBlock)(UIViewController *fromVC,NSDictionary *params,AXERouterCallbackBlock callback);
+typedef void (^AXERouterBlock)(UIViewController *fromVC,AXEData *params,AXERouterCallbackBlock callback);
 // 返回 UIViewController形式的 路由block
-typedef UIViewController *(^AXERouteForVCBlock)(NSDictionary *params);
+typedef UIViewController *(^AXERouteForVCBlock)(AXEData *params);
 // 协议注册的路由block
-typedef void (^AXEProtoclRouterBlock)(UIViewController *fromVC,NSDictionary *params,AXERouterCallbackBlock callback,NSString *sourceURL);
+typedef void (^AXEProtoclRouterBlock)(UIViewController *fromVC,AXEData *params,AXERouterCallbackBlock callback,NSString *sourceURL);
 // 协议注册的 返回 VC形式 的路由。
-typedef UIViewController *(^AXEProtoclRouteForVCBlock)(NSString *sourceURL,NSDictionary *params);
+typedef UIViewController *(^AXEProtoclRouteForVCBlock)(NSString *sourceURL,AXEData *params);
 /**
   路由， 负责根据URL实现页面跳转。
  管理URL，管理模块。
@@ -45,7 +46,7 @@ typedef UIViewController *(^AXEProtoclRouteForVCBlock)(NSString *sourceURL,NSDic
  @param params 传递参数
  @param block 回调。
  */
-- (void)routeURL:(NSString *)url fromViewController:(UIViewController *)fromVC withParams:(NSDictionary *)params finishBlock:(AXERouterCallbackBlock)block;
+- (void)routeURL:(NSString *)url fromViewController:(UIViewController *)fromVC withParams:(AXEData *)params finishBlock:(AXERouterCallbackBlock)block;
 
 
 /**
@@ -64,7 +65,7 @@ typedef UIViewController *(^AXEProtoclRouteForVCBlock)(NSString *sourceURL,NSDic
  @param params 参数
  @return 返回 UIViewController， 需要注意 ， 如果路由没有注册，这里返回空值时， 要考虑崩溃处理问题。
  */
-- (UIViewController *)viewControllerForRouterURL:(NSString *)url params:(NSDictionary *)params;
+- (UIViewController *)viewControllerForRouterURL:(NSString *)url params:(AXEData *)params;
 
 #pragma mark - register
 

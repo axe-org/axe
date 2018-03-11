@@ -11,5 +11,12 @@ target 'Demo' do
     'TabBarController',
     'Html'
     ]
-  #pod 'MXReact', :path => '/Users/luoxianming/git/react-native/MXReact.podspec'
+  # pod 'MXReact', :podspec => '/Users/luoxianming/git/react-native/MXReact.podspec' , :subspecs =>  [
+  #  'Core',
+  #  'CxxBridge', # Include this for RN >= 0.47
+  #   'RCTNetwork',
+  #   'DevSupport', # Include this to enable In-App Devmenu if RN >= 0.43
+  #   'RCTWebSocket', 
+  # ]
+
 end

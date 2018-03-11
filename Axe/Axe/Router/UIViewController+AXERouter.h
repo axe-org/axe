@@ -20,7 +20,7 @@
  @param params 传递参数
  @param block 回调。
  */
-- (void)routeURL:(NSString *)url withParams:(NSDictionary *)params finishBlock:(AXERouterCallbackBlock)block;
+- (void)routeURL:(NSString *)url withParams:(AXEData *)params finishBlock:(AXERouterCallbackBlock)block;
 
 
 /**

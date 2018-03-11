@@ -8,12 +8,13 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import "AXEData.h"
 #import "AXEEXTScope.h"
 
 /**
     事件回调block。 参数info 与 NSNotification 所带信息相同。
  */
-typedef void(^AXEEventHandlerBlock)(NSDictionary *info);
+typedef void(^AXEEventHandlerBlock)(AXEData *payload);
 
 // 默认事件优先级 ,为1 。 事件支持优先级， 越高就能越快处理。
 extern NSInteger const AXEEventDefaultPriority;
@@ -64,15 +65,17 @@ extern NSInteger const AXEEventDefaultPriority;
   发送事件通知
 
  @param name 名称
- @param userInfo 附带的信息。
+ @param payload 附带的信息。
  */
-+ (void)postEventName:(NSString *)name userInfo:(NSDictionary *)userInfo;
++ (void)postEventName:(NSString *)name withPayload:(AXEData *)payload;
 
 
 
 /**
   将 NSNotification的通知转换为 AXEEvent通知。
-
+  需要注意的是， 这里附带的用户信息， 在 NSNotification中发送的是 NSDictionary
+  转换成 AXEData , 然后存在 @"userInfo"中。
+ 
  @param notificationName 原通知名称。
  */
 + (void)translateNotification:(NSString *)notificationName;
@@ -151,4 +154,4 @@ UIKIT_EXTERN NSNotificationName const UIApplicationDidBecomeActiveNotification;
 UIKIT_EXTERN NSNotificationName const UIApplicationWillResignActiveNotification;
 UIKIT_EXTERN NSNotificationName const UIApplicationWillTerminateNotification;
 
-
+extern NSString *const AXEEventNotificationUserInfoKey;

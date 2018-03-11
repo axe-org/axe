@@ -10,7 +10,7 @@
 
 @implementation UIViewController(AXERouter)
 
-- (void)routeURL:(NSString *)url withParams:(NSDictionary *)params finishBlock:(AXERouterCallbackBlock)block {
+- (void)routeURL:(NSString *)url withParams:(AXEData *)params finishBlock:(AXERouterCallbackBlock)block {
     return [[AXERouter sharedRouter] routeURL:url fromViewController:self withParams:params finishBlock:block];
 }
 

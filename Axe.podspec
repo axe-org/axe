@@ -22,11 +22,11 @@ Pod::Spec.new do |s|
   end
   s.subspec "TabBarController" do |ss|
     ss.dependency             "Axe/Core"
-    ss.source_files           = "Axe/Extension/TabBarController/*.{h,.m}"
+    ss.source_files           = "Axe/Extension/TabBarController/*.{h,m}"
   end
   s.subspec "Html" do |ss|
     ss.dependency             "Axe/Core"
     ss.dependency             "WebViewJavascriptBridge"
-    ss.source_files           = "Axe/Extension/Html/*.{h,.m}"
+    ss.source_files           = "Axe/Extension/Html/*.{h,m}"
   end
 end

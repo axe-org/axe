@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
+// data
+#import "AXEData.h"
+#import "AXEJavaScriptModelData.h"
+#import "AXEData+JavaScriptSupport.h"
 
 // event
 #import "AXEEvent.h"

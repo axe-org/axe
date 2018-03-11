@@ -2,12 +2,150 @@
 //  AXEData.m
 //  Axe
 //
-//  Created by 罗贤明 on 2018/3/7.
+//  Created by 罗贤明 on 2018/3/11.
 //  Copyright © 2018年 罗贤明. All rights reserved.
 //
 
 #import "AXEData.h"
+#import "AXEBaseData.h"
+#import "AXEBasicTypeData.h"
+#import "AXEModelTypeData.h"
+#import "AXEDefines.h"
+
+@interface AXEData()
+
+@property (nonatomic,strong) NSMutableDictionary<NSString *,AXEBaseData *> *storedDatas;
+
+@end
 
 @implementation AXEData
+
++ (instancetype)sharedData {
+    static AXEData *instance;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        instance = [[AXEData alloc] init];
+        instance.storedDatas = [[NSMutableDictionary alloc] initWithCapacity:100];
+    });
+    return instance;
+}
+
++ (instancetype)dataForTransmission {
+    AXEData *data = [[AXEData alloc] init];
+    data.storedDatas = [[NSMutableDictionary alloc] init];
+    return data;
+}
+
+- (void)setData:(id)data forKey:(NSString *)key {
+    if (data && [key isKindOfClass:[NSString class]]) {
+        if ([data isKindOfClass:[NSNumber class]]) {
+            AXELogTrace(@"存储数据 : %@ = %@",key,data);
+            [_storedDatas setObject:[AXEBasicTypeData basicDataWithNumber:data] forKey:key];
+        }else if ([data isKindOfClass:[NSString class]]) {
+            AXELogTrace(@"存储数据 : %@ = %@",key,data);
+            [_storedDatas setObject:[AXEBasicTypeData basicDataWithString:data] forKey:key];
+        }else if ([data isKindOfClass:[NSArray class]]) {
+            AXELogTrace(@"存储数据 : %@ = %@",key,data);
+            [_storedDatas setObject:[AXEBasicTypeData basicDataWithArray:data] forKey:key];
+        }else if([data isKindOfClass:[NSDictionary class]]) {
+            AXELogTrace(@"存储数据 : %@ = %@",key,data);
+            [_storedDatas setObject:[AXEBasicTypeData basicDataWithDictionary:data] forKey:key];
+        }else if ([data isKindOfClass:[UIImage class]]) {
+            AXELogTrace(@"存储数据 : %@ = %@",key,data);
+            [_storedDatas setObject:[AXEBasicTypeData basicDataWithImage:data] forKey:key];
+        }else if ([data conformsToProtocol:@protocol(AXEDataModelProtocol)] ) {
+            AXELogTrace(@"存储数据 : %@ = %@",key,[data axe_modelToJSONObject]);
+            [_storedDatas setObject:[AXEModelTypeData modelDataWithValue:data] forKey:key];
+        }else {
+            AXELogWarn(@"存储数据 ： %@ = %@  ，检测数据不合法！！！",key,data);
+        }
+    }else {
+        AXELogWarn(@"存储数据失败  key : %@ data: %@！！！",key,data);
+    }
+}
+
+- (void)removeDataForKey:(NSString *)key {
+    NSParameterAssert([key isKindOfClass:[NSString class]]);
+    
+    [_storedDatas removeObjectForKey:key];
+}
+
+- (AXEBaseData *)sharedDataForKey:(NSString *)key {
+    NSParameterAssert([key isKindOfClass:[NSString class]]);
+    
+    return [_storedDatas objectForKey:key];
+}
+
+
+- (NSNumber *)numberForKey:(NSString *)key {
+    NSParameterAssert([key isKindOfClass:[NSString class]]);
+    
+    AXEBaseData *data = [_storedDatas objectForKey:key];
+    NSNumber *value = data.value;
+    if (value && ![value isKindOfClass:[NSNumber class]]) {
+        AXELogWarn(@" 查找共享数据 key : %@ , 但是数据格式不是 NSNumber ,值为 %@",key,value);
+    }
+    return value;
+}
+
+- (NSString *)stringForKey:(NSString *)key {
+    NSParameterAssert([key isKindOfClass:[NSString class]]);
+    
+    AXEBaseData *data = [_storedDatas objectForKey:key];
+    NSString *value = data.value;
+    if (value && ![value isKindOfClass:[NSString class]]) {
+        AXELogWarn(@" 查找共享数据 key : %@ , 但是数据格式不是 NSString ,值为 %@",key,value);
+    }
+    return value;
+}
+
+- (NSArray *)arrayForKey:(NSString *)key {
+    NSParameterAssert([key isKindOfClass:[NSString class]]);
+    
+    AXEBaseData *data = [_storedDatas objectForKey:key];
+    NSArray *value = data.value;
+    if (value && ![value isKindOfClass:[NSArray class]]) {
+        AXELogWarn(@" 查找共享数据 key : %@ , 但是数据格式不是 NSArray ,值为 %@",key,value);
+    }
+    return value;
+}
+
+- (NSDictionary *)dictionaryForKey:(NSString *)key {
+    NSParameterAssert([key isKindOfClass:[NSString class]]);
+    
+    AXEBaseData *data = [_storedDatas objectForKey:key];
+    NSDictionary *value = data.value;
+    if (value && ![value isKindOfClass:[NSDictionary class]]) {
+        AXELogWarn(@" 查找共享数据 key : %@ , 但是数据格式不是 NSDictionary ,值为 %@",key,value);
+    }
+    return value;
+}
+
+- (UIImage *)imageForKey:(NSString *)key {
+    NSParameterAssert([key isKindOfClass:[NSString class]]);
+    
+    AXEBaseData *data = [_storedDatas objectForKey:key];
+    UIImage *value = data.value;
+    if (value && ![value isKindOfClass:[UIImage class]]) {
+        AXELogWarn(@" 查找共享数据 key : %@ , 但是数据格式不是 UIImage ,值为 %@",key,value);
+    }
+    return value;
+}
+
+- (id)modelForKey:(NSString *)key {
+    NSParameterAssert([key isKindOfClass:[NSString class]]);
+    
+    AXEBaseData *data = [_storedDatas objectForKey:key];
+    if (!data) {
+        AXELogTrace(@" 未查到 key值为 %@ 的model数据",key);
+        return nil;
+    }
+    if ([data isKindOfClass:[AXEModelTypeData class]]) {
+        return data.value;
+    }else {
+        AXELogWarn(@" 查找共享数据 key : %@ , 但是数据格式不是 Model类型 ,值为 %@",key,data.value);
+        return nil;
+    }
+}
 
 @end

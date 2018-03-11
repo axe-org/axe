@@ -18,13 +18,13 @@
 + (instancetype)definitionWithPagePath:(NSString *)path block:(AXERouterBlock)block;
 
 - (void)excuteWithFromVC:(UIViewController *)fromVC
-                  params:(NSDictionary *)params
+                  params:(AXEData *)params
            callbackBlock:(AXERouterCallbackBlock)callbackBlock;
 
 // 返回ViewController的路由定义
 + (instancetype)definitionWithPagePath:(NSString *)path routeForVCBlock:(AXERouteForVCBlock)block;
 
-- (UIViewController *)getViewControllerWithParams:(NSDictionary *)params;
+- (UIViewController *)getViewControllerWithParams:(AXEData *)params;
 
 
 @end

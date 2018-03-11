@@ -23,13 +23,13 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     
-    [[AXERouter sharedRouter] registerPagePath:@"a" withRouterForVCBlock:^UIViewController *(NSDictionary *params) {
+    [[AXERouter sharedRouter] registerPagePath:@"a" withRouterForVCBlock:^UIViewController *(AXEData *params) {
         ViewController *vc = [[ViewController alloc] init];
         UINavigationController *nv = [[UINavigationController alloc] initWithRootViewController:vc];
         return nv;
     }];
     
-    [[AXERouter sharedRouter] registerPagePath:@"b" withRouterForVCBlock:^UIViewController *(NSDictionary *params) {
+    [[AXERouter sharedRouter] registerPagePath:@"b" withRouterForVCBlock:^UIViewController *(AXEData *params) {
         ViewController *vc = [[ViewController alloc] init];
         return vc;
     }];
@@ -43,7 +43,7 @@
     [AXETabBarController registerTabBarItem:itemb];
     
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    AXETabBarController *rootViewController = [AXETabBarController AXETabBarController];
+    AXETabBarController *rootViewController = [AXETabBarController TabBarController];
     self.window.rootViewController = rootViewController;
     [self.window makeKeyAndVisible];
     

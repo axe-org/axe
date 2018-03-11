@@ -12,13 +12,13 @@
 @interface AXERouterRequest()
 @property (nonatomic,copy) NSString *sourceURL;
 @property (nonatomic,strong) UIViewController *fromVC;
-
+@property (nonatomic,strong) AXEData *params;
 @end
 
 @implementation AXERouterRequest
 
 + (instancetype)requestWithSourceURL:(NSString *)sourceURL
-                              params:(NSDictionary *)params
+                              params:(AXEData *)params
                               fromVC:(UIViewController *)fromVC {
     AXERouterRequest *request = [[AXERouterRequest alloc] init];
     request.sourceURL = sourceURL;
@@ -61,14 +61,12 @@
         NSString *query = urlComponets.query;
         if (query) {
             // 解析URL中的参数.
-            NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
-            [urlComponets.queryItems enumerateObjectsUsingBlock:^(NSURLQueryItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                [params setObject:obj.name forKey:obj.value];
-            }];
-            if (_params) {
-                [params addEntriesFromDictionary:_params];
+            for (NSURLQueryItem *item in urlComponets.queryItems) {
+                if (!_params) {
+                    _params = [AXEData dataForTransmission];
+                }
+                [_params setData:item.value forKey:item.name];
             }
-            _params = [params copy];
         }
         return YES;
     }

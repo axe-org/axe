@@ -31,7 +31,7 @@
 }
 
 - (void)excuteWithFromVC:(UIViewController *)fromVC
-                  params:(NSDictionary *)params
+                  params:(AXEData *)params
            callbackBlock:(AXERouterCallbackBlock)callbackBlock {
     _calledTime ++ ;
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -52,7 +52,7 @@
     return definition;
 }
 
-- (UIViewController *)getViewControllerWithParams:(NSDictionary *)params {
+- (UIViewController *)getViewControllerWithParams:(AXEData *)params {
     _calledTime ++;
     return _getVCBlock(params);
 }

@@ -97,14 +97,14 @@ static void (^customDecorateBlock)(AXETabBarController *) = nil;
         customDecorateBlock(self);
         customDecorateBlock = nil;
     }
-    [[AXERouter sharedRouter] registerProtocol:AXETabBarRouterDefaultProtocolName withRouterBlock:^(UIViewController *fromVC, NSDictionary *params, AXERouterCallbackBlock callback, NSString *sourceURL) {
+    [[AXERouter sharedRouter] registerProtocol:AXETabBarRouterDefaultProtocolName withRouterBlock:^(UIViewController *fromVC, AXEData *params, AXERouterCallbackBlock callback, NSString *sourceURL) {
         NSInteger index = 0;
-        for (; index < _routeURLs.count; index ++) {
-            if ([sourceURL isEqualToString:_routeURLs[index]]) {
+        for (; index < self->_routeURLs.count; index ++) {
+            if ([sourceURL isEqualToString:self->_routeURLs[index]]) {
                 break;
             }
         }
-        if (index < _routeURLs.count) {
+        if (index < self->_routeURLs.count) {
             // 则找到页面
             [self backToIndex:index fromViewController:fromVC];
         }else {

@@ -1,5 +1,5 @@
 //
-//  AXEWebViewModule.h
+//  AXEWebViewBridge.h
 //  Axe
 //
 //  Created by 罗贤明 on 2018/3/10.
@@ -8,6 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
-@interface AXEWebViewModule : NSObject
+
+/**
+  桥接 axe的三大组件与webview。
+ */
+@interface AXEWebViewBridge : NSObject
 
 @end
