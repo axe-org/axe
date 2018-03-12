@@ -33,10 +33,10 @@
 - (void)excuteWithFromVC:(UIViewController *)fromVC
                   params:(AXEData *)params
            callbackBlock:(AXERouterCallbackBlock)callbackBlock
-               sourceURL:(NSString *)sourceURL {
+                     URL:(NSString *)url {
     _calledTime ++;
     dispatch_async(dispatch_get_main_queue(), ^{
-        self->_block(fromVC,params,callbackBlock,sourceURL);
+        self->_block(fromVC,params,callbackBlock,url);
     });
 }
 
@@ -55,9 +55,10 @@
 }
 
 - (UIViewController *)getViewControllerWithParams:(AXEData *)params
-                                        sourceURL:(NSString *)sourceURL {
+                                              URL:(NSString *)url
+                                    callbackBlock:(AXERouterCallbackBlock)callback {
     _calledTime ++;
-    return _getVCBlock(sourceURL,params);
+    return _getVCBlock(url,params,callback);
 }
 
 @end

@@ -13,6 +13,8 @@
 
 #import "Axe.h"
 
+#import "AXEWebViewController.h"
+
 @interface AppDelegate ()
 
 @end
@@ -23,16 +25,18 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     
-    [[AXERouter sharedRouter] registerPagePath:@"a" withRouterForVCBlock:^UIViewController *(AXEData *params) {
+    [[AXERouter sharedRouter] registerPagePath:@"a" withRouterForVCBlock:^UIViewController *(AXEData *params,AXERouterCallbackBlock callback) {
         ViewController *vc = [[ViewController alloc] init];
         UINavigationController *nv = [[UINavigationController alloc] initWithRootViewController:vc];
         return nv;
     }];
     
-    [[AXERouter sharedRouter] registerPagePath:@"b" withRouterForVCBlock:^UIViewController *(AXEData *params) {
+    [[AXERouter sharedRouter] registerPagePath:@"b" withRouterForVCBlock:^UIViewController *(AXEData *params,AXERouterCallbackBlock callback) {
         ViewController *vc = [[ViewController alloc] init];
         return vc;
     }];
+    [AXEWebViewController registerUIWebViewForHTTP];
+    
     
     AXETabBarItem *itema = [AXETabBarItem itemWithPagePath:@"A" routURL:@"axe://a"];
     itema.title = @"A";
@@ -41,6 +45,10 @@
     AXETabBarItem *itemb = [AXETabBarItem itemWithPagePath:@"B" routURL:@"axe://b"];
     itemb.title = @"B";
     [AXETabBarController registerTabBarItem:itemb];
+    
+    AXETabBarItem *itemc = [AXETabBarItem itemWithPagePath:@"C" routURL:@"http://192.168.1.3/echo.html"];
+    itemc.title = @"echo";
+    [AXETabBarController registerTabBarItem:itemc];
     
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     AXETabBarController *rootViewController = [AXETabBarController TabBarController];

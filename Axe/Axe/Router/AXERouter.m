@@ -112,8 +112,8 @@ static NSTimeInterval const RouteMinInterval = 1;
     lastRouteTime = now;
     
     AXERouterRequest *request = [AXERouterRequest requestWithSourceURL:url params:params fromVC:fromVC];
-    [_preprocesses enumerateObjectsUsingBlock:^(AXERouterPreprocessBlock  _Nonnull block, NSUInteger idx, BOOL * _Nonnull stop) {
-        block(request);
+    [_preprocesses enumerateObjectsUsingBlock:^(AXERouterPreprocessBlock  _Nonnull preprocess, NSUInteger idx, BOOL * _Nonnull stop) {
+        preprocess(request);
     }];
     if ([request checkRequestIsValid]) {
         [self routeRequest:request withCallBack:(AXERouterCallbackBlock)block];
@@ -136,7 +136,7 @@ static NSTimeInterval const RouteMinInterval = 1;
         if (!definition) {
             AXELogWarn(@"当前未支持协议 %@",request.protocol);
         }else{
-            [definition excuteWithFromVC:request.fromVC params:request.params callbackBlock:block sourceURL:request.redirectURL ? : request.sourceURL];
+            [definition excuteWithFromVC:request.fromVC params:request.params callbackBlock:block URL:request.redirectURL ? : request.sourceURL];
         }
     }
 }
@@ -145,13 +145,17 @@ static NSTimeInterval const RouteMinInterval = 1;
     return [self routeURL:url fromViewController:vc withParams:nil finishBlock:nil];
 }
 
-- (UIViewController *)viewControllerForRouterURL:(NSString *)url params:(AXEData *)params {
+- (UIViewController *)viewControllerForRouterURL:(NSString *)url {
+    return [self viewControllerForRouterURL:url params:nil finishBlock:nil];
+}
+
+- (UIViewController *)viewControllerForRouterURL:(NSString *)url params:(AXEData *)params finishBlock:(AXERouterCallbackBlock)block {
     NSParameterAssert([url isKindOfClass:[NSString class]]);
     NSParameterAssert(!params || [params isKindOfClass:[NSDictionary class]]);
     
     AXERouterRequest *request = [AXERouterRequest requestWithSourceURL:url params:params fromVC:nil];
-    [_preprocesses enumerateObjectsUsingBlock:^(AXERouterPreprocessBlock  _Nonnull block, NSUInteger idx, BOOL * _Nonnull stop) {
-        block(request);
+    [_preprocesses enumerateObjectsUsingBlock:^(AXERouterPreprocessBlock  _Nonnull preprocess, NSUInteger idx, BOOL * _Nonnull stop) {
+        preprocess(request);
     }];
     if ([request checkRequestIsValid]) {
         if ([request.protocol isEqualToString:AXERouterDefaultProtocolName]) {
@@ -161,7 +165,7 @@ static NSTimeInterval const RouteMinInterval = 1;
                 AXELogWarn(@"当前未支持路由跳转链接 %@",request.formedURL);
                 return nil;
             }else {
-                return [definition getViewControllerWithParams:request.params];
+                return [definition getViewControllerWithParams:request.params callbackBlock:block];
             }
         }else {
             // 在协议注册中寻找
@@ -170,7 +174,7 @@ static NSTimeInterval const RouteMinInterval = 1;
                 AXELogWarn(@"当前未支持协议 %@",request.protocol);
                 return nil;
             }else{
-                return [definition getViewControllerWithParams:request.params sourceURL:request.sourceURL];
+                return [definition getViewControllerWithParams:request.params URL:request.sourceURL callbackBlock:block];
             }
         }
     }else {

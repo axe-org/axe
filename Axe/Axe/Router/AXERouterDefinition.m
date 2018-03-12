@@ -52,9 +52,9 @@
     return definition;
 }
 
-- (UIViewController *)getViewControllerWithParams:(AXEData *)params {
+- (UIViewController *)getViewControllerWithParams:(AXEData *)params callbackBlock:(AXERouterCallbackBlock)callbackBlock{
     _calledTime ++;
-    return _getVCBlock(params);
+    return _getVCBlock(params,callbackBlock);
 }
 
 

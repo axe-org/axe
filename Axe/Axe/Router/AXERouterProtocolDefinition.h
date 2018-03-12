@@ -21,12 +21,13 @@
 - (void)excuteWithFromVC:(UIViewController *)fromVC
                   params:(AXEData *)params
            callbackBlock:(AXERouterCallbackBlock)callbackBlock
-               sourceURL:(NSString *)sourceURL;
+                     URL:(NSString *)url;
 
 // 返回VC路由
 + (instancetype)definitionWithProtocol:(NSString *)protocol routeForVCBlock:(AXEProtoclRouteForVCBlock)block;
 
 - (UIViewController *)getViewControllerWithParams:(AXEData *)params
-                                        sourceURL:(NSString *)sourceURL;
+                                              URL:(NSString *)url
+                                    callbackBlock:(AXERouterCallbackBlock)callback;
 
 @end

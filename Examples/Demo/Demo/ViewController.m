@@ -33,10 +33,6 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    
-    NSLog(@"self.tabbarController : %@",self.tabBarController);
-    NSLog(@"self.presentedViewController : %@",self.presentedViewController);
-    
     NSDictionary *dic = @{@"hello":@"world",@"hel":@(213)};
     [[AXEData sharedData] setJavascriptModel:dic forKey:@"test"];
     

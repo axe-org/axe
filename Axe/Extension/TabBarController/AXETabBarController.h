@@ -15,6 +15,7 @@
 /**
   基于Axe ， 实现简单的TabBarController路由
  这里是放置于首页的tabbarController 。 所以默认注册协议 home://
+  所有首页的ViewController 必须包含在 UINavigationController中！！！
  */
 @interface AXETabBarController : UITabBarController
 
@@ -34,10 +35,17 @@
 + (void)setCustomDecorateBlock:(void (^)(AXETabBarController *))block;
 
 
+/**
+  设置 navigationController 基类。
+   对于所有返回值， 如果返回的是  UINavigationControlller ,则直接设置，
+   否则， 通过该类型， 调用 -initWithRootViewController: 方法来创建一个导航栈。
+ @param cls <#cls description#>
+ */
++ (void)setNavigationControllerClass:(Class)cls;
 
 /**
   根据配置，创建实例。
-
+  不是单例， 这是一个工厂函数。
  @return <#return value description#>
  */
 + (instancetype)TabBarController;

@@ -27,12 +27,6 @@
     return data;
 }
 
-+ (instancetype)basicDataWithImage:(UIImage *)image {
-    AXEBasicTypeData *data = [AXEBasicTypeData dataWithValue:image];
-    data.basicType = AXEDataBasicTypeUIImage;
-    return data;
-}
-
 + (instancetype)basicDataWithArray:(NSArray *)array {
     AXEBasicTypeData *data = [AXEBasicTypeData dataWithValue:[array copy]];
     data.basicType = AXEDataBasicTypeArray;
@@ -42,6 +36,32 @@
 + (instancetype)basicDataWithDictionary:(NSDictionary *)dictionary {
     AXEBasicTypeData *data = [AXEBasicTypeData dataWithValue:[dictionary copy]];
     data.basicType = AXEDataBasicTypeDictionary;
+    return data;
+}
+
+
++ (instancetype)basicDataWithImage:(UIImage *)image {
+    AXEBasicTypeData *data = [AXEBasicTypeData dataWithValue:image];
+    data.basicType = AXEDataBasicTypeUIImage;
+    return data;
+}
+
+
++ (instancetype)basicDataWithBoolean:(BOOL)boolean {
+    AXEBasicTypeData *data = [AXEBasicTypeData dataWithValue:@(boolean)];
+    data.basicType = AXEDataBasicTypeBoolean;
+    return data;
+}
+
++ (instancetype)basicDataWithData:(NSData *)data {
+    AXEBasicTypeData *d = [AXEBasicTypeData dataWithValue:data];
+    d.basicType = AXEDataBasicTypeData;
+    return d;
+}
+
++ (instancetype)basicDataWithDate:(NSDate *)date {
+    AXEBasicTypeData *data = [AXEBasicTypeData dataWithValue:date];
+    data.basicType = AXEDataBasicTypeDate;
     return data;
 }
 

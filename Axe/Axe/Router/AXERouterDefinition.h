@@ -24,7 +24,7 @@
 // 返回ViewController的路由定义
 + (instancetype)definitionWithPagePath:(NSString *)path routeForVCBlock:(AXERouteForVCBlock)block;
 
-- (UIViewController *)getViewControllerWithParams:(AXEData *)params;
+- (UIViewController *)getViewControllerWithParams:(AXEData *)params callbackBlock:(AXERouterCallbackBlock)callbackBlock;
 
 
 @end

@@ -38,6 +38,14 @@
 
 
 /**
+  提供一个特殊的方法，用于设置 bool 值。
+
+ @param boo BOOL
+ @param key 键值。
+ */
+- (void)setBool:(BOOL)boo forKey:(NSString *)key;
+
+/**
   删除共享数据
 
  @param key 键值。
@@ -72,6 +80,22 @@
     根据键值 ，获取一个 UIImage.
  */
 - (UIImage *)imageForKey:(NSString *)key;
+
+/**
+ 根据键值 ，获取一个 NSData.
+ */
+- (NSData *)dataForKey:(NSString *)key;
+
+/**
+ 根据键值 ，获取一个 NSDate.
+ */
+- (NSDate *)dateForKey:(NSString *)key;
+
+/**
+ 根据键值 ，获取一个 bool值.
+  如果key 不存在，则返回 false.
+ */
+- (BOOL)boolForKey:(NSString *)key;
 
 /**
  根据键值， 获取一个 Model类型。

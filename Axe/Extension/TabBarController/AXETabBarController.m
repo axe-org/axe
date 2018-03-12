@@ -24,7 +24,14 @@ static void (^customDecorateBlock)(AXETabBarController *) = nil;
 
 @end
 
+
+static Class NavigationControllerClass = NULL;
+
 @implementation AXETabBarController
+
++ (void)setNavigationControllerClass:(Class)cls {
+    NavigationControllerClass = cls;
+}
 
 + (void)registerTabBarItem:(AXETabBarItem *)barItem {
     NSParameterAssert([barItem isKindOfClass:[AXETabBarItem class]]);
@@ -51,6 +58,9 @@ static void (^customDecorateBlock)(AXETabBarController *) = nil;
         AXELogWarn(@"[AXETabBarController tabBarController]： 当前没有设置任何的子界面!!!");
     }
     [AXEEvent postEventName:AXEEventTabBarModuleInitializing];
+    if (NULL == NavigationControllerClass) {
+        NavigationControllerClass = [UINavigationController class];
+    }
     AXETabBarController *controller = [[AXETabBarController alloc] init];
     return controller;
 }
@@ -61,10 +71,15 @@ static void (^customDecorateBlock)(AXETabBarController *) = nil;
     NSMutableArray *controllerList = [[NSMutableArray alloc] initWithCapacity:10];
     NSMutableArray *validItemList = [[NSMutableArray alloc] initWithCapacity:10];
     for (AXETabBarItem *item in itemList) {
-        UIViewController *controller = [[AXERouter sharedRouter] viewControllerForRouterURL:item.vcRouteURL params:nil];
+        UIViewController *controller = [[AXERouter sharedRouter] viewControllerForRouterURL:item.vcRouteURL];
         if (!controller) {
             AXELogWarn(@"[AXETabBarController viewDidLoad] : 当前 routeURL ： %@ ，未能正确返回ViewController！！！",item.vcRouteURL);
         }else {
+            if (![controller isKindOfClass:[UINavigationController class]]) {
+                // 则构建一个 navigationController
+                UINavigationController *navigation = [[NavigationControllerClass alloc] initWithRootViewController:controller];
+                controller = navigation;
+            }
             [controllerList addObject:controller];
             [validItemList addObject:item];
         }

@@ -34,7 +34,7 @@
  @param callback 回调。
  @return 实例
  */
-+ (instancetype)webViewControllerWithURL:(NSString *)url postParams:(NSDictionary *)params callback:(AXERouterCallbackBlock)callback;
++ (instancetype)webViewControllerWithURL:(NSString *)url postParams:(AXEData *)params callback:(AXERouterCallbackBlock)callback;
 /**
  设置回调， 在ViewDidLoad时执行， 以定制AXEWebViewController
  

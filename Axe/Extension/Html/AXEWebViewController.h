@@ -10,6 +10,11 @@
 #import <UIKit/UIKit.h>
 #import "WebViewJavascriptBridge.h"
 #import "AXERouter.h"
+// 对于 H5默认路由， 关于回调的注意事项 。
+// 参考 AXERouter.h中对于路由的描述 ,已知， 对于 jump route ，回调时的界面关闭由被调用者实现， 对于 controller route ，界面关闭由调用者管理。
+// 所以， 在 h5 默认实现中， 对于 jump route 带有回调时， js 正常调用回调接口即可， 页面关闭由 AXEWebViewController 实现了。
+// 而 已知 controller route 的关闭由调用者负责， 所以 js端可以完全不用关注页面的关闭逻辑。
+// 只需要注意， 一次带有回调了调用，应该在当前页面, 当前webview完成， 打开新的webview后，回调不会被传递到新的webview中。
 
 /**
   使用 UIWebView展示页面
@@ -34,7 +39,7 @@
  @param callback 回调。
  @return 实例
  */
-+ (instancetype)webViewControllerWithURL:(NSString *)url postParams:(NSDictionary *)params callback:(AXERouterCallbackBlock)callback;
++ (instancetype)webViewControllerWithURL:(NSString *)url postParams:(AXEData *)params callback:(AXERouterCallbackBlock)callback;
 
 /**
   设置回调， 在ViewDidLoad时执行， 以定制AXEWebViewController
@@ -71,4 +76,7 @@
  */
 @property (nonatomic,weak) id<UIWebViewDelegate> webViewDelegate;
 
+
 @end
+
+

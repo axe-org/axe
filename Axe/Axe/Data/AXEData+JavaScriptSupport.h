@@ -9,6 +9,10 @@
 #import <Foundation/Foundation.h>
 #import "AXEData.h"
 
+@interface AXEData(JavaScriptSupportPrivate)
+
+@property (nonatomic,strong) NSMutableDictionary<NSString *,AXEBaseData *> *storedDatas;
+@end
 
 /**
  支持 javascript。
@@ -33,6 +37,16 @@
  @param key 键值
  */
 - (void)setJavascriptModel:(NSDictionary *)model forKey:(NSString *)key;
+
+
+
+/**
+  封装 js的设置方法， 规定好交互逻辑
+
+ @param data 数据
+ @param key 键值。
+ */
+- (void)setJavascriptData:(NSDictionary *)data;
 
 @end
 

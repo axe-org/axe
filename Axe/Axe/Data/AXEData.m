@@ -53,6 +53,12 @@
         }else if ([data isKindOfClass:[UIImage class]]) {
             AXELogTrace(@"存储数据 : %@ = %@",key,data);
             [_storedDatas setObject:[AXEBasicTypeData basicDataWithImage:data] forKey:key];
+        }else if ([data isKindOfClass:[NSData class]]) {
+            AXELogTrace(@"存储数据 : %@ = %@",key,data);
+            [_storedDatas setObject:[AXEBasicTypeData basicDataWithData:data] forKey:key];
+        }else if ([data isKindOfClass:[NSDate class]]) {
+            AXELogTrace(@"存储数据 : %@ = %@",key,data);
+            [_storedDatas setObject:[AXEBasicTypeData basicDataWithDate:data] forKey:key];
         }else if ([data conformsToProtocol:@protocol(AXEDataModelProtocol)] ) {
             AXELogTrace(@"存储数据 : %@ = %@",key,[data axe_modelToJSONObject]);
             [_storedDatas setObject:[AXEModelTypeData modelDataWithValue:data] forKey:key];
@@ -61,6 +67,12 @@
         }
     }else {
         AXELogWarn(@"存储数据失败  key : %@ data: %@！！！",key,data);
+    }
+}
+
+- (void)setBool:(BOOL)boo forKey:(NSString *)key {
+    if ([key isKindOfClass:[NSString class]]) {
+        [_storedDatas setObject:[AXEBasicTypeData basicDataWithBoolean:boo] forKey:key];
     }
 }
 
@@ -131,6 +143,44 @@
     }
     return value;
 }
+
+
+- (NSData *)dataForKey:(NSString *)key {
+    NSParameterAssert([key isKindOfClass:[NSString class]]);
+    
+    AXEBaseData *data = [_storedDatas objectForKey:key];
+    NSData *value = data.value;
+    if (value && ![value isKindOfClass:[NSData class]]) {
+        AXELogWarn(@" 查找共享数据 key : %@ , 但是数据格式不是 NSData ,值为 %@",key,value);
+    }
+    return value;
+}
+
+
+- (NSDate *)dateForKey:(NSString *)key {
+    NSParameterAssert([key isKindOfClass:[NSString class]]);
+    
+    AXEBaseData *data = [_storedDatas objectForKey:key];
+    NSDate *value = data.value;
+    if (value && ![value isKindOfClass:[NSDate class]]) {
+        AXELogWarn(@" 查找共享数据 key : %@ , 但是数据格式不是 NSDate ,值为 %@",key,value);
+    }
+    return value;
+}
+
+
+- (BOOL)boolForKey:(NSString *)key {
+    NSParameterAssert([key isKindOfClass:[NSString class]]);
+    
+    AXEBasicTypeData *data = (AXEBasicTypeData *)[_storedDatas objectForKey:key];
+    NSNumber *value = data.value;
+    if (data.basicType != AXEDataBasicTypeBoolean) {
+        AXELogWarn(@" 查找共享数据 key : %@ , 但是数据格式不是 Boolean ,值为 %@",key,value);
+        return false;
+    }
+    return [value boolValue];
+}
+
 
 - (id)modelForKey:(NSString *)key {
     NSParameterAssert([key isKindOfClass:[NSString class]]);
