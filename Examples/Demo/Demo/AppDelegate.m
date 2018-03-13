@@ -14,6 +14,7 @@
 #import "Axe.h"
 
 #import "AXEWebViewController.h"
+#import "AXEWKWebViewController.h"
 
 @interface AppDelegate ()
 
@@ -35,18 +36,19 @@
         ViewController *vc = [[ViewController alloc] init];
         return vc;
     }];
-    [AXEWebViewController registerUIWebViewForHTTP];
-    
+//    [AXEWebViewController registerUIWebViewForHTTP];
+    [AXEWKWebViewController registerWKWebViewForHTTP];
+    [AXEWKWebViewController registerWKWebViewForHTTPS];
     
     AXETabBarItem *itema = [AXETabBarItem itemWithPagePath:@"A" routURL:@"axe://a"];
     itema.title = @"A";
     [AXETabBarController registerTabBarItem:itema];
     
-    AXETabBarItem *itemb = [AXETabBarItem itemWithPagePath:@"B" routURL:@"axe://b"];
+    AXETabBarItem *itemb = [AXETabBarItem itemWithPagePath:@"B" routURL:@"https://www.baidu.com"];
     itemb.title = @"B";
     [AXETabBarController registerTabBarItem:itemb];
     
-    AXETabBarItem *itemc = [AXETabBarItem itemWithPagePath:@"C" routURL:@"http://192.168.1.3/echo.html"];
+    AXETabBarItem *itemc = [AXETabBarItem itemWithPagePath:@"C" routURL:@"http://localhost/echo.html"];
     itemc.title = @"echo";
     [AXETabBarController registerTabBarItem:itemc];
     
@@ -54,6 +56,11 @@
     AXETabBarController *rootViewController = [AXETabBarController TabBarController];
     self.window.rootViewController = rootViewController;
     [self.window makeKeyAndVisible];
+    
+    
+    [AXEEvent registerListenerForEventName:@"event_test" handler:^(AXEData *payload) {
+        NSLog(@"payload 里面带有时间 为 %@",[payload dateForKey:@"now_date"]);
+    }];
     
     return YES;
 }

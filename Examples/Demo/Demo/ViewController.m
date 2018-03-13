@@ -33,8 +33,6 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    NSDictionary *dic = @{@"hello":@"world",@"hel":@(213)};
-    [[AXEData sharedData] setJavascriptModel:dic forKey:@"test"];
     
     id<Test> test = [[AXEData sharedData] modelForKey:@"test"];
     NSLog(@"%@",test.hello);

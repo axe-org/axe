@@ -8,7 +8,7 @@ function setupWebViewJavascriptBridge(callback) {
     document.documentElement.appendChild(WVJBIframe);
     setTimeout(function() { document.documentElement.removeChild(WVJBIframe) }, 0)
 }
-function injectAxe(bridge){
+function injectAxe(){
     if(window.axe) {return}
     axe = {}
 
@@ -54,7 +54,8 @@ function injectAxe(bridge){
                 // 返回的 base64的字符串。
                 ret = data.value;
             }else if(data.type === "Date") {
-                ret = Date(data.value);
+                ret = new Date()
+                ret.setTime(data.value)
             }
             return ret;
         }
@@ -192,11 +193,15 @@ function injectAxe(bridge){
 
     sharedData.setObjectForKey = function(key,value) {
         value["key"] = key;
-        bridge.callHandler('axe_data_set', value);
+        setupWebViewJavascriptBridge(function(bridge){
+            bridge.callHandler('axe_data_set', value);
+        });
     }
     sharedData.removeItem = function(key) {
         if (key && is.String(key)) {
-            bridge.callHandler('axe_data_remove',key);
+            setupWebViewJavascriptBridge(function(bridge){
+                bridge.callHandler('axe_data_remove',key);
+            });
         }
     }
     // 共享数据的 get方法，是异步的，需要使用回调来获取值。如 
@@ -206,13 +211,16 @@ function injectAxe(bridge){
         if(! is.String(key) || typeof callback != "function") {
             return;
         }
-        bridge.callHandler('axe_data_get',key,function(data){
-            // 如果是空值， 则是 null
-            if(data) {
-                data = parseAxeData(data);
-            }
-            callback(data)
+        setupWebViewJavascriptBridge(function(bridge){
+            bridge.callHandler('axe_data_get',key,function(data){
+                // 如果是空值， 则是 null
+                if(data) {
+                    data = parseAxeData(data);
+                }
+                callback(data)
+            });
         });
+        
     }
     axe.data = {
         shared : sharedData,
@@ -237,24 +245,72 @@ function injectAxe(bridge){
                     return;
                 }
                 payload["callback"] = true;
-                bridge.callHandler('axe_route', payload,function(data) {
-                    // 将data 转换为 AXEData.
-                    if (data) {
-                        axe_data = new AXEData()
-                        // 该data 满足格式。
-                        axe_data.datas = data
-                        data = axe_data
-                    }
-                    callback(data);
+                setupWebViewJavascriptBridge(function(bridge){ 
+                    bridge.callHandler('axe_router_route', payload,function(data) {
+                        // 将data 转换为 AXEData.
+                        if (data) {
+                            axe_data = new AXEData()
+                            // 该data 满足格式。
+                            axe_data.datas = data
+                            data = axe_data
+                        }
+                        callback(data);
+                    });
                 });
+                
             }else {
-                bridge.callHandler('axe_route', payload)
+                setupWebViewJavascriptBridge(function(bridge){ 
+                    bridge.callHandler('axe_router_route', payload)
+                });
             }
         }
     }
+    // 在 h5模块中，已知 h5回调时的页面关闭由原生代码实现，所以这里只要调用回调即可。  
+    var routerCallback = function(param) {
+        if(param && param.__proto__ === AXEData.prototype) {
+            setupWebViewJavascriptBridge(function(bridge){ 
+                bridge.callHandler('axe_router_callback', param.datas)
+            });
+        }else {
+            setupWebViewJavascriptBridge(function(bridge){ 
+                bridge.callHandler('axe_router_callback')
+            });
+        }
+    }
+    // source 用来获取路由跳转而来的一些信息。 需要注意异步调用问题。
+    // source.needCallback  Boolean 类型， 是否有回调。
+    // source.payload       AXEData 类型， 附带的参数。
+    var getSourceFunc = function( callback ) {
+        if(window.axe.router.source) {
+            callback(window.axe.router.source)
+        }else {
+            setupWebViewJavascriptBridge(function(bridge){ 
+                bridge.callHandler('axe_router_source',undefined,function(data){
+                    if(data){
+                        var payload = data["payload"]
+                        if (payload) {
+                            var axe_data = new AXEData()
+                            axe_data.datas = payload
+                            data["payload"] = axe_data
+                        }
+                        data["needCallback"] = data["needCallback"] === "true";
+                        window.axe.router.source = data
+                    }else{
+                        window.axe.router.source = undefined;
+                    }
+                    callback(window.axe.router.source)
+                })
+            });
+        }
+    }
     axe.router = {
-        route : router
+        route : router,
+        callback : routerCallback,
+        getSource : getSourceFunc,
+        source : undefined,
     };
+
+    
 
     // 本地记录 事件与回调
     var registeredEvents = undefined
@@ -265,22 +321,26 @@ function injectAxe(bridge){
             if(!registeredEvents) {
                 registeredEvents = {}
                 //  注册回调
-                bridge.registerHandler('axe_event_callback', function(name,data) {
-                    // 将data 转换为 AXEData.
-                    if (data) {
-                        axe_data = new AXEData()
-                        // 该data 满足格式。
-                        axe_data.datas = data
-                        data = axe_data
-                    }
-                    var callbackList =  registeredEvents[name]
-                    if (callbackList) {
-                        // 如果有回调，则读取回调。
-                        for (index in callbackList) {
-                            callbackList[index](data);
+                setupWebViewJavascriptBridge(function(bridge){ 
+                    bridge.registerHandler('axe_event_callback', function(data) {
+                        // 将data 转换为 AXEData.
+                        var name = data["name"];
+                        var payload = data["payload"]
+                        if (payload) {
+                            axe_data = new AXEData()
+                            // 该data 满足格式。
+                            axe_data.datas = payload
+                            payload = axe_data
                         }
-                    }
-                })
+                        var callbackList =  registeredEvents[name]
+                        if (callbackList) {
+                            // 如果有回调，则读取回调。
+                            for (index in callbackList) {
+                                callbackList[index](payload);
+                            }
+                        }
+                    })
+                });
             }
             var callbackList = registeredEvents[eventName]
             if (!callbackList) {
@@ -288,7 +348,9 @@ function injectAxe(bridge){
                 registeredEvents[eventName] = callbackList
             }
             callbackList.push(callback)
-            bridge.callHandler('axe_event_register', eventName);
+            setupWebViewJavascriptBridge(function(bridge){ 
+                bridge.callHandler('axe_event_register', eventName);
+            });
         }
     };
     // 取消注册函数 , 需要注意，这里取消监听，会直接删掉当前网页的这个 eventName的全部监听。
@@ -296,7 +358,9 @@ function injectAxe(bridge){
         if(is.String(eventName)) {
             if(registeredEvents) {
                 registeredEvents[eventName] = undefined;
-                bridge.callHandler('axe_event_remove', eventName);
+                setupWebViewJavascriptBridge(function(bridge){ 
+                    bridge.callHandler('axe_event_remove', eventName);
+                });
             }
         }
     };
@@ -311,7 +375,10 @@ function injectAxe(bridge){
                 }
                 event["data"] = data.datas;
             }
-            bridge.callHandler('axe_event_post',event);
+            setupWebViewJavascriptBridge(function(bridge){ 
+                bridge.callHandler('axe_event_post',event);
+            });
+            
         }
     }
     axe.event = {
@@ -322,4 +389,5 @@ function injectAxe(bridge){
     // 完成初始化。
     window.axe = axe;
 }
-setupWebViewJavascriptBridge(injectAxe);
+
+injectAxe();

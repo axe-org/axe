@@ -26,7 +26,12 @@ Pod::Spec.new do |s|
   end
   s.subspec "Html" do |ss|
     ss.dependency             "Axe/Core"
+    ss.dependency             "Axe/JavascriptSupport"
     ss.dependency             "WebViewJavascriptBridge"
     ss.source_files           = "Axe/Extension/Html/*.{h,m}"
+  end
+  s.subspec "JavascriptSupport" do |ss|
+    ss.dependency             "Axe/Core"
+    ss.source_files           = "Axe/Extension/JavascriptSupport/*.{h,m}"
   end
 end

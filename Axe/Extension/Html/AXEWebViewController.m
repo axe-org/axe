@@ -12,12 +12,14 @@
 #import "AXEDefines.h"
 
 // 注意， 参数和回调，是持久存在的， 但是监听， 必须要在页面跳转后，进行清理。但是 如果进行了清理，那么在页面来回跳转时，如何进行监听 ？
-// 注意测试 ，两个页面来回切换，会不会导致内存出大问题。
+// TODO 注意测试 ，两个页面来回切换，会不会导致内存出大问题。
 @interface AXEWebViewController ()<AXEEventUserInterfaceContainer>
 
 // 路由参数
 @property (nonatomic,copy) AXERouterCallbackBlock routeCallback;
 @property (nonatomic,strong) AXEData *routeParams;
+
+
 @property (nonatomic,strong) AXEWebViewBridge *bridge;
 @property (nonatomic,strong) NSString *startURL;
 @end
@@ -36,9 +38,9 @@ static void (^customViewDidLoadBlock)(AXEWebViewController *);
 
 + (instancetype)webViewControllerWithURL:(NSString *)url postParams:(AXEData *)params callback:(AXERouterCallbackBlock)callback {
     NSParameterAssert([url isKindOfClass:[NSString class]]);
-    NSParameterAssert(!params || [params isKindOfClass:[NSDictionary class]]);
+    NSParameterAssert(!params || [params isKindOfClass:[AXEData class]]);
     
-    AXEWebViewController *controller = [[AXEWebViewController alloc] init];
+    AXEWebViewController *controller = [[self alloc] init];
     controller.startURL = [url copy];
     controller.routeParams = params;
     controller.routeCallback = callback;
@@ -56,7 +58,11 @@ static void (^customViewDidLoadBlock)(AXEWebViewController *);
     [_webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:_startURL] cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:0]];
     
     _bridge = [AXEWebViewBridge bridgeWithUIWebView:_webView];
-    
+    _bridge.webviewController = self;
+    _bridge.routeCallback = _routeCallback;
+    _routeCallback = nil;
+    _bridge.routeParams = _routeParams;
+    _routeParams = nil;
     if (customViewDidLoadBlock) {
         customViewDidLoadBlock(self);
     }
@@ -66,13 +72,13 @@ static void (^customViewDidLoadBlock)(AXEWebViewController *);
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    [_bridge.state containerWillAppear];
+    [_bridge.AXEContainerState containerWillAppear];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     
-    [_bridge.state containerWillDisappear];
+    [_bridge.AXEContainerState containerWillDisappear];
 }
 
 - (WebViewJavascriptBridge *)javascriptBridge {
@@ -80,9 +86,13 @@ static void (^customViewDidLoadBlock)(AXEWebViewController *);
 }
 
 - (AXEEventUserInterfaceState *)AXEContainerState {
-    return _bridge.state;
+    return _bridge.AXEContainerState;
 }
 
+- (void)setWebViewDelegate:(id<UIWebViewDelegate>)webViewDelegate {
+    _webViewDelegate = webViewDelegate;
+    [(WebViewJavascriptBridge *)_bridge.javascriptBridge setWebViewDelegate:webViewDelegate];
+}
 
 #pragma mark - router register 
 + (void)registerUIWebViewForHTTP {
@@ -143,5 +153,7 @@ static void (^customViewDidLoadBlock)(AXEWebViewController *);
         return [AXEWebViewController webViewControllerWithURL:url postParams:params callback:callback];
     }];
 }
+
+
 
 @end

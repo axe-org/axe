@@ -42,25 +42,6 @@
 + (instancetype)webViewControllerWithURL:(NSString *)url postParams:(AXEData *)params callback:(AXERouterCallbackBlock)callback;
 
 /**
-  设置回调， 在ViewDidLoad时执行， 以定制AXEWebViewController
-
- @param block <#block description#>
- */
-+ (void)setCustomViewDidLoadBlock:(void(^)(AXEWebViewController *))block;
-
-/**
-  注册 http协议， 使用UIWebView处理。 建议生成环境不要启用，只使用https.
- */
-+ (void)registerUIWebViewForHTTP;
-
-
-/**
-  注册 https协议 ， 使用UIWebView处理。
- */
-+ (void)registerUIWebViewForHTTPS;
-
-
-/**
   该controller只有一个webview。
     需要注意的是 ，这个webview使用webviewJSBridge设置了delegate , 所以不能修改该delegate.
  */
@@ -75,6 +56,26 @@
   设置代理，必须使用这个。 不能直接操作上面的webview的delegate
  */
 @property (nonatomic,weak) id<UIWebViewDelegate> webViewDelegate;
+
+#pragma mark - router and setting
+
+/**
+ 设置回调， 在ViewDidLoad时执行， 以定制AXEWebViewController
+ 
+ @param block <#block description#>
+ */
++ (void)setCustomViewDidLoadBlock:(void(^)(AXEWebViewController *))block;
+
+/**
+ 注册 http协议， 使用UIWebView处理。 建议生成环境不要启用，只使用https.
+ */
++ (void)registerUIWebViewForHTTP;
+
+
+/**
+ 注册 https协议 ， 使用UIWebView处理。
+ */
++ (void)registerUIWebViewForHTTPS;
 
 
 @end

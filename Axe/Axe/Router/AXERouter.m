@@ -151,7 +151,7 @@ static NSTimeInterval const RouteMinInterval = 1;
 
 - (UIViewController *)viewControllerForRouterURL:(NSString *)url params:(AXEData *)params finishBlock:(AXERouterCallbackBlock)block {
     NSParameterAssert([url isKindOfClass:[NSString class]]);
-    NSParameterAssert(!params || [params isKindOfClass:[NSDictionary class]]);
+    NSParameterAssert(!params || [params isKindOfClass:[AXEData class]]);
     
     AXERouterRequest *request = [AXERouterRequest requestWithSourceURL:url params:params fromVC:nil];
     [_preprocesses enumerateObjectsUsingBlock:^(AXERouterPreprocessBlock  _Nonnull preprocess, NSUInteger idx, BOOL * _Nonnull stop) {

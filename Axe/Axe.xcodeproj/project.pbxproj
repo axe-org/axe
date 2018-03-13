@@ -51,10 +51,10 @@
 		283B8B1A2054FA6B00681FA0 /* AXEBasicTypeData.m in Sources */ = {isa = PBXBuildFile; fileRef = 283B8B182054FA6B00681FA0 /* AXEBasicTypeData.m */; };
 		283B8B1D2054FAA500681FA0 /* AXEModelTypeData.h in Headers */ = {isa = PBXBuildFile; fileRef = 283B8B1B2054FAA500681FA0 /* AXEModelTypeData.h */; };
 		283B8B1E2054FAA500681FA0 /* AXEModelTypeData.m in Sources */ = {isa = PBXBuildFile; fileRef = 283B8B1C2054FAA500681FA0 /* AXEModelTypeData.m */; };
-		283B8B212054FB7100681FA0 /* AXEJavaScriptModelData.h in Headers */ = {isa = PBXBuildFile; fileRef = 283B8B1F2054FB7100681FA0 /* AXEJavaScriptModelData.h */; };
-		283B8B222054FB7100681FA0 /* AXEJavaScriptModelData.m in Sources */ = {isa = PBXBuildFile; fileRef = 283B8B202054FB7100681FA0 /* AXEJavaScriptModelData.m */; };
-		28AE4C1C20551CCE00EF052F /* AXEData+JavaScriptSupport.h in Headers */ = {isa = PBXBuildFile; fileRef = 28AE4C1A20551CCE00EF052F /* AXEData+JavaScriptSupport.h */; };
-		28AE4C1D20551CCE00EF052F /* AXEData+JavaScriptSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 28AE4C1B20551CCE00EF052F /* AXEData+JavaScriptSupport.m */; };
+		28AE4C232057B9EB00EF052F /* AXEData+JavaScriptSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 28AE4C1F2057B9EB00EF052F /* AXEData+JavaScriptSupport.m */; };
+		28AE4C242057B9EB00EF052F /* AXEJavaScriptModelData.m in Sources */ = {isa = PBXBuildFile; fileRef = 28AE4C202057B9EB00EF052F /* AXEJavaScriptModelData.m */; };
+		28AE4C252057B9EB00EF052F /* AXEData+JavaScriptSupport.h in Headers */ = {isa = PBXBuildFile; fileRef = 28AE4C212057B9EB00EF052F /* AXEData+JavaScriptSupport.h */; };
+		28AE4C262057B9EB00EF052F /* AXEJavaScriptModelData.h in Headers */ = {isa = PBXBuildFile; fileRef = 28AE4C222057B9EB00EF052F /* AXEJavaScriptModelData.h */; };
 		BBABFFE8B66048E09C7A3CAC /* libPods-Axe.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AB7F78A7CF416604D0F53E80 /* libPods-Axe.a */; };
 		FFD80750E78927C16A1B97CC /* libPods-AxeTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D0126C8FC0DA4A11A8572E5F /* libPods-AxeTests.a */; };
 /* End PBXBuildFile section */
@@ -119,10 +119,10 @@
 		283B8B182054FA6B00681FA0 /* AXEBasicTypeData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AXEBasicTypeData.m; sourceTree = "<group>"; };
 		283B8B1B2054FAA500681FA0 /* AXEModelTypeData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AXEModelTypeData.h; sourceTree = "<group>"; };
 		283B8B1C2054FAA500681FA0 /* AXEModelTypeData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AXEModelTypeData.m; sourceTree = "<group>"; };
-		283B8B1F2054FB7100681FA0 /* AXEJavaScriptModelData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AXEJavaScriptModelData.h; sourceTree = "<group>"; };
-		283B8B202054FB7100681FA0 /* AXEJavaScriptModelData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AXEJavaScriptModelData.m; sourceTree = "<group>"; };
-		28AE4C1A20551CCE00EF052F /* AXEData+JavaScriptSupport.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AXEData+JavaScriptSupport.h"; sourceTree = "<group>"; };
-		28AE4C1B20551CCE00EF052F /* AXEData+JavaScriptSupport.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "AXEData+JavaScriptSupport.m"; sourceTree = "<group>"; };
+		28AE4C1F2057B9EB00EF052F /* AXEData+JavaScriptSupport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AXEData+JavaScriptSupport.m"; sourceTree = "<group>"; };
+		28AE4C202057B9EB00EF052F /* AXEJavaScriptModelData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AXEJavaScriptModelData.m; sourceTree = "<group>"; };
+		28AE4C212057B9EB00EF052F /* AXEData+JavaScriptSupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AXEData+JavaScriptSupport.h"; sourceTree = "<group>"; };
+		28AE4C222057B9EB00EF052F /* AXEJavaScriptModelData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AXEJavaScriptModelData.h; sourceTree = "<group>"; };
 		6957F8C6DE98A3F8ACF26A11 /* Pods-AxeTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AxeTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AxeTests/Pods-AxeTests.debug.xcconfig"; sourceTree = "<group>"; };
 		789F23BA9634E436E1CB6B69 /* Pods-Axe.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Axe.release.xcconfig"; path = "Pods/Target Support Files/Pods-Axe/Pods-Axe.release.xcconfig"; sourceTree = "<group>"; };
 		9489B2F66701502A774E4BDA /* Pods-Axe.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Axe.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Axe/Pods-Axe.debug.xcconfig"; sourceTree = "<group>"; };
@@ -233,10 +233,6 @@
 				283B8B182054FA6B00681FA0 /* AXEBasicTypeData.m */,
 				283B8B1B2054FAA500681FA0 /* AXEModelTypeData.h */,
 				283B8B1C2054FAA500681FA0 /* AXEModelTypeData.m */,
-				283B8B1F2054FB7100681FA0 /* AXEJavaScriptModelData.h */,
-				283B8B202054FB7100681FA0 /* AXEJavaScriptModelData.m */,
-				28AE4C1A20551CCE00EF052F /* AXEData+JavaScriptSupport.h */,
-				28AE4C1B20551CCE00EF052F /* AXEData+JavaScriptSupport.m */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -264,6 +260,7 @@
 		283B899520502CA000681FA0 /* Extension */ = {
 			isa = PBXGroup;
 			children = (
+				28AE4C1E2057B9EB00EF052F /* JavascriptSupport */,
 				283B8AC42053C42700681FA0 /* TabBarController */,
 				283B8A9C20539E6900681FA0 /* Html */,
 				283B8A9A20539E6900681FA0 /* OfflineHtml */,
@@ -318,6 +315,17 @@
 			path = TabBarController;
 			sourceTree = "<group>";
 		};
+		28AE4C1E2057B9EB00EF052F /* JavascriptSupport */ = {
+			isa = PBXGroup;
+			children = (
+				28AE4C1F2057B9EB00EF052F /* AXEData+JavaScriptSupport.m */,
+				28AE4C202057B9EB00EF052F /* AXEJavaScriptModelData.m */,
+				28AE4C212057B9EB00EF052F /* AXEData+JavaScriptSupport.h */,
+				28AE4C222057B9EB00EF052F /* AXEJavaScriptModelData.h */,
+			);
+			path = JavascriptSupport;
+			sourceTree = "<group>";
+		};
 		F59769D21081A966775DFDB1 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -344,6 +352,7 @@
 				283B89AF205125D800681FA0 /* AXEEventListener.h in Headers */,
 				283B8B152054F9EA00681FA0 /* AXEBaseData.h in Headers */,
 				283B8B192054FA6B00681FA0 /* AXEBasicTypeData.h in Headers */,
+				28AE4C252057B9EB00EF052F /* AXEData+JavaScriptSupport.h in Headers */,
 				283B89BC20517C6700681FA0 /* AXEEXTScope.h in Headers */,
 				283B89C42052290800681FA0 /* AXERouterDefinition.h in Headers */,
 				283B8AC92053C42700681FA0 /* AXETabBarItem.h in Headers */,
@@ -357,9 +366,8 @@
 				283B89C0205228C600681FA0 /* AXERouterRequest.h in Headers */,
 				283B8ACF2053CBF400681FA0 /* AXEWebViewController.h in Headers */,
 				283B89BB20517C6700681FA0 /* AXEmetamacros.h in Headers */,
+				28AE4C262057B9EB00EF052F /* AXEJavaScriptModelData.h in Headers */,
 				283B898920502B4F00681FA0 /* Axe.h in Headers */,
-				283B8B212054FB7100681FA0 /* AXEJavaScriptModelData.h in Headers */,
-				28AE4C1C20551CCE00EF052F /* AXEData+JavaScriptSupport.h in Headers */,
 				283B8ACC2053C42700681FA0 /* AXETabBarController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -556,16 +564,16 @@
 				283B899C20502CBB00681FA0 /* AXERouter.m in Sources */,
 				283B8B1A2054FA6B00681FA0 /* AXEBasicTypeData.m in Sources */,
 				283B89A82051218900681FA0 /* AXEAutoreleaseEvent.m in Sources */,
-				28AE4C1D20551CCE00EF052F /* AXEData+JavaScriptSupport.m in Sources */,
 				283B89B0205125D800681FA0 /* AXEEventListener.m in Sources */,
-				283B8B222054FB7100681FA0 /* AXEJavaScriptModelData.m in Sources */,
 				283B89B42051261600681FA0 /* AXEModuleInitializer.m in Sources */,
+				28AE4C242057B9EB00EF052F /* AXEJavaScriptModelData.m in Sources */,
 				283B8B122054F9BE00681FA0 /* AXEData.m in Sources */,
 				283B8AD02053CBF400681FA0 /* AXEWebViewController.m in Sources */,
 				283B8ACA2053C42700681FA0 /* AXETabBarController.m in Sources */,
 				283B89C920522B0800681FA0 /* UIViewController+AXERouter.m in Sources */,
 				283B8B1E2054FAA500681FA0 /* AXEModelTypeData.m in Sources */,
 				283B8B162054F9EA00681FA0 /* AXEBaseData.m in Sources */,
+				28AE4C232057B9EB00EF052F /* AXEData+JavaScriptSupport.m in Sources */,
 				283B89D120523C9800681FA0 /* AXERouterProtocolDefinition.m in Sources */,
 				283B8AD42053CC0400681FA0 /* AXEWKWebViewController.m in Sources */,
 				283B89C1205228C600681FA0 /* AXERouterRequest.m in Sources */,

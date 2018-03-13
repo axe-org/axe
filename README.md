@@ -10,13 +10,14 @@ Axe is all the reinforcement this army needs.
 * Event
 * Data 
 * TarbarController
+* JavascriptSupport
+* Html
 
 #### 尚未完成
 
 * OfflinePackage
-* Html
 * React
 * OfflineHtml
 * OfflineReact
-* OynamicModular
+* DynamicModular
 * 模块管理平台

@@ -12,7 +12,7 @@
 #import "WebViewJavascriptBridgeBase.h"
 #import "AXEEvent.h"
 #import "AXEEventUserInterfaceState.h"
-
+#import "AXERouter.h"
 // wkWebview和uiwebview的 jsbridge 接口相同， 使用同样的方式去调用。
 @protocol AXEWebViewJavaScriptBridge<NSObject>
 - (void)registerHandler:(NSString*)handlerName handler:(WVJBHandler)handler;
@@ -39,7 +39,7 @@
  window.axe.event.register(name,handler)
  
  */
-@interface AXEWebViewBridge : NSObject
+@interface AXEWebViewBridge : NSObject <AXEEventUserInterfaceContainer>
 
 
 /**
@@ -53,9 +53,22 @@
  */
 + (instancetype)bridgeWithWKWebView:(WKWebView *)webView;
 
-@property (nonatomic,readonly,copy) id<AXEWebViewJavaScriptBridge> javascriptBridge;
+@property (nonatomic,readonly,strong) id<AXEWebViewJavaScriptBridge> javascriptBridge;
 
-@property (nonatomic,readonly,strong) AXEEventUserInterfaceState *state;
+@property (nonatomic,readonly,strong) AXEEventUserInterfaceState *AXEContainerState;
 
+@property (nonatomic,weak) UIViewController *webviewController;
+
+
+/**
+  如果是路由跳转过来的，可能会拥有回调.
+ */
+@property (nonatomic,copy) AXERouterCallbackBlock routeCallback;
+
+/**
+  路由跳转时， 所带的参数。 javascript 通过
+   axe.router.source 来判断是否是有路由跳转过来，是否带有参数，是否带有回调。
+ */
+@property (nonatomic,strong) AXEData *routeParams;
 
 @end

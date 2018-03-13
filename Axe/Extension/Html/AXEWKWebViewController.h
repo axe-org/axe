@@ -35,24 +35,6 @@
  @return 实例
  */
 + (instancetype)webViewControllerWithURL:(NSString *)url postParams:(AXEData *)params callback:(AXERouterCallbackBlock)callback;
-/**
- 设置回调， 在ViewDidLoad时执行， 以定制AXEWebViewController
- 
- @param block <#block description#>
- */
-+ (void)setCustomViewDidLoadBlock:(void(^)(AXEWKWebViewController *))block;
-
-/**
- 注册 http协议， 使用WKWebView处理。 建议生成环境不要启用，只使用https.
- */
-+ (void)registerWKWebViewForHTTP;
-
-
-/**
- 注册 https协议 ， 使用WKWebView处理。
- */
-+ (void)registerWKWebViewForHTTPS;
-
 
 /**
  该controller只有一个webview。
@@ -71,4 +53,21 @@
  */
 @property (nonatomic,weak) id<WKNavigationDelegate> webViewDelegate;
 
+
+#pragma mark - router and setting
+/**
+ 设置回调， 在ViewDidLoad时执行， 以定制AXEWebViewController
+ */
++ (void)setCustomViewDidLoadBlock:(void(^)(AXEWKWebViewController *))block;
+
+/**
+ 注册 http协议， 使用WKWebView处理。 建议生成环境不要启用，只使用https.
+ */
++ (void)registerWKWebViewForHTTP;
+
+
+/**
+ 注册 https协议 ， 使用WKWebView处理。
+ */
++ (void)registerWKWebViewForHTTPS;
 @end
