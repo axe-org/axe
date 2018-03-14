@@ -9,14 +9,16 @@ target 'Demo' do
   pod 'Axe' , :path => '../../Axe.podspec' , :subspecs => [
     'Core',
     'TabBarController',
-    'Html'
+    'Html',
+    'React'
     ]
-  # pod 'MXReact', :podspec => '/Users/luoxianming/git/react-native/MXReact.podspec' , :subspecs =>  [
-  #  'Core',
-  #  'CxxBridge', # Include this for RN >= 0.47
-  #   'RCTNetwork',
-  #   'DevSupport', # Include this to enable In-App Devmenu if RN >= 0.43
-  #   'RCTWebSocket', 
-  # ]
+  pod 'MXReact', :podspec => '/Users/luoxianming/git/react-native/MXReact.podspec' , :subspecs =>  [
+   'Core',
+   'CxxBridge', # Include this for RN >= 0.47
+   'RCTText',
+   'RCTNetwork',
+   'DevSupport', # Include this to enable In-App Devmenu if RN >= 0.43
+   'RCTWebSocket', 
+  ]
 
 end

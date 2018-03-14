@@ -58,6 +58,7 @@
             _pagePath = [_moduleName stringByAppendingString:pageName];
         }
         _formedURL = [NSString stringWithFormat:@"%@://%@",_protocol,_pagePath];
+        // TODO 考虑是否有必要去解析 URL中的参数， 已知提供了接口供 传递参数， 那么 使用URL 传递参数的场景在于哪里？
         NSString *query = urlComponets.query;
         if (query) {
             // 解析URL中的参数.

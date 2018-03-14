@@ -90,7 +90,6 @@
                             [post setObject:javascriptData forKey:@"payload"];
                         }
                     }
-                    NSLog(@"post event !!!");
                     [self->_javascriptBridge callHandler:@"axe_event_callback" data:post];
                 } inUIContainer:self];
                 [self->_registeredEvents setObject:disposable forKey:eventName];

@@ -34,4 +34,10 @@ Pod::Spec.new do |s|
     ss.dependency             "Axe/Core"
     ss.source_files           = "Axe/Extension/JavascriptSupport/*.{h,m}"
   end
+  s.subspec "React" do |ss|
+    ss.dependency             "Axe/Core"
+    ss.dependency             "Axe/JavascriptSupport"
+    ss.dependency             "MXReact/CxxBridge"
+    ss.source_files           = "Axe/Extension/React/*.{h,m}"
+  end
 end

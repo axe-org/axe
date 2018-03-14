@@ -55,6 +55,14 @@
 		28AE4C242057B9EB00EF052F /* AXEJavaScriptModelData.m in Sources */ = {isa = PBXBuildFile; fileRef = 28AE4C202057B9EB00EF052F /* AXEJavaScriptModelData.m */; };
 		28AE4C252057B9EB00EF052F /* AXEData+JavaScriptSupport.h in Headers */ = {isa = PBXBuildFile; fileRef = 28AE4C212057B9EB00EF052F /* AXEData+JavaScriptSupport.h */; };
 		28AE4C262057B9EB00EF052F /* AXEJavaScriptModelData.h in Headers */ = {isa = PBXBuildFile; fileRef = 28AE4C222057B9EB00EF052F /* AXEJavaScriptModelData.h */; };
+		28AE4C2A2057C10600EF052F /* AXEReactViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 28AE4C282057C10600EF052F /* AXEReactViewController.h */; };
+		28AE4C2B2057C10600EF052F /* AXEReactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28AE4C292057C10600EF052F /* AXEReactViewController.m */; };
+		28AE4C32205806F200EF052F /* AXEReactDataModule.h in Headers */ = {isa = PBXBuildFile; fileRef = 28AE4C30205806F200EF052F /* AXEReactDataModule.h */; };
+		28AE4C33205806F200EF052F /* AXEReactDataModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 28AE4C31205806F200EF052F /* AXEReactDataModule.m */; };
+		28AE4C362058070200EF052F /* AXEReactEventModule.h in Headers */ = {isa = PBXBuildFile; fileRef = 28AE4C342058070200EF052F /* AXEReactEventModule.h */; };
+		28AE4C372058070200EF052F /* AXEReactEventModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 28AE4C352058070200EF052F /* AXEReactEventModule.m */; };
+		28AE4C3A2058071500EF052F /* AXEReactRouterModule.h in Headers */ = {isa = PBXBuildFile; fileRef = 28AE4C382058071500EF052F /* AXEReactRouterModule.h */; };
+		28AE4C3B2058071500EF052F /* AXEReactRouterModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 28AE4C392058071500EF052F /* AXEReactRouterModule.m */; };
 		BBABFFE8B66048E09C7A3CAC /* libPods-Axe.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AB7F78A7CF416604D0F53E80 /* libPods-Axe.a */; };
 		FFD80750E78927C16A1B97CC /* libPods-AxeTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D0126C8FC0DA4A11A8572E5F /* libPods-AxeTests.a */; };
 /* End PBXBuildFile section */
@@ -123,6 +131,14 @@
 		28AE4C202057B9EB00EF052F /* AXEJavaScriptModelData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AXEJavaScriptModelData.m; sourceTree = "<group>"; };
 		28AE4C212057B9EB00EF052F /* AXEData+JavaScriptSupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AXEData+JavaScriptSupport.h"; sourceTree = "<group>"; };
 		28AE4C222057B9EB00EF052F /* AXEJavaScriptModelData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AXEJavaScriptModelData.h; sourceTree = "<group>"; };
+		28AE4C282057C10600EF052F /* AXEReactViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AXEReactViewController.h; sourceTree = "<group>"; };
+		28AE4C292057C10600EF052F /* AXEReactViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AXEReactViewController.m; sourceTree = "<group>"; };
+		28AE4C30205806F200EF052F /* AXEReactDataModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AXEReactDataModule.h; sourceTree = "<group>"; };
+		28AE4C31205806F200EF052F /* AXEReactDataModule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AXEReactDataModule.m; sourceTree = "<group>"; };
+		28AE4C342058070200EF052F /* AXEReactEventModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AXEReactEventModule.h; sourceTree = "<group>"; };
+		28AE4C352058070200EF052F /* AXEReactEventModule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AXEReactEventModule.m; sourceTree = "<group>"; };
+		28AE4C382058071500EF052F /* AXEReactRouterModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AXEReactRouterModule.h; sourceTree = "<group>"; };
+		28AE4C392058071500EF052F /* AXEReactRouterModule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AXEReactRouterModule.m; sourceTree = "<group>"; };
 		6957F8C6DE98A3F8ACF26A11 /* Pods-AxeTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AxeTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AxeTests/Pods-AxeTests.debug.xcconfig"; sourceTree = "<group>"; };
 		789F23BA9634E436E1CB6B69 /* Pods-Axe.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Axe.release.xcconfig"; path = "Pods/Target Support Files/Pods-Axe/Pods-Axe.release.xcconfig"; sourceTree = "<group>"; };
 		9489B2F66701502A774E4BDA /* Pods-Axe.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Axe.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Axe/Pods-Axe.debug.xcconfig"; sourceTree = "<group>"; };
@@ -260,6 +276,7 @@
 		283B899520502CA000681FA0 /* Extension */ = {
 			isa = PBXGroup;
 			children = (
+				28AE4C272057C0E400EF052F /* OfflinePackage */,
 				28AE4C1E2057B9EB00EF052F /* JavascriptSupport */,
 				283B8AC42053C42700681FA0 /* TabBarController */,
 				283B8A9C20539E6900681FA0 /* Html */,
@@ -273,6 +290,14 @@
 		283B8A9820539E6900681FA0 /* React */ = {
 			isa = PBXGroup;
 			children = (
+				28AE4C282057C10600EF052F /* AXEReactViewController.h */,
+				28AE4C292057C10600EF052F /* AXEReactViewController.m */,
+				28AE4C30205806F200EF052F /* AXEReactDataModule.h */,
+				28AE4C31205806F200EF052F /* AXEReactDataModule.m */,
+				28AE4C342058070200EF052F /* AXEReactEventModule.h */,
+				28AE4C352058070200EF052F /* AXEReactEventModule.m */,
+				28AE4C382058071500EF052F /* AXEReactRouterModule.h */,
+				28AE4C392058071500EF052F /* AXEReactRouterModule.m */,
 			);
 			path = React;
 			sourceTree = "<group>";
@@ -326,6 +351,13 @@
 			path = JavascriptSupport;
 			sourceTree = "<group>";
 		};
+		28AE4C272057C0E400EF052F /* OfflinePackage */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = OfflinePackage;
+			sourceTree = "<group>";
+		};
 		F59769D21081A966775DFDB1 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -350,6 +382,8 @@
 				283B899F20502DC100681FA0 /* AXEEvent.h in Headers */,
 				283B89D020523C9800681FA0 /* AXERouterProtocolDefinition.h in Headers */,
 				283B89AF205125D800681FA0 /* AXEEventListener.h in Headers */,
+				28AE4C362058070200EF052F /* AXEReactEventModule.h in Headers */,
+				28AE4C32205806F200EF052F /* AXEReactDataModule.h in Headers */,
 				283B8B152054F9EA00681FA0 /* AXEBaseData.h in Headers */,
 				283B8B192054FA6B00681FA0 /* AXEBasicTypeData.h in Headers */,
 				28AE4C252057B9EB00EF052F /* AXEData+JavaScriptSupport.h in Headers */,
@@ -367,7 +401,9 @@
 				283B8ACF2053CBF400681FA0 /* AXEWebViewController.h in Headers */,
 				283B89BB20517C6700681FA0 /* AXEmetamacros.h in Headers */,
 				28AE4C262057B9EB00EF052F /* AXEJavaScriptModelData.h in Headers */,
+				28AE4C3A2058071500EF052F /* AXEReactRouterModule.h in Headers */,
 				283B898920502B4F00681FA0 /* Axe.h in Headers */,
+				28AE4C2A2057C10600EF052F /* AXEReactViewController.h in Headers */,
 				283B8ACC2053C42700681FA0 /* AXETabBarController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -560,6 +596,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				283B89C52052290800681FA0 /* AXERouterDefinition.m in Sources */,
+				28AE4C2B2057C10600EF052F /* AXEReactViewController.m in Sources */,
 				283B8AD82053D6C000681FA0 /* AXEWebViewBridge.m in Sources */,
 				283B899C20502CBB00681FA0 /* AXERouter.m in Sources */,
 				283B8B1A2054FA6B00681FA0 /* AXEBasicTypeData.m in Sources */,
@@ -573,10 +610,13 @@
 				283B89C920522B0800681FA0 /* UIViewController+AXERouter.m in Sources */,
 				283B8B1E2054FAA500681FA0 /* AXEModelTypeData.m in Sources */,
 				283B8B162054F9EA00681FA0 /* AXEBaseData.m in Sources */,
+				28AE4C372058070200EF052F /* AXEReactEventModule.m in Sources */,
 				28AE4C232057B9EB00EF052F /* AXEData+JavaScriptSupport.m in Sources */,
 				283B89D120523C9800681FA0 /* AXERouterProtocolDefinition.m in Sources */,
 				283B8AD42053CC0400681FA0 /* AXEWKWebViewController.m in Sources */,
 				283B89C1205228C600681FA0 /* AXERouterRequest.m in Sources */,
+				28AE4C3B2058071500EF052F /* AXEReactRouterModule.m in Sources */,
+				28AE4C33205806F200EF052F /* AXEReactDataModule.m in Sources */,
 				283B89B820516CF600681FA0 /* AXEEventUserInterfaceState.m in Sources */,
 				283B89A020502DC100681FA0 /* AXEEvent.m in Sources */,
 				283B8ACB2053C42700681FA0 /* AXETabBarItem.m in Sources */,

@@ -50,8 +50,7 @@ static void (^customViewDidLoadBlock)(AXEWKWebViewController *);
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // TODO 去掉测试代码
-    [_webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:_startURL] cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:0]];
+    [_webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:_startURL]]];
     
     _bridge = [AXEWebViewBridge bridgeWithWKWebView:_webView];
     _bridge.webviewController = self;
@@ -111,6 +110,7 @@ static void (^customViewDidLoadBlock)(AXEWKWebViewController *);
                 callback = autoCloseCallback;
             }
             AXEWKWebViewController *controller = [AXEWKWebViewController webViewControllerWithURL:url postParams:params callback:callback];
+            controller.hidesBottomBarWhenPushed = YES;
             [navigation pushViewController:controller animated:YES];
         }else {
             AXELogWarn(@"当前 fromVC 设置有问题，无法进行跳转 ！！！fromVC : %@",fromVC);
@@ -141,6 +141,7 @@ static void (^customViewDidLoadBlock)(AXEWKWebViewController *);
                 callback = autoCloseCallback;
             }
             AXEWKWebViewController *controller = [AXEWKWebViewController webViewControllerWithURL:url postParams:params callback:callback];
+            controller.hidesBottomBarWhenPushed = YES;
             [navigation pushViewController:controller animated:YES];
         }else {
             AXELogWarn(@"当前 fromVC 设置有问题，无法进行跳转 ！！！fromVC : %@",fromVC);

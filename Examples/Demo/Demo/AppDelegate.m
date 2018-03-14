@@ -15,6 +15,7 @@
 
 #import "AXEWebViewController.h"
 #import "AXEWKWebViewController.h"
+#import "AXEReactViewController.h"
 
 @interface AppDelegate ()
 
@@ -39,12 +40,13 @@
 //    [AXEWebViewController registerUIWebViewForHTTP];
     [AXEWKWebViewController registerWKWebViewForHTTP];
     [AXEWKWebViewController registerWKWebViewForHTTPS];
+    [AXEReactViewController registerReactProtocol];
     
     AXETabBarItem *itema = [AXETabBarItem itemWithPagePath:@"A" routURL:@"axe://a"];
     itema.title = @"A";
     [AXETabBarController registerTabBarItem:itema];
     
-    AXETabBarItem *itemb = [AXETabBarItem itemWithPagePath:@"B" routURL:@"https://www.baidu.com"];
+    AXETabBarItem *itemb = [AXETabBarItem itemWithPagePath:@"B" routURL:@"react://localhost:8081/index.bundle?platform=ios&_moduleName=Awesome"];
     itemb.title = @"B";
     [AXETabBarController registerTabBarItem:itemb];
     

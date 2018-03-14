@@ -188,7 +188,7 @@ function injectAxe(){
     }
 
     // 数据接口。
-    var sharedData =new AXEData();
+    var sharedData = new AXEData();
     // sharedData 基本 所有接口与 普通的data 接口相同， 只有
 
     sharedData.setObjectForKey = function(key,value) {
