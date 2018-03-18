@@ -14,14 +14,16 @@ Axe is all the reinforcement this army needs.
 * Html
 * React
 * [axe-react](https://github.com/CodingForMoney/axe-react)
+* [axe-js](https://github.com/CodingForMoney/axe-js)
+* [offline-pack-server](https://github.com/CodingForMoney/offline-pack-server)
 
 #### 尚未完成
 
-* OfflinePackage
+* OfflinePackage / offline-pack-ios
 * OfflineHtml
 * OfflineReact
 * DynamicModular 动态路由
-* 模块管理平台
+* APP 开发平台
 * 完整 Demo
 * 代码检视 、 异常处理 、 异常日志。
 
