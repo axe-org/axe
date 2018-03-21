@@ -17,11 +17,12 @@ Axe is all the reinforcement this army needs.
 * [axe-js](https://github.com/CodingForMoney/axe-js)
 * [offline-pack-server](https://github.com/CodingForMoney/offline-pack-server)
 * [OfflinePackage](https://github.com/CodingForMoney/offline-pack-ios)
+* OfflineHtml
+* OfflineReact
 
 #### 尚未完成
 
-* OfflineHtml
-* OfflineReact
+
 * DynamicModular 动态路由
 * APP 开发平台
 * 完整 Demo

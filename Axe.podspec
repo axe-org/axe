@@ -25,7 +25,7 @@ Pod::Spec.new do |s|
     ss.source_files           = "Axe/Extension/TabBarController/*.{h,m}"
   end
   s.subspec "Html" do |ss|
-    ss.dependency             "Axe/Core"
+    ss.dependency             "Axe/Util"
     ss.dependency             "Axe/JavascriptSupport"
     ss.dependency             "WebViewJavascriptBridge"
     ss.source_files           = "Axe/Extension/Html/*.{h,m}"
@@ -35,9 +35,23 @@ Pod::Spec.new do |s|
     ss.source_files           = "Axe/Extension/JavascriptSupport/*.{h,m}"
   end
   s.subspec "React" do |ss|
-    ss.dependency             "Axe/Core"
+    ss.dependency             "Axe/Util"
     ss.dependency             "Axe/JavascriptSupport"
     ss.dependency             "MXReact/CxxBridge"
     ss.source_files           = "Axe/Extension/React/*.{h,m}"
+  end
+  s.subspec "OfflineHtml" do |ss|
+    ss.dependency             "Axe/Html"
+    ss.dependency             "OfflinePackage"
+    ss.source_files           = "Axe/Extension/OfflineHtml/*.{h,m}"
+  end
+  s.subspec "OfflineReact" do |ss|
+    ss.dependency             "Axe/React"
+    ss.dependency             "OfflinePackage"
+    ss.source_files           = "Axe/Extension/OfflineReact/*.{h,m}"
+  end
+  s.subspec "Util" do |ss|
+    ss.dependency             "Axe/Core"
+    ss.source_files           = "Axe/Extension/Util/*.{h,m}"
   end
 end

@@ -68,6 +68,8 @@
 
 /**
  注册 http协议， 使用UIWebView处理。 建议生成环境不要启用，只使用https.
+ 
+  讨论 ， 取消回调的处理。 如果用户点击关闭页面时， 这个取消回调，是否提供默认实现。
  */
 + (void)registerUIWebViewForHTTP;
 

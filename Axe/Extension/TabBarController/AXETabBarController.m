@@ -70,11 +70,15 @@ static Class NavigationControllerClass = NULL;
     [super viewDidLoad];
     NSMutableArray *controllerList = [[NSMutableArray alloc] initWithCapacity:10];
     NSMutableArray *validItemList = [[NSMutableArray alloc] initWithCapacity:10];
+    NSInteger index = 0;
     for (AXETabBarItem *item in itemList) {
-        UIViewController *controller = [[AXERouter sharedRouter] viewControllerForRouterURL:item.vcRouteURL];
+        AXEData *data = [AXEData dataForTransmission];
+        [data setData:@(index) forKey:AXETabBarRouteFlagKey];
+        UIViewController *controller = [[AXERouter sharedRouter] viewControllerForRouterURL:item.vcRouteURL params:data finishBlock:nil];
         if (!controller) {
             AXELogWarn(@"[AXETabBarController viewDidLoad] : 当前 routeURL ： %@ ，未能正确返回ViewController！！！",item.vcRouteURL);
         }else {
+            index ++;
             if (![controller isKindOfClass:[UINavigationController class]]) {
                 // 则构建一个 navigationController
                 UINavigationController *navigation = [[NavigationControllerClass alloc] initWithRootViewController:controller];
@@ -159,3 +163,5 @@ static Class NavigationControllerClass = NULL;
 NSString *AXETabBarRouterDefaultProtocolName = @"home";
 
 NSString *const AXEEventTabBarModuleInitializing = @"AXEEventTabBarModuleInitializing";
+NSString *const AXETabBarRouteFlagKey = @"AXETabBarRouteFlagKey";
+

@@ -32,7 +32,7 @@ static void (^customViewDidLoadBlock)(AXEWKWebViewController *);
 }
 
 + (instancetype)webViewControllerWithURL:(NSString *)url postParams:(AXEData *)params callback:(AXERouterCallbackBlock)callback {
-    NSParameterAssert([url isKindOfClass:[NSString class]]);
+    NSParameterAssert(!url || [url isKindOfClass:[NSString class]]);
     NSParameterAssert(!params || [params isKindOfClass:[AXEData class]]);
     
     AXEWKWebViewController *controller = [[self alloc] init];
@@ -50,7 +50,9 @@ static void (^customViewDidLoadBlock)(AXEWKWebViewController *);
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [_webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:_startURL]]];
+    if (_startURL) {
+        [_webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:_startURL]]];
+    }
     
     _bridge = [AXEWebViewBridge bridgeWithWKWebView:_webView];
     _bridge.webviewController = self;

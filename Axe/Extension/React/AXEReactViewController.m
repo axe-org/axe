@@ -33,7 +33,7 @@ static void (^CustomViewDidLoadBlock)(AXEReactViewController *);
 }
 
 + (instancetype)controllerWithURL:(NSString *)url params:(AXEData *)params callback:(AXERouterCallbackBlock)callback {
-    NSParameterAssert([url isKindOfClass:[NSString class]]);
+    NSParameterAssert(!url || [url isKindOfClass:[NSString class]]);
     NSParameterAssert([params isKindOfClass:[AXEData class]]);
     
     AXEReactViewController *controller = [[self alloc] init];
@@ -45,31 +45,36 @@ static void (^CustomViewDidLoadBlock)(AXEReactViewController *);
     return controller;
 }
 
-- (void)loadView {
-    NSURL *url = [NSURL URLWithString:_startURL];
-    NSString *moduleName = [_routeParams stringForKey:@"_moduleName"];
-    if (![moduleName isKindOfClass:[NSString class]]) {
-        AXELogWarn(@"对于React Native模块 ，参数中必须带有 _moduleName 参数！！！");
-    }else {
-        AXEReactControllerWrapper *wrapper = [AXEReactControllerWrapper wrapperWithController:self];
-        wrapper.routerData = _routeParams;
-        wrapper.routerCallback =  _routeCallback;
-        _routeParams = nil;
-        _routeCallback = nil;
-        
-        NSDictionary *launchOptions = @{AXEReactControllerWrapperKey : wrapper};
-        _rctRootView = [[RCTRootView alloc] initWithBundleURL:url moduleName:moduleName initialProperties:nil launchOptions:launchOptions];
-        
-        self.view = _rctRootView;
-    }
-}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    self.view.backgroundColor = [UIColor whiteColor];
+    if (_startURL) {
+        [self loadRCTViewWithURL:_startURL];
+    }
+
     if (CustomViewDidLoadBlock) {
         CustomViewDidLoadBlock(self);
     }
+}
+
+- (void)loadRCTViewWithURL:(NSString *)urlStr {
+    NSString *moduleName = [_routeParams stringForKey:AXEReactModuleNameKey];
+    if (![moduleName isKindOfClass:[NSString class]]) {
+        AXELogWarn(@"对于React Native模块 ，参数中必须带有 AXEReactModuleNameKey 参数！！！");
+        return;
+    }
+    AXEReactControllerWrapper *wrapper = [AXEReactControllerWrapper wrapperWithController:self];
+    wrapper.routerData = _routeParams;
+    wrapper.routerCallback =  _routeCallback;
+    _routeParams = nil;
+    _routeCallback = nil;
+    NSURL *url = [NSURL URLWithString:urlStr];
+    NSDictionary *launchOptions = @{AXEReactControllerWrapperKey : wrapper};
+    _rctRootView = [[RCTRootView alloc] initWithBundleURL:url moduleName:moduleName initialProperties:nil launchOptions:launchOptions];
+    
+    [self.view addSubview:_rctRootView];
+    _rctRootView.frame = self.view.bounds;
 }
 
 
@@ -160,3 +165,5 @@ static void (^CustomViewDidLoadBlock)(AXEReactViewController *);
 
 
 @end
+
+NSString *const AXEReactModuleNameKey = @"_moduleName";

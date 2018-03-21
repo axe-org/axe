@@ -16,6 +16,7 @@
   基于Axe ， 实现简单的TabBarController路由
  这里是放置于首页的tabbarController 。 所以默认注册协议 home://
   所有首页的ViewController 必须包含在 UINavigationController中！！！
+ TODO 处理 离线包形式的特殊页面， 要求设置特殊参数。
  */
 @interface AXETabBarController : UITabBarController
 
@@ -57,4 +58,5 @@ extern NSString *const AXEEventTabBarModuleInitializing;
 
 // 默认protocol名称 , home://
 extern NSString *AXETabBarRouterDefaultProtocolName;
-
+// 对于所有通过 tabbar注册的 路由， 发送一个 data ，key 为AXETabBarRouteFlagKey ， 值为当前页面所在index.
+extern NSString *const AXETabBarRouteFlagKey;

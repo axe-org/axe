@@ -8,6 +8,7 @@ target 'Axe' do
   # Pods for Axe
   pod 'WebViewJavascriptBridge'
   pod 'MXReact/CxxBridge' 
+  pod 'OfflinePackage'
   target 'AxeTests' do
     inherit! :search_paths
     # Pods for testing

@@ -25,7 +25,7 @@ typedef UIViewController *(^AXEProtoclRouteForVCBlock)(NSString *url,AXEData *pa
   路由， 负责根据URL实现页面跳转。
  管理URL，管理模块。
  路由模块的URL标准格式是 axe://moduleName/PageName?params...
-
+ TODO 路由回调的默认处理问题， 对于路由跳转后， 用户点击返回和滑动返回时，而不是成功返回时， 如果自动处理这种取消回调。
  */
 @interface AXERouter : NSObject
 

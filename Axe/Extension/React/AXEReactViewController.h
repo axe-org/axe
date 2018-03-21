@@ -8,8 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "AXERouter.h"
+#import "AXEEventUserInterfaceState.h"
 
-@protocol AXEEventUserInterfaceContainer;
 @class RCTRootView;
 
 /**
@@ -22,7 +22,7 @@
 /**
  设置回调， 在ViewDidLoad时执行， 以定制AXEReactViewController
  
- @param block <#block description#>
+ @param block 定制。
  */
 + (void)setCustomViewDidLoadBlock:(void(^)(AXEReactViewController *))block;
 
@@ -38,6 +38,10 @@
 
 
 
+/**
+  需要注意， 如果一开始没有传入 , 则在viewDidLoad时，rctRootView为空。
+  之后再设置 URL时，要正确设置rctRootView.
+ */
 @property (nonatomic,strong) RCTRootView *rctRootView;
 
 
@@ -58,3 +62,6 @@
 + (void)registerReactsProtocol;
 
 @end
+
+/// 对于react 页面跳转， 要求在 AXEData或者URL中标明 moduleName ， 以正确展示页面。 key值为_moduleName
+extern NSString *const AXEReactModuleNameKey;
