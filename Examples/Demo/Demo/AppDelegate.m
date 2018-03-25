@@ -30,7 +30,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-    
+    [OPOfflineManager sharedManager].appID = @"fuku";
     [[OPOfflineManager sharedManager] setUpWithPublicPKCS8Pem:@"-----BEGIN PUBLIC KEY-----\r\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA4YXOMN8CxfZqDy2lpV+kbUgE4knWCG4k0M5/+lzOoEWl9eoohXw0Ln3dY0Cjx2EGsVCR5KzZVIfjRCiyQwdd8QYpmXwkXwbSq4hLtRPMN/411WN/zTgycaDEXlgqz5YZ3RReQzdzqj/KkLvwjFvaW6Q57CeEM52VaRhtYzMIU0WJuUwhsDKODg8jYzAOp3n+gKdUToOGiC/wG9HyU/0qt37gA/eHgRjOUcNJ1KT085+ddTGKHyopN+cTtNQ0nq+nzj5ZhF3Zl6iQ92JWSV9ERE62CvX+dPnyVWjOc/1jmcDgcaejJldFGLc2DjRMn148LM93kLDeCw35vhZTQeS+AwIDAQAB-----END PUBLIC KEY-----" baseURL:@"http://localhost:2677/app/"];
     
     [[AXERouter sharedRouter] registerPagePath:@"a" withRouterForVCBlock:^UIViewController *(AXEData *params,AXERouterCallbackBlock callback) {
@@ -54,7 +54,7 @@
     AXETabBarItem *itema = [AXETabBarItem itemWithPagePath:@"A" routURL:@"axe://a"];
     itema.title = @"A";
     [AXETabBarController registerTabBarItem:itema];
-    
+
     //react://localhost:8081/index.bundle?platform=ios&_moduleName=Awesome
     AXETabBarItem *itemb = [AXETabBarItem itemWithPagePath:@"B" routURL:@"ophttp://vmuapp/index.html#/feteamdevnav"];
     itemb.title = @"B";

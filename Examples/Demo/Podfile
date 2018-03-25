@@ -14,6 +14,7 @@ target 'Demo' do
     'OfflineHtml',
     'OfflineReact'
     ]
+  #pod 'OfflinePackage' , :path => '/Users/luoxianming/git/offline-pack-ios/OfflinePackage.podspec'
   pod 'MXReact', :subspecs =>  [
    'Core',
    'CxxBridge', # Include this for RN >= 0.47
