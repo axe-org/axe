@@ -16,27 +16,38 @@ Axe is all the reinforcement this army needs.
 
 #### 初步完成
 
-* Router 
-* Event
+* Router
+* Event 
 * Data 
-* TarbarController
-* JavascriptSupport
-* Html
-* React
-* [axe-react](https://github.com/CodingForMoney/axe-react)
-* [axe-js](https://github.com/CodingForMoney/axe-js)
-* [offline-pack-server](https://github.com/CodingForMoney/offline-pack-server)
-* [OfflinePackage](https://github.com/CodingForMoney/offline-pack-ios)
-* OfflineHtml
-* OfflineReact
+* TabbarController ： 提供基础功能的 TabbarController 
+* JavascriptSupport : 三大基础组件为支持js调用，所做的简单封装
+* Html ：提供webview支持
+* React ： 提供react-native支持
+* [axe-react](https://github.com/CodingForMoney/axe-react) ： js端的接口封装
+* [axe-js](https://github.com/CodingForMoney/axe-js) ：  js端的接口封装
+* [offline-pack-server](https://github.com/CodingForMoney/offline-pack-server) ： 离线包管理平台
+* [OfflinePackage](https://github.com/CodingForMoney/offline-pack-ios) ： 离线包基础
+* OfflineHtml ： h5离线包支持
+* OfflineReact : react-native 离线包支持
 
 #### 尚未完成
 
 
-* DynamicModular 动态路由
-* APP 开发平台
+* DynamicModular ： 动态路由，实现完全脱离实现细节的 路由控制。
+* MockTest ： 模拟测试，可以简单定义一些接口、事件和数据，以实现单独地测试，以及在依赖工程同步开发时的单独测试。
+* APP 开发管理平台 [axe-admin](https://github.com/CodingForMoney/axe-admin) ： 为优化业务模块开发流程，开发的简单的管理平台， 提供依赖图、发布构建、开发时间线、接口文档等等有用的功能
 * 完整 Demo
 * 代码检视 、 异常处理 、 异常日志。
+
+## Axe 想要解决以下问题
+
+* 统一的业务组件之间的交互方式
+* 一个可用的离线包系统
+* rn和js的支持
+* 模块动态切换
+* 模块单独测试
+* 一个可用的开发管理平台
+* 一个可用的开发框架、模式与系统
 
 ## 思路阐述
 
