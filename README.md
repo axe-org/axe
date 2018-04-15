@@ -2,6 +2,10 @@
 
 Axe is all the reinforcement this army needs.
 
+要用一句话，最简洁明了的表示自己的思路 ：
+
+面向大前端开发的iOS业务组件化框架， 即这个框架无视开发语言，通过一套标准的业务组件通信方式，来组织与管理 iOS组件、android组件、h5组件和 react-native组件。
+
 ## 主要内容
 
 通过三大基础组件，来规定所有业务组件之间的交互方式， 三大基础组件即 ： 
