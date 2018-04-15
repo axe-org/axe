@@ -6,7 +6,7 @@ Pod::Spec.new do |s|
   s.license                   = { :type => "MIT"}
   s.author                    = { "luoxianming" => "luoxianmingg@gmail.com" }
   s.ios.deployment_target     = '8.0'
-  s.source                    = { :git => "https://github.com/axe-org/axe.git.git", :tag => s.version}
+  s.source                    = { :git => "https://github.com/axe-org/axe.git", :tag => s.version}
   s.default_subspec           = "Core"
   s.subspec "Core" do |ss|
     ss.source_files           = "Axe/Axe/Axe.h"
