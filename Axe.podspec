@@ -1,12 +1,12 @@
 Pod::Spec.new do |s|
   s.name                      = "Axe"
-  s.version                   = "0.0.1"
+  s.version                   = "0.0.2"
   s.summary                   = "Axe is all the reinforcement this army needs"
-  s.homepage                  = "https://github.com/CodingForMoney/Axe"
+  s.homepage                  = "https://github.com/axe-org/axe"
   s.license                   = { :type => "MIT"}
   s.author                    = { "luoxianming" => "luoxianmingg@gmail.com" }
   s.ios.deployment_target     = '8.0'
-  s.source                    = { :git => "https://github.com/CodingForMoney/Axe.git", :tag => s.version}
+  s.source                    = { :git => "https://github.com/axe-org/axe.git.git", :tag => s.version}
   s.default_subspec           = "Core"
   s.subspec "Core" do |ss|
     ss.source_files           = "Axe/Axe/Axe.h"
