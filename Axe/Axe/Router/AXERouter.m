@@ -115,7 +115,7 @@ static NSTimeInterval const RouteMinInterval = 1;
     [_preprocesses enumerateObjectsUsingBlock:^(AXERouterPreprocessBlock  _Nonnull preprocess, NSUInteger idx, BOOL * _Nonnull stop) {
         preprocess(request);
     }];
-    if ([request checkRequestIsValid]) {
+    if (request.valid) {
         [self routeRequest:request withCallBack:(AXERouterCallbackBlock)block];
     }
 }
@@ -136,7 +136,7 @@ static NSTimeInterval const RouteMinInterval = 1;
         if (!definition) {
             AXELogWarn(@"当前未支持协议 %@",request.protocol);
         }else{
-            [definition excuteWithFromVC:request.fromVC params:request.params callbackBlock:block URL:request.redirectURL ? : request.sourceURL];
+            [definition excuteWithFromVC:request.fromVC params:request.params callbackBlock:block URL:request.currentURL];
         }
     }
 }
@@ -157,7 +157,7 @@ static NSTimeInterval const RouteMinInterval = 1;
     [_preprocesses enumerateObjectsUsingBlock:^(AXERouterPreprocessBlock  _Nonnull preprocess, NSUInteger idx, BOOL * _Nonnull stop) {
         preprocess(request);
     }];
-    if ([request checkRequestIsValid]) {
+    if (request.valid) {
         if ([request.protocol isEqualToString:AXERouterDefaultProtocolName]) {
             // 如果是axe协议
             AXERouterDefinition *definition = _vcRoutes[request.pagePath];
@@ -174,7 +174,7 @@ static NSTimeInterval const RouteMinInterval = 1;
                 AXELogWarn(@"当前未支持协议 %@",request.protocol);
                 return nil;
             }else{
-                return [definition getViewControllerWithParams:request.params URL:request.sourceURL callbackBlock:block];
+                return [definition getViewControllerWithParams:request.params URL:request.currentURL callbackBlock:block];
             }
         }
     }else {

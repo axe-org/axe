@@ -10,6 +10,7 @@
 #import "Axe.h"
 #import "AXEWebViewBridge.h"
 #import "AXEDefines.h"
+#import "WebViewJavascriptBridge.h"
 
 // 注意， 参数和回调，是持久存在的， 但是监听， 必须要在页面跳转后，进行清理。但是 如果进行了清理，那么在页面来回跳转时，如何进行监听 ？
 // TODO 注意测试 ，两个页面来回切换，会不会导致内存出大问题。

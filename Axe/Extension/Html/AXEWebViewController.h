@@ -8,8 +8,10 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import "WebViewJavascriptBridge.h"
 #import "AXERouter.h"
+// 使用 WebViewJavascriptBridge 作为桥接
+@class WebViewJavascriptBridge;
+
 // 对于 H5默认路由， 关于回调的注意事项 。
 // 参考 AXERouter.h中对于路由的描述 ,已知， 对于 jump route ，回调时的界面关闭由被调用者实现， 对于 controller route ，界面关闭由调用者管理。
 // 所以， 在 h5 默认实现中， 对于 jump route 带有回调时， js 正常调用回调接口即可， 页面关闭由 AXEWebViewController 实现了。

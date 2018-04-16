@@ -9,8 +9,10 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import <WebKit/WebKit.h>
-#import "WKWebViewJavascriptBridge.h"
 #import "AXERouter.h"
+
+// 使用WebViewJavascriptBridge 作为桥接。
+@class WKWebViewJavascriptBridge;
 
 /**
   使用 WKWebView展示网页

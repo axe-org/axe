@@ -15,15 +15,18 @@
 @interface AXERouterRequest : NSObject
 
 /**
-  无效的请求， 用于 AXERouterPreprocessBlock 中设置，即提供外界拒绝请求的能力。默认是NO.
+  是否合法，默认是YES.
+    默认解析URL时进行判断 ， 可以在 AXERouterPreprocessBlock 中设置，即提供外界拒绝请求的能力。
  */
-@property (nonatomic,assign) BOOL invalid;
+@property (nonatomic,assign) BOOL valid;
 
 
 /**
   用于重定向， 可以 AXERouterPreprocessBlock 修改URL，以使一个地址指向另外一个路径。
+   重定向时，不应该添加参数。修改参数建议直接获取 params 进行设置。
+  初始化时， 值为传入的 sourceURL
  */
-@property (nonatomic,copy) NSString *redirectURL;
+@property (nonatomic,copy) NSString *currentURL;
 
 /**
   所在协议
@@ -42,13 +45,13 @@
 
 
 /**
-  页面路径。
+  页面路径，去除参数部分。
  */
 @property (nonatomic,readonly,strong) NSString *pagePath;
 
 
 /**
- 格式化的URL  ，最后生成的  protocol://pagePath  的URL.
+ 格式化的URL  ，最后生成的  protocol://pagePath  的URL. 以去除参数
  */
 @property (nonatomic,readonly,strong) NSString *formedURL;
 
@@ -73,13 +76,6 @@
                               params:(AXEData *)params
                               fromVC:(UIViewController *)fromVC;
 
-/**
-  检测请求是否合法。
-   同时正式解析URL数据。
-  在预处理时 AXERouterPreprocessBlock ，只有传入的三个数据，其他值需要调用该方法后才确定。
-   YES表示合法， NO表示失败。
- */
-- (BOOL)checkRequestIsValid;
 
 @end
 

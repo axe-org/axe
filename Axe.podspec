@@ -1,13 +1,12 @@
 Pod::Spec.new do |s|
   s.name                      = "Axe"
-  s.version                   = "0.0.2"
+  s.version                   = "0.0.5"
   s.summary                   = "Axe is all the reinforcement this army needs"
   s.homepage                  = "https://github.com/axe-org/axe"
   s.license                   = { :type => "MIT"}
   s.author                    = { "luoxianming" => "luoxianmingg@gmail.com" }
   s.ios.deployment_target     = '8.0'
   s.source                    = { :git => "https://github.com/axe-org/axe.git", :tag => s.version}
-  s.default_subspec           = "Core"
   s.subspec "Core" do |ss|
     ss.source_files           = "Axe/Axe/Axe.h"
     ss.subspec "Router" do |sss|
@@ -53,5 +52,9 @@ Pod::Spec.new do |s|
   s.subspec "Util" do |ss|
     ss.dependency             "Axe/Core"
     ss.source_files           = "Axe/Extension/Util/*.{h,m}"
+  end
+  s.subspec "DynamicRouter" do |ss|
+    ss.dependency             "Axe/Core"
+    ss.source_files           = "Axe/Extension/DynamicRouter/*.{h,m}"
   end
 end

@@ -13,6 +13,7 @@
 
 /**
   model 协议， 存储的model类型，需要满足这个协议，以进行 序列化和反序列化。
+   这里的model类型指的是 可以序列化的，用于前后端交互的 model类型。 所以能做到跨语言通用。
  */
 @protocol AXEDataModelProtocol <NSObject>
 
