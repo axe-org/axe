@@ -33,13 +33,13 @@ Axe is all the reinforcement this army needs.
 * [OfflinePackage](https://github.com/CodingForMoney/offline-pack-ios) ： 离线包基础
 * OfflineHtml ： h5离线包支持
 * OfflineReact : react-native 离线包支持
+* DynamicRouter ： 动态路由，实现完全脱离实现细节的 路由控制。
+* [dynamic-router-server](https://github.com/axe-org/dynamic-router-server) : 动态路由后台
 
 #### 尚未完成
 
-
-* DynamicModular ： 动态路由，实现完全脱离实现细节的 路由控制。
 * MockTest ： 模拟测试，可以简单定义一些接口、事件和数据，以实现单独地测试，以及在依赖工程同步开发时的单独测试。
-* APP 开发管理平台 [axe-admin](https://github.com/CodingForMoney/axe-admin) ： 为优化业务模块开发流程，开发的简单的管理平台， 提供依赖图、发布构建、开发时间线、接口文档等等有用的功能
+* APP 开发管理平台 ： 为优化业务模块开发流程，开发的简单的管理平台， 提供依赖图、发布构建、开发时间线、接口文档等等有用的功能
 * 完整 Demo
 * 代码检视 、 异常处理 、 异常日志。
 

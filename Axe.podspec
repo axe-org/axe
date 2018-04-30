@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name                      = "Axe"
-  s.version                   = "0.0.5"
+  s.version                   = "0.0.6"
   s.summary                   = "Axe is all the reinforcement this army needs"
   s.homepage                  = "https://github.com/axe-org/axe"
   s.license                   = { :type => "MIT"}
