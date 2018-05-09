@@ -2,74 +2,99 @@
 
 Axe is all the reinforcement this army needs.
 
-要用一句话，最简洁明了的表示自己的思路 ：
+## Axe 框架
 
-面向大前端开发的iOS业务组件化框架， 即这个框架无视开发语言，通过一套标准的业务组件通信方式，来组织与管理 iOS组件、android组件、h5组件和 react-native组件。
-
-## 主要内容
-
-通过三大基础组件，来规定所有业务组件之间的交互方式， 三大基础组件即 ： 
+`Axe`是一个iOS的业务组件化框架，通过三大基础组件，来规定所有业务组件之间的交互方式， 三大基础组件为 ： 
 
 * Router : 路由模块，根据URL获取界面或者进行跳转
 * Event : 事件通知， 是业务组件之间的主要交互方式
 * Data :  公共数据，以及业务组件之前传递数据的媒介
 
-三大基础组件，更重要的意义是能够跨越不同语言 ， 即对于 APP中的`h5`或者`react-native`等内容， 也可以基于这三大组件，来实现业务组件之间的交互与合作。 这样就是跨语言的业务开发模式的统一成为了可能 ， 更高程度地管理和控制APP上所有业务组件的开发。
+相对于一般的组件化方案，我们多了一个`Event`和`Data`, 这两个组件的出现，使跨语言的统一业务开发模式的统一成为了可能 ，即当我们规定好三种路由、事件和数据后，`h5`的模块和`react-native`的模块可以和原生模块一样通过`Axe`框架与其他业务模块进行交互。
 
-## 进度
+## 示例
 
-#### 初步完成
+详细示例可以参考[Demo项目](https://github.com/axe-org/demo-app) , 这里简单介绍一下常用方法：
 
-* Router
-* Event 
-* Data 
-* TabbarController ： 提供基础功能的 TabbarController 
-* JavascriptSupport : 三大基础组件为支持js调用，所做的简单封装
-* Html ：提供webview支持
-* React ： 提供react-native支持
-* [axe-react](https://github.com/CodingForMoney/axe-react) ： js端的接口封装
-* [axe-js](https://github.com/CodingForMoney/axe-js) ：  js端的接口封装
-* [offline-pack-server](https://github.com/CodingForMoney/offline-pack-server) ： 离线包管理平台
-* [OfflinePackage](https://github.com/CodingForMoney/offline-pack-ios) ： 离线包基础
-* OfflineHtml ： h5离线包支持
-* OfflineReact : react-native 离线包支持
-* DynamicRouter ： 动态路由，实现完全脱离实现细节的 路由控制。
-* [dynamic-router-server](https://github.com/axe-org/dynamic-router-server) : 动态路由后台
+...
 
-#### 尚未完成
+## Axe框架结构
+ 
+ 核心功能：
+ 
+* Router ： 路由， 根据一个`URL`返回一次页面跳转或者一个界面
+* Event  ： 事件通知 
+* Data ： 数据， 既可以作为 路由跳转和事件通知的数据传递媒介，也可以做公共数据的共享
 
-* MockTest ： 模拟测试，可以简单定义一些接口、事件和数据，以实现单独地测试，以及在依赖工程同步开发时的单独测试。
-* APP 开发管理平台 ： 为优化业务模块开发流程，开发的简单的管理平台， 提供依赖图、发布构建、开发时间线、接口文档等等有用的功能
-* 完整 Demo
-* 代码检视 、 异常处理 、 异常日志。
+扩展功能：
 
-## Axe 想要解决以下问题
+* TabbarController ： TabbarController 管理的简单实现
+* JavascriptSupport : 三大基础组件为支持js调用，所做的简单封装，动态性支持。
+* Html ：提供webview支持，动态性支持。
+* React ： 提供react-native支持，动态性支持。
+* OfflineHtml ： h5离线包支持，动态性支持。
+* OfflineReact : react-native 离线包支持，动态性支持。
+* DynamicRouter ： 动态路由，实现完全脱离实现细节的 路由控制。，动态性支持。
 
-* 统一的业务组件之间的交互方式
-* 一个可用的离线包系统
-* rn和js的支持
-* 模块动态切换
-* 模块单独测试
-* 一个可用的开发管理平台
-* 一个可用的开发框架、模式与系统
 
-## 思路阐述
+## Axe系统
 
-> 这个地方， 对于平台化的定义，还是要继续斟酌。
+`Axe`框架是一个组件化的框架，而`Axe`系统是基于`Axe`框架搭建起来的完整的业务模块化管理开发系统。 所以 从`Axe`框架 到系统，分为以下三个层次 ：
 
-`axe`是什么， 是一个 iOS的`平台化框架` 。 一个业务组件化的基础开发平台。
+![](axe-system.png)
 
-`平台化` : 将APP底层和公共的内容整合成一个完整而高效的平台， 使业务开发者能够更高效地在这个平台上开发功能， 由于是一个平台，功能可以随意的新增、删除与切换， 且这个平台是对所有在APP上的内容。 即 APP、h5、rn等内容，都能使用同样的一套业务交互的逻辑来进行开发与管理。
+* 组件化： 实现业务组件化拆分，实现代码隔离的单独编译
+* 动态化： 接入`html` 和`react-native`支持， 同时模块可替换。
+* 平台化： 为APP上的业务模块开发提供一个管理平台，管理开发流程。
 
-平台化的主要思想是 `基础平台化，业务组件化`
+## Axe的动态化
 
-具体实现，将一个APP的公共业务和基础组件整合起来做为一个底层的平台，向业务开发者提供的一套高效严谨的业务组件开发方案。 即 `axe`使一个APP形成一个平台， 而APP的业务在平台上开发， 使代码分离，使跨模块、跨团队的合作开发成为可能。
+动态化指 尽可能地提高`APP`的动态性能力。 已知目前在`iOS`上能用的动态化方案，有两种, `H5`和`react-native` （忽略weex等），则动态化要做到的内容是 ： 支持`h5`和`react-native`模块， 使两种模块表现与原生模块相同， 最后做到能够动态切换。
 
-`axe`的目标是 ：
+#### 接入h5和react-native
 
-* 业务组件化， 实现真正的代码分离，支持单独编译、单独测试
-* 形成一套跨平台的 `业务模块开发` 模式, 在这个平台上，开发 `APP`，与开发`H5`，开发`React-Native`， 都是一样的模式，一样的沟通方式。 扩展开发者的视野与能力。
-* 搭建一个APP模块开发管理平台， 为开发者提供便捷好用的功能，降低沟通成本，提高开发效率。
+我们为`axe`提供了两个接口 ：
+
+* [axe-js](https://github.com/axe-org/axe-js) ： `h5`使用的`axe`接口
+* [axe-react](https://github.com/axe-org/axe-react) ： `react-native`使用的`axe`接口
+
+通过这两个接口，使`js`开发的业务模块也纳入了 组件化的体系中，保持与原生业务模块的一致性， 即一个原生开发的模块，与`js`开发的模块，几乎没有区别。
+
+同时，我们为`js`开发的模块提供了离线包功能， 以优化其更新下载过程 ：
+
+* [offline-pack-server](https://github.com/axe-org/offline-pack-server) ： 离线包管理平台
+* [offline-pack-ios](https://github.com/axe-org/offline-pack-ios) ： 离线包的iOS 实现。
+
+在`axe`框架的扩展中，`JavascriptSupport` ,`Html`, `React`,`OfflineHtml`,`OfflineReact` ,都是为`js`模块服务的。
+
+#### 可替换性与动态切换
+
+如上所述， 我们说`js`开发的模块接入了组件化体系， 通过提供`接口`（路由、事件、通知） 供其他模块调用，以及通过`接口`调用其他模块。 所以在我们`Axe`的组件化下， `js`模块与原生模块表现一致，可以互相替换。
+
+动态切换：指当前APP上如果有一个业务模块的多个实现时， 我们可以控制模块选取具体的实现。
+
+一个模块的多个实现，其接口中， 事件和通知都是相同，不同的是`路由` 。 所以我们提出了`声明路由`和`实现路由`的概念：
+
+![](router-declaration.png)
+
+当APP需要这种动态化能力时， 我们开发模块时会隐藏`实现路由` ，而暴露`声明路由` ， 再通过一个下发路由映射规则的服务 ：
+
+[dynamic-router-server](https://github.com/axe-org/dynamic-router-server)
+
+做到线上模块动态切换。 
+
+## Axe的平台化
+
+平台化指通过一个平台，来规范模块化APP的开发、构建、测试、接入、发布流程，优化跨小组、团队、部门的协作开发。平台化关注以下问题：
+
+* 代码管理的规范： 确定`git-flow`， 确定代码检视规则，确定代码提交权限 等等。
+* 项目管理的规范： 确定项目时间， 明确测试与发布时间，约定需求接收模式，明确职责划分 等等 
+* 协作开发的规范： 模块相关信息与接口API的展示，模块版本变更记录， 协作开发时处理模块间的依赖 等等。
+* 版本管理的规范： APP的版本规则， 模块版本的规则， 版本如何发布，模块如何接入到APP中 等等。
+* 持续集成的规范： 确定构建工具，搭建持续集成平台，管理模块和APP的打包  等等。
+* 自动化测试：    确定自动化测试的工具与方式，完成自动化测试系统的搭建， 确保每个模块都进行自动化测试。
+
+`Axe`系统提供一个平台化的解决方案 [axe-admin](https://github.com/axe-org/axe-admin) , 提供[demo](https://demo.axe-org.cn)以查看效果。
 
 ### License
 
