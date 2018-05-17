@@ -9,6 +9,7 @@
 #import "AXEReactDataModule.h"
 #import <React/RCTConvert.h>
 #import "AXEData+JavaScriptSupport.h"
+#import "AXEDefines.h"
 
 @implementation AXEReactDataModule
 RCT_EXPORT_MODULE(axe_data);
@@ -16,27 +17,34 @@ RCT_EXPORT_MODULE(axe_data);
 
 
 RCT_EXPORT_METHOD(setData:(NSDictionary *)param){
-    NSParameterAssert([param isKindOfClass:[NSDictionary class]]);
-
-    [[AXEData sharedData] setJavascriptData:param forKey:[param objectForKey:@"key"]];
+    if ([param isKindOfClass:[NSDictionary class]]) {
+        [[AXEData sharedData] setJavascriptData:param forKey:[param objectForKey:@"key"]];
+    } else {
+        AXELogWarn(@"param 需要为 NSDictionary类型！");
+    }
 }
 
 RCT_EXPORT_METHOD(removeData:(NSString *)key){
-    NSParameterAssert([key isKindOfClass:[NSString class]]);
+    if ([key isKindOfClass:[NSString class]]) {
+        [[AXEData sharedData] removeDataForKey:key];
+    } else {
+        AXELogWarn(@"key 需要为 NSString 类型！");
+    }
     
-    [[AXEData sharedData] removeDataForKey:key];
 }
 
 
 RCT_EXPORT_METHOD(getData:(NSString *)key callback:(RCTResponseSenderBlock)callback) {
-    NSParameterAssert([key isKindOfClass:[NSString class]]);
-    
-    NSDictionary *data = [[AXEData sharedData] javascriptDataForKey:key];
-    NSArray *response;
-    if (data) {
-        response = @[data];
+    if ([key isKindOfClass:[NSString class]]) {
+        NSDictionary *data = [[AXEData sharedData] javascriptDataForKey:key];
+        NSArray *response;
+        if (data) {
+            response = @[data];
+        }
+        callback(response);
+    } else {
+        AXELogWarn(@"key 需要为 NSString 类型！");
     }
-    callback(response);
 }
 
 @end

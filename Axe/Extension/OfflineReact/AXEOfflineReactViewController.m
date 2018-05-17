@@ -12,12 +12,17 @@
 #import "AXEReactControllerWrapper.h"
 #import "AXEDefines.h"
 
+// 同时我们也规定，入口文件名，也固定 ，为 bundle.js
+static NSString *const AXEDefaultBundleName = @"bundle.js";
+
+
 @interface AXEOfflineReactViewController ()<OPOfflineDownloadDelegate>
-@property (nonatomic,copy) NSString *module;
-@property (nonatomic,copy) NSString *subpath;
+@property (nonatomic,copy) NSString *path;
+@property (nonatomic,copy) NSString *offlineModule;
+@property (nonatomic,copy) NSString *moduleName;
 @property (nonatomic,strong) NSURL *localURL;// 最终的本地路径。
 @property (nonatomic,weak) AXEOfflineDownloadView *downloadView;// 下载进度。
-- (void)loadRCTViewWithURL:(NSString *)url;
+
 @end
 
 @implementation AXEOfflineReactViewController
@@ -29,24 +34,24 @@
 }
 
 
-+ (instancetype)controllerWithSubpath:(NSString *)subpath
-                               Module:(NSString *)module
-                               params:(AXEData *)params
-                             callback:(AXERouterCallbackBlock)callback {
-    NSParameterAssert([subpath isKindOfClass:[NSString class]]);
-    NSParameterAssert([module isKindOfClass:[NSString class]]);
-    NSParameterAssert(!params || [params isKindOfClass:[AXEData class]]);
++ (instancetype)controllerWithBundlePath:(NSString *)path
+                              moduleName:(NSString *)moduleName
+                         inOfflineModule:(NSString *)offlineModule {
+    NSParameterAssert([path isKindOfClass:[NSString class]]);
+    NSParameterAssert([moduleName isKindOfClass:[NSString class]]);
+    NSParameterAssert([offlineModule isKindOfClass:[NSString class]]);
     
-    AXEOfflineReactViewController *controller = [AXEOfflineReactViewController controllerWithURL:nil params:params callback:callback];
-    controller.module = module;
-    controller.subpath = subpath;
+    AXEOfflineReactViewController *controller = [[AXEOfflineReactViewController alloc] init];
+    controller.path = path;
+    controller.moduleName = moduleName;
+    controller.offlineModule = offlineModule;
     return controller;
 }
 
 
 - (void)checkUpdate {
     // 检测离线包模块。
-    OPOfflineModule *module = [[OPOfflineManager sharedManager] moduleForName:_module];
+    OPOfflineModule *module = [[OPOfflineManager sharedManager] moduleForName:_offlineModule];
     // 要检测module ,一般肯定会返回，但是要以防万一。
     if (!module) {
         // TODO 展示错误页面。
@@ -58,7 +63,7 @@
         module.delegate = self;
         dispatch_async(dispatch_get_main_queue(), ^{
             self->_downloadView = [AXEOfflineDownloadView showInView:self.view];
-            [self->_downloadView setRetryButtonTitle:@"重试" withBlock:^{
+            [self->_downloadView setErrorHandlerButtonTitle:@"重试" withBlock:^{
                 [self checkUpdate];
             }];
         });
@@ -69,10 +74,10 @@
 }
 
 - (void)loadRCTViewWithModule:(OPOfflineModule *)module {
-    NSString *url = [module.path stringByAppendingPathComponent:_subpath];
+    NSString *url = [module.path stringByAppendingPathComponent:_path];
     url = [@"file://" stringByAppendingString:url];
     
-    [self loadRCTViewWithURL:url];
+    [self loadReactWithBundleURL:url moduleName:_moduleName];
 }
 
 
@@ -94,44 +99,79 @@
 
 #pragma mark router register
 + (void)registerOfflineReactProtocol {
-    [[AXERouter sharedRouter] registerProtocol:@"opreact" withRouterBlock:^(UIViewController *fromVC, AXEData *params, AXERouterCallbackBlock callback, NSString *url) {
+    [[AXERouter sharedRouter] registerProtocol:AXEOfflineReactProtocol withJumpRoute:^(AXERouteRequest *request) {
         UINavigationController *navigation;
-        if ([fromVC isKindOfClass:[UINavigationController class]]) {
-            navigation = (UINavigationController *)fromVC;
-        }else if(fromVC.navigationController) {
-            navigation = fromVC.navigationController;
+        if ([request.fromVC isKindOfClass:[UINavigationController class]]) {
+            navigation = (UINavigationController *)request.fromVC;
+        }else if(request.fromVC.navigationController) {
+            navigation = request.fromVC.navigationController;
         }
         if (navigation) {
             // 对于 跳转路由， 自动在执行回调时关闭页面。
-            if (callback) {
+            if (request.callback) {
+                AXERouteCallbackBlock originCallback = request.callback;
                 UIViewController *topVC = navigation.topViewController;
-                AXERouterCallbackBlock autoCloseCallback = ^(AXEData *data) {
+                AXERouteCallbackBlock autoCloseCallback = ^(AXEData *data) {
                     [navigation popToViewController:topVC animated:YES];
-                    callback(data);
+                    originCallback(data);
                 };
-                callback = autoCloseCallback;
+                request.callback = autoCloseCallback;
             }
             // 解析URL
-            NSString *path = [url substringFromIndex:10];// opreact:// 10
-            NSRange ranage = [path rangeOfString:@"/"];
-            NSString *module = [path substringToIndex:ranage.location];
-            NSString *subpath = [path substringFromIndex:ranage.location + 1];
-            AXEOfflineReactViewController *controller = [AXEOfflineReactViewController controllerWithSubpath:subpath Module:module params:params callback:callback];
+            NSURLComponents *urlComponets = [NSURLComponents componentsWithString:request.currentURL];
+            NSString *module = urlComponets.host;
+            if (!module) {
+                AXELogWarn(@"当前URL 设置出错！ %@",request.currentURL);
+                return;
+            }
+            NSString *page = urlComponets.path;
+            NSString *path = module;
+            if (page.length > 1) {
+                path = [module stringByAppendingString:page];
+                page = [page substringFromIndex:1];
+            }
+            request.module = module;
+            request.path = path;
+            request.page = page;
+            
+            
+            AXEOfflineReactViewController *controller = [AXEOfflineReactViewController controllerWithBundlePath:AXEDefaultBundleName
+                                                                                                     moduleName:page
+                                                                                                inOfflineModule:module];
             controller.hidesBottomBarWhenPushed = YES;
+            controller.routeRequest = request;
             [navigation pushViewController:controller animated:YES];
         }else {
-            AXELogWarn(@"当前 fromVC 设置有问题，无法进行跳转 ！！！fromVC : %@",fromVC);
+            AXELogWarn(@"当前 fromVC 设置有问题，无法进行跳转 ！！！fromVC : %@",request.fromVC);
         }
     }];
-    [[AXERouter sharedRouter] registerProtocol:@"opreact" withRouteForVCBlock:^UIViewController *(NSString *url, AXEData *params, AXERouterCallbackBlock callback) {
+    [[AXERouter sharedRouter] registerProtocol:AXEOfflineReactProtocol withViewRoute:^UIViewController *(AXERouteRequest *request) {
         // 解析URL
-        NSString *path = [url substringFromIndex:10];// opreact:// 10
-        NSRange ranage = [path rangeOfString:@"/"];
-        NSString *module = [path substringToIndex:ranage.location];
-        NSString *subpath = [path substringFromIndex:ranage.location + 1];
-        return [AXEOfflineReactViewController controllerWithSubpath:subpath Module:module params:params callback:callback];
+        NSURLComponents *urlComponets = [NSURLComponents componentsWithString:request.currentURL];
+        NSString *module = urlComponets.host;
+        if (!module) {
+            AXELogWarn(@"当前URL 设置出错！ %@",request.currentURL);
+            return nil;
+        }
+        NSString *page = urlComponets.path;
+        NSString *path = module;
+        if (page.length > 1) {
+            path = [module stringByAppendingString:page];
+            page = [page substringFromIndex:1];
+        }
+        request.module = module;
+        request.path = path;
+        request.page = page;
+        
+        AXEOfflineReactViewController *controller = [AXEOfflineReactViewController controllerWithBundlePath:AXEDefaultBundleName
+                                                                                                 moduleName:page
+                                                                                            inOfflineModule:module];
+        controller.routeRequest = request;
+        return controller;
     }];
 }
 
 
 @end
+
+NSString *const AXEOfflineReactProtocol = @"oprn";

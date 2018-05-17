@@ -14,9 +14,8 @@
 
 /**
   基于Axe ， 实现简单的TabBarController路由
- 这里是放置于首页的tabbarController 。 所以默认注册协议 home://
-  所有首页的ViewController 必须包含在 UINavigationController中！！！
- TODO 处理 离线包形式的特殊页面， 要求设置特殊参数。
+ 这里是放置于首页的tabbarController 。 所以默认注册协议 axe://home/page
+  所有首页的ViewController 都包含在 UINavigationController中！！！
  */
 @interface AXETabBarController : UITabBarController
 
@@ -38,25 +37,25 @@
 
 /**
   设置 navigationController 基类。
-   对于所有返回值， 如果返回的是  UINavigationControlller ,则直接设置，
-   否则， 通过该类型， 调用 -initWithRootViewController: 方法来创建一个导航栈。
- @param cls <#cls description#>
+   设置该类型， 调用 -initWithRootViewController: 方法来创建指定类型的 NavigationController类的实例。
+ @param cls navigationController基类
  */
 + (void)setNavigationControllerClass:(Class)cls;
 
 /**
-  根据配置，创建实例。
-  不是单例， 这是一个工厂函数。
- @return <#return value description#>
+  单例。
  */
-+ (instancetype)TabBarController;
++ (instancetype)sharedTabBarController;
 
+// 跳回到首页具体 index的页面。
+- (void)backToIndex:(NSInteger)index fromViewController:(UIViewController *)fromVC;
 @end
 
-// 在初始化时，发送这个通知， 建议将初始化放在  AXEEventModulesBeginInitializing 之前，以提前初始化首页必须的 业务组件。
-extern NSString *const AXEEventTabBarModuleInitializing;
-
-// 默认protocol名称 , home://
+// 默认protocol名称 , home
 extern NSString *AXETabBarRouterDefaultProtocolName;
-// 对于所有通过 tabbar注册的 路由， 发送一个 data ，key 为AXETabBarRouteFlagKey ， 值为当前页面所在index.
-extern NSString *const AXETabBarRouteFlagKey;
+
+// 注册的路由会附带两个参数
+// index ，从0开始
+extern NSString *const AXETabBarRouterIndexKey;
+// path , 指 AXETabBarItem.pagePath
+extern NSString *const AXETabBarRouterPathKey;;

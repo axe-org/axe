@@ -14,13 +14,15 @@
 
 #import "AXEData+JavaScriptSupport.h"
 
+NSString *const AXEReactHttpProtocol = @"react";
+NSString *const AXEReactHttpsProtocol = @"reacts";
+NSString *const AXEReactModuleNameKey = @"module";
+
 @interface AXEReactViewController ()
 
-// 路由参数
-@property (nonatomic,copy) AXERouterCallbackBlock routeCallback;
-@property (nonatomic,strong) AXEData *routeParams;
-@property (nonatomic,strong) NSString *startURL;
-@property (nonatomic,strong) AXEEventUserInterfaceState *AXEContainerState;
+
+@property (nonatomic,copy) NSString *module;
+@property (nonatomic,copy) NSString *url;
 
 @end
 
@@ -32,25 +34,24 @@ static void (^CustomViewDidLoadBlock)(AXEReactViewController *);
     CustomViewDidLoadBlock = [block copy];
 }
 
-+ (instancetype)controllerWithURL:(NSString *)url params:(AXEData *)params callback:(AXERouterCallbackBlock)callback {
++ (instancetype)controllerWithURL:(NSString *)url moduleName:(NSString *)moduleName {
     NSParameterAssert(!url || [url isKindOfClass:[NSString class]]);
-    NSParameterAssert([params isKindOfClass:[AXEData class]]);
+    NSParameterAssert([moduleName isKindOfClass:[NSString class]]);
     
     AXEReactViewController *controller = [[self alloc] init];
-    controller.startURL = [url copy];
-    controller.routeParams = params;
-    controller.routeCallback = callback;
-    controller.AXEContainerState = [AXEEventUserInterfaceState state];
-    controller.edgesForExtendedLayout = UIRectEdgeLeft | UIRectEdgeBottom | UIRectEdgeRight;
+    controller.url = url;
+    controller.module = moduleName;
     return controller;
 }
 
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.edgesForExtendedLayout = UIRectEdgeNone;
+    self.extendedLayoutIncludesOpaqueBars = false;
     self.view.backgroundColor = [UIColor whiteColor];
-    if (_startURL) {
-        [self loadRCTViewWithURL:_startURL];
+    if (_url) {
+        [self loadReactWithBundleURL:_url moduleName:_module];
     }
 
     if (CustomViewDidLoadBlock) {
@@ -58,107 +59,121 @@ static void (^CustomViewDidLoadBlock)(AXEReactViewController *);
     }
 }
 
-- (void)loadRCTViewWithURL:(NSString *)urlStr {
-    NSString *moduleName = [_routeParams stringForKey:AXEReactModuleNameKey];
-    if (![moduleName isKindOfClass:[NSString class]]) {
-        AXELogWarn(@"对于React Native模块 ，参数中必须带有 AXEReactModuleNameKey 参数！！！");
-        return;
+- (void)loadReactWithBundleURL:(NSString *)urlStr moduleName:(NSString *)moduleName {
+    if (_rctRootView) {
+        [_rctRootView removeFromSuperview];
     }
+
+    _url = urlStr;
+    _module = moduleName;
     AXEReactControllerWrapper *wrapper = [AXEReactControllerWrapper wrapperWithController:self];
-    wrapper.routerData = _routeParams;
-    wrapper.routerCallback =  _routeCallback;
-    _routeParams = nil;
-    _routeCallback = nil;
     NSURL *url = [NSURL URLWithString:urlStr];
     NSDictionary *launchOptions = @{AXEReactControllerWrapperKey : wrapper};
-    _rctRootView = [[RCTRootView alloc] initWithBundleURL:url moduleName:moduleName initialProperties:nil launchOptions:launchOptions];
+    _rctRootView = [[RCTRootView alloc] initWithBundleURL:url
+                                               moduleName:_module
+                                        initialProperties:nil
+                                            launchOptions:launchOptions];
     
     [self.view addSubview:_rctRootView];
-    _rctRootView.frame = self.view.bounds;
-}
-
-
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
     
-    [_AXEContainerState containerWillAppear];
-}
-
-- (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-    
-    [_AXEContainerState containerWillDisappear];
+    _rctRootView.translatesAutoresizingMaskIntoConstraints = NO;
+    NSDictionary *viewsDictionary = NSDictionaryOfVariableBindings(_rctRootView);
+    NSArray *constraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[_rctRootView]-0-|"
+                                            options:0 metrics:nil views:viewsDictionary];
+    [self.view addConstraints:constraints];
+    constraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[_rctRootView]-0-|"
+                                                          options:0 metrics:nil views:viewsDictionary];
+    [self.view addConstraints:constraints];
 }
 
 
 
 #pragma mark - router register
 + (void)registerReactProtocol {
-    [[AXERouter sharedRouter] registerProtocol:@"react" withRouterBlock:^(UIViewController *fromVC, AXEData *params, AXERouterCallbackBlock callback, NSString *url) {
+    [[AXERouter sharedRouter] registerProtocol:AXEReactHttpProtocol withJumpRoute:^(AXERouteRequest *request) {
         UINavigationController *navigation;
-        if ([fromVC isKindOfClass:[UINavigationController class]]) {
-            navigation = (UINavigationController *)fromVC;
-        }else if(fromVC.navigationController) {
-            navigation = fromVC.navigationController;
+        if ([request.fromVC isKindOfClass:[UINavigationController class]]) {
+            navigation = (UINavigationController *)request.fromVC;
+        }else if(request.fromVC.navigationController) {
+            navigation = request.fromVC.navigationController;
         }
         if (navigation) {
             // 对于 跳转路由， 自动在执行回调时关闭页面。
-            if (callback) {
+            if (request.callback) {
                 UIViewController *topVC = navigation.topViewController;
-                AXERouterCallbackBlock autoCloseCallback = ^(AXEData *data) {
+                AXERouteCallbackBlock originCallback = request.callback;
+                AXERouteCallbackBlock autoCloseCallback = ^(AXEData *data) {
                     [navigation popToViewController:topVC animated:YES];
-                    callback(data);
+                    originCallback(data);
                 };
-                callback = autoCloseCallback;
+                request.callback = autoCloseCallback;
             }
-            // 将url 修改回http
-            url = [url stringByReplacingCharactersInRange:NSMakeRange(0, 5) withString:@"http"];
-            AXEReactViewController *controller = [AXEReactViewController controllerWithURL:url params:params callback:callback];
+            // 对于react 协议的请求。 如 react://localhost:8081/index.bundle?platform=ios&module=register
+            // 我们约定， URL中必须声明 module ,以表示 单页面中的具体展示页面。
+            NSString *module = [request.params stringForKey:AXEReactModuleNameKey];
+            NSParameterAssert([module isKindOfClass:[NSString class]]);
+            // 将 react -> http
+            NSString *url = [request.currentURL stringByReplacingCharactersInRange:NSMakeRange(0, 5) withString:@"http"];
+            AXEReactViewController *controller = [AXEReactViewController controllerWithURL:url moduleName:module];
+            controller.routeRequest = request;
             controller.hidesBottomBarWhenPushed = YES;
             [navigation pushViewController:controller animated:YES];
         }else {
-            AXELogWarn(@"当前 fromVC 设置有问题，无法进行跳转 ！！！fromVC : %@",fromVC);
+            AXELogWarn(@"当前 fromVC 设置有问题，无法进行跳转 ！！！fromVC : %@",request.fromVC);
         }
     }];
-    [[AXERouter sharedRouter] registerProtocol:@"react" withRouteForVCBlock:^UIViewController *(NSString *url, AXEData *params, AXERouterCallbackBlock callback) {
-        // 将url 修改回http
-        url = [url stringByReplacingCharactersInRange:NSMakeRange(0, 5) withString:@"http"];
-        return [AXEReactViewController controllerWithURL:url params:params callback:callback];
+    [[AXERouter sharedRouter] registerProtocol:AXEReactHttpProtocol withViewRoute:^UIViewController *(AXERouteRequest *request) {
+        NSString *module = [request.params stringForKey:AXEReactModuleNameKey];
+        NSParameterAssert([module isKindOfClass:[NSString class]]);
+        // 将 react -> http
+        NSString *url = [request.currentURL stringByReplacingCharactersInRange:NSMakeRange(0, 5) withString:@"http"];
+        AXEReactViewController *controller = [AXEReactViewController controllerWithURL:url moduleName:module];
+        controller.routeRequest = request;
+        return controller;
     }];
 }
 
 + (void)registerReactsProtocol {
-    [[AXERouter sharedRouter] registerProtocol:@"reacts" withRouterBlock:^(UIViewController *fromVC, AXEData *params, AXERouterCallbackBlock callback, NSString *url) {
+    [[AXERouter sharedRouter] registerProtocol:AXEReactHttpsProtocol withJumpRoute:^(AXERouteRequest *request) {
         UINavigationController *navigation;
-        if ([fromVC isKindOfClass:[UINavigationController class]]) {
-            navigation = (UINavigationController *)fromVC;
-        }else if(fromVC.navigationController) {
-            navigation = fromVC.navigationController;
+        if ([request.fromVC isKindOfClass:[UINavigationController class]]) {
+            navigation = (UINavigationController *)request.fromVC;
+        }else if(request.fromVC.navigationController) {
+            navigation = request.fromVC.navigationController;
         }
         if (navigation) {
             // 对于 跳转路由， 自动在执行回调时关闭页面。
-            if (callback) {
+            if (request.callback) {
                 UIViewController *topVC = navigation.topViewController;
-                AXERouterCallbackBlock autoCloseCallback = ^(AXEData *data) {
+                AXERouteCallbackBlock originCallback = request.callback;
+                AXERouteCallbackBlock autoCloseCallback = ^(AXEData *data) {
                     [navigation popToViewController:topVC animated:YES];
-                    callback(data);
+                    originCallback(data);
                 };
-                callback = autoCloseCallback;
+                request.callback = autoCloseCallback;
             }
-            // 将url 修改回http
-            url = [url stringByReplacingCharactersInRange:NSMakeRange(0, 6) withString:@"https"];
-            AXEReactViewController *controller = [AXEReactViewController controllerWithURL:url params:params callback:callback];
+            // 对于react 协议的请求。 如 reacts://localhost:8081/index.bundle?platform=ios&module=register
+            // 我们约定， URL中必须声明 module ,以表示 单页面中的具体展示页面。
+            NSString *module = [request.params stringForKey:AXEReactModuleNameKey];
+            NSParameterAssert([module isKindOfClass:[NSString class]]);
+            // 将 reacts -> https
+            NSString *url = [request.currentURL stringByReplacingCharactersInRange:NSMakeRange(0, 6) withString:@"https"];
+            AXEReactViewController *controller = [AXEReactViewController controllerWithURL:url moduleName:module];
+            controller.routeRequest = request;
             controller.hidesBottomBarWhenPushed = YES;
             [navigation pushViewController:controller animated:YES];
         }else {
-            AXELogWarn(@"当前 fromVC 设置有问题，无法进行跳转 ！！！fromVC : %@",fromVC);
+            AXELogWarn(@"当前 fromVC 设置有问题，无法进行跳转 ！！！fromVC : %@",request.fromVC);
         }
     }];
-    [[AXERouter sharedRouter] registerProtocol:@"react" withRouteForVCBlock:^UIViewController *(NSString *url, AXEData *params, AXERouterCallbackBlock callback) {
-        // 将url 修改回http
-        url = [url stringByReplacingCharactersInRange:NSMakeRange(0, 6) withString:@"https"];
-        return [AXEReactViewController controllerWithURL:url params:params callback:callback];
+    [[AXERouter sharedRouter] registerProtocol:AXEReactHttpsProtocol withViewRoute:^UIViewController *(AXERouteRequest *request) {
+        NSString *module = [request.params stringForKey:AXEReactModuleNameKey];
+        NSParameterAssert([module isKindOfClass:[NSString class]]);
+        // 将 reacts -> https
+        NSString *url = [request.currentURL stringByReplacingCharactersInRange:NSMakeRange(0, 6) withString:@"https"];
+        AXEReactViewController *controller = [AXEReactViewController controllerWithURL:url moduleName:module];
+        controller.routeRequest = request;
+        return controller;
     }];
 }
 
@@ -166,4 +181,3 @@ static void (^CustomViewDidLoadBlock)(AXEReactViewController *);
 
 @end
 
-NSString *const AXEReactModuleNameKey = @"_moduleName";

@@ -12,13 +12,16 @@
 
 
 /**
+  model类型指的是 可以序列化的，用于前后端交互的 model类型。 所以能做到跨语言跨容器通用。
+ 
   model 协议， 存储的model类型，需要满足这个协议，以进行 序列化和反序列化。
-   这里的model类型指的是 可以序列化的，用于前后端交互的 model类型。 所以能做到跨语言通用。
  */
 @protocol AXEDataModelProtocol <NSObject>
 
 /**
-  使用一个json来 重置model
+  使用一个json来 重置model。
+ 进行的是合并操作， 如现有值为 {a: 1,b: 2}
+ 则我们传入 {b: 3} , 只修改 b的值，不修改a的值。
  */
 - (void)axe_modelSetWithJSON:(NSDictionary *)json;
 /**
@@ -29,7 +32,7 @@
 @end
 
 /**
-  model类型的基础数据。
+  model类型数据。
  */
 @interface AXEModelTypeData : AXEBaseData
 

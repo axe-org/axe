@@ -36,13 +36,14 @@ NSInteger const AXEEventDefaultPriority = 1;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         instance = [[AXEEvent alloc] init];
-        [instance setupDefaultUIEvent];
+        [instance translateDefaultEvents];
     });
     return instance;
 }
 
 - (instancetype)init {
     if (self = [super init]) {
+        // 这里，我们创建了两个序列化的队列，简单地优化一下序列执行，即事件监听会分配到两个队列中，避免一个任务造成的堵塞。
         _serialQueueA = dispatch_queue_create("org.axe.event.serail_queue_a", DISPATCH_QUEUE_SERIAL);
         _serialQueueB = dispatch_queue_create("org.axe.event.serail_queue_b", DISPATCH_QUEUE_SERIAL);
         _chooseQueueA = YES;
@@ -92,6 +93,19 @@ NSInteger const AXEEventDefaultPriority = 1;
     return listener;
 }
 
+
++ (id<AXEListenerDisposable>)registerSerialListenerForEventName:(NSString *)name
+                                                        handler:(AXEEventHandlerBlock)handler
+                                                       priority:(NSInteger)priority {
+    return [self registerAsyncListenerForEventName:name handler:handler priority:priority inSerialQueue:YES];
+}
+
+
++ (id<AXEListenerDisposable>)registerConcurrentListenerForEventName:(NSString *)name
+                                                            handler:(AXEEventHandlerBlock)handler {
+    return [self registerAsyncListenerForEventName:name handler:handler priority:AXEEventDefaultPriority inSerialQueue:NO];
+}
+
 + (id<AXEListenerDisposable>)registerUIListenerForEventName:(NSString *)name
                                                     handler:(AXEEventHandlerBlock)handler
                                               inUIContainer:(id<AXEEventUserInterfaceContainer>)container {
@@ -107,15 +121,15 @@ NSInteger const AXEEventDefaultPriority = 1;
                                               inUIContainer:(id<AXEEventUserInterfaceContainer>)container {
     NSParameterAssert([name isKindOfClass:[NSString class]]);
     NSParameterAssert(handler);
-    NSParameterAssert([container performSelector:@selector(AXEContainerState)]);
+    NSParameterAssert([container performSelector:@selector(AXEContainerStatus)]);
     
     AXEEventListener *listener = [[AXEEventListener alloc] init];
     listener.eventName = name;
     listener.handler = handler;
     listener.priority = priority;
     listener.asynchronous = YES;
-    listener.useUIThread = YES;
-    listener.containerState = container.AXEContainerState;
+    listener.userInterface = YES;
+    listener.containerStatus = container.AXEContainerStatus;
     [[AXEEvent sharedInstance] addListener:listener];
     return listener;
 }
@@ -144,9 +158,7 @@ NSInteger const AXEEventDefaultPriority = 1;
 #pragma mark - post
 
 + (void)postEventName:(NSString *)name {
-    NSParameterAssert([name isKindOfClass:[NSString class]]);
-    
-    [[AXEEvent sharedInstance] dispatchEventName:name withPayload:nil];
+    return [[AXEEvent sharedInstance] dispatchEventName:name withPayload:nil];
 }
 
 + (void)postEventName:(NSString *)name withPayload:(AXEData *)payload {
@@ -158,13 +170,14 @@ NSInteger const AXEEventDefaultPriority = 1;
 
 - (void)dispatchEventName:(NSString *)name withPayload:(AXEData *)payload {
     AXEEventListenerPriorityQueue *listeners = _listeners[name];
+    AXELogTrace(@"发送事件 %@ 。" , name);
     if (listeners) {
-        AXELogTrace(@"发送事件 %@ 。" , name);
         NSMutableArray *asyncListeners = [[NSMutableArray alloc] init];
+        NSMutableArray *syncListeners = [[NSMutableArray alloc] init];
         [listeners enumerateListenersUsingBlock:^(AXEEventListener *listener) {
-            if (listener.useUIThread) {
+            if (listener.userInterface) {
                 // 要在主线程中执行。
-                if (!listener.containerState) {
+                if (!listener.containerStatus) {
                     // 如果state不存在，表示UI被释放，则取消监听.
                     [listener dispose];
                 }else {
@@ -172,27 +185,28 @@ NSInteger const AXEEventDefaultPriority = 1;
                     dispatch_block_t block= ^{
                         listener.handler(payload);
                     };
-                    if (listener.containerState.inFront) {
+                    if (listener.containerStatus.inFront) {
                         dispatch_async(dispatch_get_main_queue(), block);
                     }else {
-                        [listener.containerState storeEventName:listener.eventName handlerBlock:block];
+                        [listener.containerStatus storeEventName:listener.eventName handlerBlock:block];
                     }
                 }
             }else if (!listener.asynchronous) {
-                // 同步执行。
-                listener.handler(payload);
+                [syncListeners addObject:listener];
             }else {
                 // 异步执行。
                 if (listener.serial) {
                     // 序列执行先记录一下。
                     [asyncListeners addObject:listener];
                 }else {
+                    // 并发执行
                     dispatch_async(self->_concurrentQueue, ^{
                         listener.handler(payload);
                     });
                 }
             }
         }];
+        // 先调用好异步任务
         if (asyncListeners.count) {
             dispatch_queue_t queue = [self getSerailQueue];
             dispatch_async(queue, ^{
@@ -200,6 +214,12 @@ NSInteger const AXEEventDefaultPriority = 1;
                     listener.handler(payload);
                 }];
             });
+        }
+        //然后才执行同步任务
+        if (syncListeners.count) {
+            [syncListeners enumerateObjectsUsingBlock:^(AXEEventListener *listener, NSUInteger idx, BOOL * _Nonnull stop) {
+                listener.handler(payload);
+            }];
         }
     }
 }
@@ -239,7 +259,7 @@ NSInteger const AXEEventDefaultPriority = 1;
     [[AXEEvent sharedInstance] dispatchEventName:notification.name withPayload:data];
 }
 
-- (void)setupDefaultUIEvent {
+- (void)translateDefaultEvents {
     [self translateNotification:UIApplicationDidEnterBackgroundNotification];
     [self translateNotification:UIApplicationWillEnterForegroundNotification];
     [self translateNotification:UIApplicationDidBecomeActiveNotification];

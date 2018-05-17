@@ -10,19 +10,19 @@
 
 @interface AXETabBarItem()
 
-@property (nonatomic,copy) NSString *pagePath;
-@property (nonatomic,copy) NSString *vcRouteURL;
+@property (nonatomic,copy) NSString *path;
+@property (nonatomic,copy) NSString *viewRoute;
 @end
 
 @implementation AXETabBarItem
 
-+ (instancetype)itemWithPagePath:(NSString *)pagePath routURL:(NSString *)routeURL {
-    NSParameterAssert([pagePath isKindOfClass:[NSString class]]);
-    NSParameterAssert([routeURL isKindOfClass:[NSString class]]);
++ (instancetype)itemWithPath:(NSString *)path viewRoute:(NSString *)viewRoute {
+    NSParameterAssert([path isKindOfClass:[NSString class]]);
+    NSParameterAssert([viewRoute isKindOfClass:[NSString class]]);
     
     AXETabBarItem *item = [[AXETabBarItem alloc] init];
-    item.pagePath = pagePath;
-    item.vcRouteURL = routeURL;
+    item.path = path;
+    item.viewRoute = viewRoute;
     return item;
 }
 

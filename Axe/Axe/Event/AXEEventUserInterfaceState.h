@@ -1,5 +1,5 @@
 //
-//  AXEEventUserInterfaceState.h
+//  AXEEventUserInterfaceStatus.h
 //  Axe
 //
 //  Created by 罗贤明 on 2018/3/8.
@@ -10,48 +10,47 @@
 
 
 /**
- UI 活跃状态类， 页面打开关闭时，通知该状态进行变化。
+ 界面状态类， 页面打开关闭时，通知该状态进行变化。
  */
-@interface AXEEventUserInterfaceState : NSObject
+@interface AXEEventUserInterfaceStatus : NSObject
 
 /**
- 界面将要消失或退到后台.
+ 界面将要消失或隐藏
  */
 - (void)containerWillDisappear;
 
 /**
- 界面将要回到前台。
+  界面显示。
  */
-- (void)containerWillAppear;
+- (void)containerDidAppear;
 
 
 /**
-  UI当前是否在前台。
+  UI当前是否在前台或展示中。
  */
 @property (nonatomic,readonly,assign) BOOL inFront;
 
 /**
    创建函数。
  */
-+ (instancetype)state;
++ (instancetype)status;
 
-// 待考虑。 TODO 
-///**
-//  释放所有监听。
-// */
-//- (void)removeListeners;
 
+/**
+  清理存储内容。
+ */
+- (void)cleanStoredEvents;
 @end
 
 /**
  UI 容器协议 ， 负责监控界面是否在前台。
- 通过这种监控，来决定是否执行任务。
+ 通过监控，来决定是否响应事件。
  */
 @protocol AXEEventUserInterfaceContainer<NSObject>
 
 /**
  持有 状态类，以监听页面前后台切换。
  */
-@property (nonatomic,readonly,strong) AXEEventUserInterfaceState *AXEContainerState;
+@property (nonatomic,readonly,strong) AXEEventUserInterfaceStatus *AXEContainerStatus;
 
 @end

@@ -31,17 +31,27 @@
 }
 
 
-
-+ (id<AXEListenerDisposable>)registerAsyncListenerForEventName:(NSString *)name
-                                                       handler:(AXEEventHandlerBlock)handler
-                                                      priority:(NSInteger)priority
-                                                 inSerialQueue:(BOOL)isSerial {
++ (id<AXEListenerDisposable>)registerSerialListenerForEventName:(NSString *)name
+                                                        handler:(AXEEventHandlerBlock)handler
+                                                       priority:(NSInteger)priority {
     id<AXEListenerDisposable> disposable;
     AXEEventHandlerBlock internalHandler = [handler copy];
-    disposable = [AXEEvent registerAsyncListenerForEventName:name handler:^(AXEData *info) {
-        internalHandler(info);
+    disposable = [AXEEvent registerSerialListenerForEventName:name handler:^(AXEData *payload) {
+        internalHandler(payload);
         [disposable dispose];
-    } priority:priority inSerialQueue:isSerial];
+    } priority:priority];
+    return disposable;
+}
+
+
++ (id<AXEListenerDisposable>)registerConcurrentListenerForEventName:(NSString *)name
+                                                            handler:(AXEEventHandlerBlock)handler {
+    id<AXEListenerDisposable> disposable;
+    AXEEventHandlerBlock internalHandler = [handler copy];
+    disposable = [AXEEvent registerConcurrentListenerForEventName:name handler:^(AXEData *payload) {
+        internalHandler(payload);
+        [disposable dispose];
+    }];
     return disposable;
 }
 

@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 /**
-  下载进度条。
+  离线包 下载进度条。
  */
 @interface AXEOfflineDownloadView : UIView
 
@@ -28,31 +28,35 @@
  */
 + (AXEOfflineDownloadView *)showInView:(UIView *)view;
 
-/**
-  进度条。
 
+/**
+ 设置一个按钮的标题与回调。 用于出错时处理。出错一般有两种思路 ：
+ 1. 提供一个关闭页面按钮 ： 问题是 如果当前页面是放在首页的，不能关闭的页面，就会很尴尬。
+ 2. 提供一个重试按钮。 即再次请求，重新下载。 我们当前默认使用重试按钮。
+ 
+ @param title 标题
+ @param block 回调
+ */
+- (void)setErrorHandlerButtonTitle:(NSString *)title withBlock:(void(^)(void))block;
+
+
+// 以下三个函数是回调，自定义时，需要实现以下三个函数。
+
+/**
+ 进度条。
+ 
  @param progress 进度， 0-100
  */
 - (void)didDownloadProgress:(NSInteger)progress;
 
 
 /**
-  成功下载回调
+ 成功下载回调
  */
 - (void)didFinishLoadSuccess;
 
-
 /**
- 对于出错的处理，设计是由改错误下载页面进行展示， 即设置这里的重试按钮。 当然，这个函数要在 didFinishLoadFailed 之前进行设置。
-  重试机制是 关掉当前 AXEOfflineDownloadView， 然后重新请求服务器。
- @param title 标题
- @param block 回调，即重新发请求
- */
-- (void)setRetryButtonTitle:(NSString *)title withBlock:(void(^)(void))block;
-
-/**
-  下载失败回调。
+ 下载失败回调。
  */
 - (void)didFinishLoadFailed;
-
 @end

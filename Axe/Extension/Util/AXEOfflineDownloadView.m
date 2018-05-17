@@ -34,7 +34,6 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         self.backgroundColor = [UIColor colorWithRed:230 / 255.0 green:235 / 255.0 blue:240 / 255.0 alpha:1];
-//        self.backgroundColor = COLOR_WITH_HEX(@"E6EBf0");
         self.layer.cornerRadius = 4;
         _progress = 0.0;
         CAGradientLayer *layer = [[CAGradientLayer alloc] init];
@@ -77,6 +76,8 @@ static AXEOfflineDownloadView *(^implemation)(UIView *);
         return implemation(view);
     }
     AXEOfflineDownloadView *downloadView = [[AXEOfflineDownloadView alloc] initWithFrame:view.bounds];
+    downloadView.retryTitle = @"确认";
+    downloadView.retryBlock = ^{};
     
     [view addSubview:downloadView];
     downloadView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
@@ -191,7 +192,7 @@ static AXEOfflineDownloadView *(^implemation)(UIView *);
 }
 
 
-- (void)setRetryButtonTitle:(NSString *)title withBlock:(void(^)(void))block {
+- (void)setErrorHandlerButtonTitle:(NSString *)title withBlock:(void(^)(void))block {
     self.retryTitle = title;
     self.retryBlock = block;
 }

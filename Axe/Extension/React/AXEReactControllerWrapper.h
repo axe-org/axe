@@ -10,28 +10,21 @@
 
 /**
   使用弱引用 包装一下 AXEReactViewController
+    通过 launchOptions 传递给每个 NativeModule.
  */
 @interface AXEReactControllerWrapper : NSObject
 
 
 /**
-  我们约束了 每个 react viewcontroller 都拥有自己的 rctbridge ,所以 每个module 都与一个 controller 相对应。
+  弱引用， 使每个 Module都可以获取当前页面。
  */
 @property (nonatomic,readonly,weak) AXEReactViewController *controller;
 
 
 /**
  初始化
-
- @param controller <#controller description#>
- @return <#return value description#>
  */
 + (instancetype)wrapperWithController:(AXEReactViewController *)controller;
-
-
-@property (nonatomic,strong) AXEData *routerData;
-
-@property (nonatomic,copy) AXERouterCallbackBlock routerCallback;
 
 @end
 

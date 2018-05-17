@@ -12,29 +12,23 @@
 #  import <Foundation/Foundation.h>
 #endif
 
-// 默认DEBUG情况下 设置AXE_DEBUG
-#ifndef AXE_DEBUG
-#if DEBUG
-#define AXE_DEBUG 1
-#else
 #define AXE_DEBUG 0
-#endif
-#endif
+
+//#if DEBUG
+//#define AXE_DEBUG 1
+//#else
+//#define AXE_DEBUG 0
+//#endif
 
 #if AXE_DEBUG
-#define AXELogTrace(...)        NSLog(@"AXE [Trace] : %@",[NSString stringWithFormat:__VA_ARGS__])
+#define AXELogTrace(...)        fprintf(stderr,"%s\n",[NSString stringWithFormat:@"[AXE Trace] %@.%d %s \n: %@",\
+                                        [[NSString stringWithUTF8String:__FILE__] lastPathComponent] ,\
+                                        __LINE__ ,__PRETTY_FUNCTION__ , [NSString stringWithFormat:__VA_ARGS__]].UTF8String)
 #else
 #define AXELogTrace(...)
 #endif
 
-#define AXELogWarn(...)         NSLog(@"AXE [Warn] : %@",[NSString stringWithFormat:__VA_ARGS__])
+#define AXELogWarn(...)         fprintf(stderr,"%s\n",[NSString stringWithFormat:@"[AXE Warn] %@.%d %s \n: %@",\
+                                        [[NSString stringWithUTF8String:__FILE__] lastPathComponent] ,\
+                                        __LINE__ ,__PRETTY_FUNCTION__ , [NSString stringWithFormat:__VA_ARGS__]].UTF8String)
 
-
-#if AXE_DEBUG
-
-#ifndef AXEROUTER_LIST_ENABLE
-// 支持路由列表功能， 将当前所有注册的路由暴露出来。
-#define AXEROUTER_LIST_ENABLE
-#endif
-
-#endif

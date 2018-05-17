@@ -9,7 +9,7 @@
 #import "AXEEventUserInterfaceState.h"
 
 
-@interface AXEEventUserInterfaceState(Event)
+@interface AXEEventUserInterfaceStatus(Event)
 
 
 

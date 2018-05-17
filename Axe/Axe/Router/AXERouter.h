@@ -10,22 +10,38 @@
 #import <UIKit/UIKit.h>
 #import "AXEData.h"
 
-
+@class AXERouteRequest;
 // 回调block
-typedef void (^AXERouterCallbackBlock)(AXEData *payload);
-// 路由block
-typedef void (^AXERouterBlock)(UIViewController *fromVC,AXEData *params,AXERouterCallbackBlock callback);
-// 返回 UIViewController形式的 路由block
-typedef UIViewController *(^AXERouteForVCBlock)(AXEData *params,AXERouterCallbackBlock callback);
-// 协议注册的路由block
-typedef void (^AXEProtoclRouterBlock)(UIViewController *fromVC,AXEData *params,AXERouterCallbackBlock callback,NSString *url);
-// 协议注册的 返回 VC形式 的路由。
-typedef UIViewController *(^AXEProtoclRouteForVCBlock)(NSString *url,AXEData *params,AXERouterCallbackBlock callback);
+typedef void (^AXERouteCallbackBlock)(AXEData *payload);
+// 跳转路由
+typedef void (^AXEJumpRouteHandler)(AXERouteRequest *request);
+// 视图路由
+typedef UIViewController *(^AXEViewRouteHandler)(AXERouteRequest *request);
+// 协议注册的跳转路由block
+typedef void (^AXEProtoclJumpRouterBlock)(AXERouteRequest *request);
+// 协议注册的视图路由block
+typedef UIViewController *(^AXEProtoclViewRouterBlock)(AXERouteRequest *request);
+
+
 /**
   路由， 负责根据URL实现页面跳转。
- 管理URL，管理模块。
- 路由模块的URL标准格式是 axe://moduleName/PageName?params...
- TODO 路由回调的默认处理问题， 对于路由跳转后， 用户点击返回和滑动返回时，而不是成功返回时， 如果自动处理这种取消回调。
+ 路由模块的URL标准格式是 protocl://moduleName/PageName?params...
+ 
+ 路由根据表现形式，分为两种 ：
+ 
+ * jump route : 跳转路由 ， 即 跳转到目标页面， 一般都是在 NavigationController下的push操作。
+ * view route : 视图路由 ， 即 返回一个目标页面， 暂定为 ViewController 返回值。 一般用于一些特殊页面的展示，如TabBarController, tab页、侧边栏等等。
+ 
+ 路由根据协议分为两种， 一种是默认协议，即原生界面的路由， 使用默认协议 axe
+ 
+ 一种是其他协议， 通过注册协议路由实现。 在扩展中，我们的协议路由有
+ 
+ * axes : 声明路由
+ * react/reacts : 线上react-native
+ * http/https: 线上h5
+ * offline: 离线包 h5
+ * oprn: 离线包 rn
+ 
  */
 @interface AXERouter : NSObject
 
@@ -37,93 +53,87 @@ typedef UIViewController *(^AXEProtoclRouteForVCBlock)(NSString *url,AXEData *pa
 + (instancetype)sharedRouter;
 
 
-#pragma mark - router
-// 路由方法， 都应该在主线程中调用。
+#pragma mark - route
 
 /**
- 路由到指定URL
-
+ 跳转
+ 路由方法， 都应该在主线程中调用。
  @param url url
- @param fromVC 所在页面
+ @param fromVC 当前页面 ，跳转路由必须要指定当前所在的ViewController。
  @param params 传递参数
  @param block 回调。
  */
-- (void)routeURL:(NSString *)url fromViewController:(UIViewController *)fromVC withParams:(AXEData *)params finishBlock:(AXERouterCallbackBlock)block;
+- (void)jumpTo:(NSString *)url fromViewController:(UIViewController *)fromVC withParams:(AXEData *)params finishBlock:(AXERouteCallbackBlock)block;
 
 
 /**
-  路由到指定URL
+  跳转
 
  @param url URL
- @param vc 必须要指定当前所在的ViewController， 以提高使router对应的block知道如何跳转页面。
+ @param fromVC 当前页面
  */
-- (void)routeURL:(NSString *)url fromViewController:(UIViewController *)vc;
+- (void)jumpTo:(NSString *)url fromViewController:(UIViewController *)fromVC;
 
-// 从整个业务系统的组件化结构来说， 两种路由的区别在于，
-// 前者是 模块内部实现跳转， 所以 模块知道自己是从何处开始， 所以结束时要自己处理 页面的关闭。
-// 后者是 由外部控制的跳转， 所以 模块不知道自己是以何种形式弹出的， 不知道自己是在栈里 还是model形式push ， 甚至可能是直接添加到window上的。 所以页面的关闭，应该由调用者来实现，即一般情况下， 由调用者在回调函数中，设置页面的关闭操作。
-
-// 所以 综上所诉， 两种路由对应的场景是不同的，应该这样区分 。
-// 跳转路由 ： 模块内自行实现跳转逻辑 。 适用于直接页面跳转的情况，简化操作，且不建议有回调。
-// Controller路由 ： 模块创建一个ViewController返回， 由调用者处理页面弹出逻辑 。 适用于有回调的情况， 由调用者完全管理页面的调用以及回调关闭页面的逻辑。 同时也适用于 组合页面，即一个页面由多个子页面组成的情况。
+// 视图路由与跳转路由 在跳转逻辑上有一些区别 ：
+// 跳转路由是 模块内部实现跳转， 所以 模块知道自己是从何处开始， 所以结束时要自己处理 页面的关闭。
+// 视图路由 是 由外部控制的界面展示， 所以 模块不知道自己是以何种形式弹出的， 不知道自己是在栈里 还是model形式push ， 甚至可能是直接添加到window上的。 所以页面的关闭，应该由调用者来实现，即一般情况下， 由调用者在回调函数中，设置页面的关闭操作。
 
 /**
-  直接从 URL 获取到一个新建的 ViewController.
+  视图路由
 
- @param url 路由URL
+ @param url URL
  @return 返回 UIViewController， 需要注意 ， 如果路由没有注册，这里返回空值时， 要考虑崩溃处理问题。
  */
-- (UIViewController *)viewControllerForRouterURL:(NSString *)url;
+- (UIViewController *)viewForURL:(NSString *)url;
 
 
 /**
-  直接从 URL 获取到一个新建的 ViewController.
+  视图路由
 
  @param url 路由URL
  @param params 参数
  @param block 回调
  @return 返回 UIViewController.
  */
-- (UIViewController *)viewControllerForRouterURL:(NSString *)url params:(AXEData *)params finishBlock:(AXERouterCallbackBlock)block;
+- (UIViewController *)viewForURL:(NSString *)url withParams:(AXEData *)params finishBlock:(AXERouteCallbackBlock)block;
 
 #pragma mark - register
 
 /**
- 注册 具体路由 在默认的 axe协议下
+ 注册 原生页面的 跳转路由 在默认的 axe协议下
 
- @param pagePath 这里注册的pagePath，建议为 moduleName/pageName 的形式 ， 则完整的URL为 axe://moduleName/pageName
- @param block  路由处理
+ @param path  路径，这里注册的pagePath，要求为 module/page 的形式 ， 则完整的URL为 axe://moduleName/pageName
+ @param handler  路由处理
  */
-- (void)registerPagePath:(NSString *)pagePath withRouterBlock:(AXERouterBlock)block;
+- (void)registerPath:(NSString *)path withJumpRoute:(AXEJumpRouteHandler)handler;
 
 /**
-  注册 具体路由， 在axe协议下。
-   这里使用 返回ViewController 形式的路由
+  注册 原生页面的 视图路由， 在axe协议下。
 
- @param pagePath 页面路径
- @param block 路由处理， 返回一个 UIViewController
+ @param path 页面路径
+ @param handler 路由处理， 返回一个 UIViewController
  */
-- (void)registerPagePath:(NSString *)pagePath withRouterForVCBlock:(AXERouteForVCBlock)block;
+- (void)registerPath:(NSString *)path withViewRoute:(AXEViewRouteHandler)handler;
 
 /**
- 注册 基于协议的路由。
+ 注册 基于协议的 跳转路由
 
- @param protocolName 协议名称。 默认注册的是 axe 。 可以使用这个来注册 http 等协议。
- @param block 路由处理 
+ @param protocol 协议名称。
+ @param handler 路由处理
  */
-- (void)registerProtocol:(NSString *)protocolName withRouterBlock:(AXEProtoclRouterBlock)block;
+- (void)registerProtocol:(NSString *)protocol withJumpRoute:(AXEProtoclJumpRouterBlock)handler;
 
 
 /**
-  注册 基于协议的路由
+  注册 基于协议的 视图路由
 
- @param protocolName 协议名称
- @param block 返回UIViewController的路由处理。
+ @param protocol 协议名称
+ @param handler 返回UIViewController的路由处理。
  */
-- (void)registerProtocol:(NSString *)protocolName withRouteForVCBlock:(AXEProtoclRouteForVCBlock)block;
+- (void)registerProtocol:(NSString *)protocol withViewRoute:(AXEProtoclViewRouterBlock)handler;
 
 @end
 
-// 默认protocol名称
-extern NSString *AXERouterDefaultProtocolName;
+// 默认protocol名称 ， 由于不是 const ,所以这个协议名称是可以修改的。
+extern NSString *AXERouterProtocolName;
 

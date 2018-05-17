@@ -13,13 +13,9 @@
 #import "WKWebViewJavascriptBridge.h"
 
 @interface AXEWKWebViewController()<AXEEventUserInterfaceContainer>
-// 路由参数
-@property (nonatomic,copy) AXERouterCallbackBlock routeCallback;
-@property (nonatomic,strong) AXEData *routeParams;
-
 
 @property (nonatomic,strong) AXEWebViewBridge *bridge;
-@property (nonatomic,strong) NSString *startURL;
+@property (nonatomic,copy) NSString *startURL;
 @end
 static void (^customViewDidLoadBlock)(AXEWKWebViewController *);
 @implementation AXEWKWebViewController
@@ -29,23 +25,16 @@ static void (^customViewDidLoadBlock)(AXEWKWebViewController *);
 }
 
 + (instancetype)webViewControllerWithURL:(NSString *)url {
-    return [self webViewControllerWithURL:url postParams:nil callback:nil];
-}
-
-+ (instancetype)webViewControllerWithURL:(NSString *)url postParams:(AXEData *)params callback:(AXERouterCallbackBlock)callback {
     NSParameterAssert(!url || [url isKindOfClass:[NSString class]]);
-    NSParameterAssert(!params || [params isKindOfClass:[AXEData class]]);
-    
     AXEWKWebViewController *controller = [[self alloc] init];
-    controller.startURL = [url copy];
-    controller.routeParams = params;
-    controller.routeCallback = callback;
+    controller.startURL = url;
     return controller;
 }
 
-
 - (void)loadView {
     _webView = [[WKWebView alloc] init];
+    // 启动手势右滑返回。
+    _webView.allowsBackForwardNavigationGestures = YES;
     self.view = _webView;
 }
 
@@ -57,34 +46,14 @@ static void (^customViewDidLoadBlock)(AXEWKWebViewController *);
     
     _bridge = [AXEWebViewBridge bridgeWithWKWebView:_webView];
     _bridge.webviewController = self;
-    _bridge.routeCallback = _routeCallback;
-    _routeCallback = nil;
-    _bridge.routeParams = _routeParams;
-    _routeParams = nil;
     if (customViewDidLoadBlock) {
         customViewDidLoadBlock(self);
     }
 }
 
 
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    
-    [_bridge.AXEContainerState containerWillAppear];
-}
-
-- (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-    
-    [_bridge.AXEContainerState containerWillDisappear];
-}
-
 - (WKWebViewJavascriptBridge *)javascriptBridge {
     return (WKWebViewJavascriptBridge *)_bridge.javascriptBridge;
-}
-
-- (AXEEventUserInterfaceState *)AXEContainerState {
-    return _bridge.AXEContainerState;
 }
 
 - (void)setWebViewDelegate:(id<WKNavigationDelegate>)webViewDelegate {
@@ -95,63 +64,71 @@ static void (^customViewDidLoadBlock)(AXEWKWebViewController *);
 
 #pragma mark - router register
 + (void)registerWKWebViewForHTTP {
-    [[AXERouter sharedRouter] registerProtocol:@"http" withRouterBlock:^(UIViewController *fromVC, AXEData *params, AXERouterCallbackBlock callback, NSString *url) {
+    [[AXERouter sharedRouter] registerProtocol:@"http" withJumpRoute:^(AXERouteRequest *request) {
         UINavigationController *navigation;
-        if ([fromVC isKindOfClass:[UINavigationController class]]) {
-            navigation = (UINavigationController *)fromVC;
-        }else if(fromVC.navigationController) {
-            navigation = fromVC.navigationController;
+        if ([request.fromVC isKindOfClass:[UINavigationController class]]) {
+            navigation = (UINavigationController *)request.fromVC;
+        }else if(request.fromVC.navigationController) {
+            navigation = request.fromVC.navigationController;
         }
         if (navigation) {
             // 对于 跳转路由， 自动在执行回调时关闭页面。
-            if (callback) {
+            if (request.callback) {
+                AXERouteCallbackBlock originCallback = request.callback;
                 UIViewController *topVC = navigation.topViewController;
-                AXERouterCallbackBlock autoCloseCallback = ^(AXEData *data) {
+                AXERouteCallbackBlock autoCloseCallback = ^(AXEData *data) {
                     [navigation popToViewController:topVC animated:YES];
-                    callback(data);
+                    originCallback(data);
                 };
-                callback = autoCloseCallback;
+                request.callback = autoCloseCallback;
             }
-            AXEWKWebViewController *controller = [AXEWKWebViewController webViewControllerWithURL:url postParams:params callback:callback];
+            AXEWKWebViewController *controller = [AXEWKWebViewController webViewControllerWithURL:request.currentURL];
+            controller.routeRequest = request;
             controller.hidesBottomBarWhenPushed = YES;
             [navigation pushViewController:controller animated:YES];
         }else {
-            AXELogWarn(@"当前 fromVC 设置有问题，无法进行跳转 ！！！fromVC : %@",fromVC);
+            AXELogWarn(@"当前 fromVC 设置有问题，无法进行跳转 ！！！fromVC : %@",request.fromVC);
         }
     }];
-    [[AXERouter sharedRouter] registerProtocol:@"http" withRouteForVCBlock:^UIViewController *(NSString *url, AXEData *params, AXERouterCallbackBlock callback) {
-        return [AXEWKWebViewController webViewControllerWithURL:url postParams:params callback:callback];
+    [[AXERouter sharedRouter] registerProtocol:@"http" withViewRoute:^UIViewController *(AXERouteRequest *request) {
+        AXEWKWebViewController *controller = [AXEWKWebViewController webViewControllerWithURL:request.currentURL];
+        controller.routeRequest = request;
+        return controller;
     }];
 }
 
 
 + (void)registerWKWebViewForHTTPS {
-    [[AXERouter sharedRouter] registerProtocol:@"https" withRouterBlock:^(UIViewController *fromVC, AXEData *params, AXERouterCallbackBlock callback, NSString *url) {
+    [[AXERouter sharedRouter] registerProtocol:@"https" withJumpRoute:^(AXERouteRequest *request) {
         UINavigationController *navigation;
-        if ([fromVC isKindOfClass:[UINavigationController class]]) {
-            navigation = (UINavigationController *)fromVC;
-        }else if(fromVC.navigationController) {
-            navigation = fromVC.navigationController;
+        if ([request.fromVC isKindOfClass:[UINavigationController class]]) {
+            navigation = (UINavigationController *)request.fromVC;
+        }else if(request.fromVC.navigationController) {
+            navigation = request.fromVC.navigationController;
         }
         if (navigation) {
             // 对于 跳转路由， 自动在执行回调时关闭页面。
-            if (callback) {
+            if (request.callback) {
+                AXERouteCallbackBlock originCallback = request.callback;
                 UIViewController *topVC = navigation.topViewController;
-                AXERouterCallbackBlock autoCloseCallback = ^(AXEData *data) {
+                AXERouteCallbackBlock autoCloseCallback = ^(AXEData *data) {
                     [navigation popToViewController:topVC animated:YES];
-                    callback(data);
+                    originCallback(data);
                 };
-                callback = autoCloseCallback;
+                request.callback = autoCloseCallback;
             }
-            AXEWKWebViewController *controller = [AXEWKWebViewController webViewControllerWithURL:url postParams:params callback:callback];
+            AXEWKWebViewController *controller = [AXEWKWebViewController webViewControllerWithURL:request.currentURL];
+            controller.routeRequest = request;
             controller.hidesBottomBarWhenPushed = YES;
             [navigation pushViewController:controller animated:YES];
         }else {
-            AXELogWarn(@"当前 fromVC 设置有问题，无法进行跳转 ！！！fromVC : %@",fromVC);
+            AXELogWarn(@"当前 fromVC 设置有问题，无法进行跳转 ！！！fromVC : %@",request.fromVC);
         }
     }];
-    [[AXERouter sharedRouter] registerProtocol:@"https" withRouteForVCBlock:^UIViewController *(NSString *url, AXEData *params, AXERouterCallbackBlock callback) {
-        return [AXEWKWebViewController webViewControllerWithURL:url postParams:params callback:callback];
+    [[AXERouter sharedRouter] registerProtocol:@"https" withViewRoute:^UIViewController *(AXERouteRequest *request) {
+        AXEWKWebViewController *controller = [AXEWKWebViewController webViewControllerWithURL:request.currentURL];
+        controller.routeRequest = request;
+        return controller;
     }];
 }
 

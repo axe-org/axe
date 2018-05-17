@@ -15,8 +15,46 @@ Axe is all the reinforcement this army needs.
 ## 示例
 
 详细示例可以参考[Demo项目](https://github.com/axe-org/demo-app) , 这里简单介绍一下常用方法：
-
-...
+	
+	// 路由
+	// 路由跳转
+	[self jumpTo:@"axes://login/register"];
+	// 视图路由
+	UIViewController *controller = [[AXERouter sharedRouter] viewForURL:item.viewRoute withParams:data finishBlock:nil];
+	// 带参数， 带回调
+	AXEData *data = [AXEData dataForTransmission];
+	[data setData:@"12345678" forKey:@"account"];
+	[self jumpTo:@"axes://login/login" withParams:data finishBlock:^(AXEData *payload) {
+	    id<LoginUserInfo> userInfo = [payload modelForKey:@"userInfo"];
+	    NSLog(@"%@",userInfo.account);
+	}];
+	    
+	//数据共享
+	// 设置数据
+	UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
+	[[AXEData sharedData] setData:image forKey:@"image"];
+    // 读取数据
+	 UIImage *image = [[AXEData sharedData] imageForKey:@"image"];
+	 
+	// 事件通知
+	// 注册
+	[wself registerUIEvent:@"LoginStatusChange" withHandler:^(AXEData *payload) {
+		BOOL login = [payload boolForKey:@"login"];
+		if (!login) {
+			[wself toastMessage:@"退出登录 ！！！"];
+		} else {
+			id<LoginUserInfo> userInfo = [payload modelForKey:@"userInfo"];
+			NSLog(@"%@",userInfo.account);
+		}
+	}];
+	// 发送通知
+	[[AXEData sharedData] removeDataForKey:@"userInfo"];
+	AXEData *data = [AXEData dataForTransmission];
+	[data setBool:NO forKey:@"login"];
+	[AXEEvent postEventName:@"LoginStatusChange" withPayload:data];
+         
+ 
+	
 
 ## Axe框架结构
  

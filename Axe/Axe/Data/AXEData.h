@@ -11,12 +11,31 @@
 @class UIImage;
 
 /**
-  提供公共数据共享， 以及供axe系统使用的数据类型。
+ Data : 数据模块， 解决跨模块数据传递的问题。
+  Data有两种用法 ：
+ 1. 共享数据，  设置一个单例来存储多模块共享的数据。
+ 2. 数据传输， 可以在 Event上附带数据，也可以在 Router的跳转和回调上附带数据。
+ 
+ Data 目前支持以下数据类型 ：
+ 
+ 1. NSNumber
+ 2. NSString
+ 3. NSArray : 需要说明， 如果要做到跨语言共享，则不能包含非基础类型 （基础类型为 NSNumber,NSString,NSArray,NSDictionary）
+ 4. NSDictionary :  需要说明， 如果要做到跨语言共享，则不能包含非基础类型
+ 
+ 5. UIImage: 最常见也是最需要的 非常规对象
+ 6. NSData
+ 7. NSDate
+ 8. BOOL
+ 
+ 9。 Model： 在Axe中提及的 Model类型，指可以进行序列化，且一般由后台获取的Model类型。
+        Model类型的要求 ： 如果是要做到跨语言共享，即与JS模块交互，则要求这类Model只能支持 基础类型。 如果只是原生模块共享，则无这个限制。
+        Model类型的放置 ： 要视该 Model的管理模块的数量，如果一个Model只由一个模块创建，则应该归该模块所有。 如果这个Model可以由多个模块创建，或者所有模块都依赖（如用户信息相关的Model）, 则应该放到 公共业务部分。
  */
 @interface AXEData : NSObject
 
 /**
-  共享的公共数据。 单例。
+  公共数据。 单例。
  */
 + (instancetype)sharedData;
 
@@ -57,7 +76,7 @@
  @param key 键值
  @return 如果当前有数据，则返回。一定要判断数据类型，避免处理出错。
  */
-- (AXEBaseData *)sharedDataForKey:(NSString *)key;
+- (AXEBaseData *)dataForKey:(NSString *)key;
 
 /**
   根据键值， 获取一个 NSNumber
@@ -84,7 +103,7 @@
 /**
  根据键值 ，获取一个 NSData.
  */
-- (NSData *)dataForKey:(NSString *)key;
+- (NSData *)NSDataForKey:(NSString *)key;
 
 /**
  根据键值 ，获取一个 NSDate.

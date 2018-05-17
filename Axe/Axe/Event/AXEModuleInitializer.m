@@ -30,9 +30,11 @@ static NSMutableArray *registeredModules;
 
 
 + (void)initializeModules {
-    for (Class cls in registeredModules) {
-        id<AXEModuleInitializer> initializer = [[cls alloc] init];
-        [initializer AEXInitialize];
+    if (registeredModules) {
+        for (Class cls in registeredModules) {
+            id<AXEModuleInitializer> initializer = [[cls alloc] init];
+            [initializer AEXInitialize];
+        }
     }
     [AXEEvent postEventName:AXEEventModulesBeginInitializing];
 }

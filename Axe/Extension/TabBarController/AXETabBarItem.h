@@ -36,26 +36,25 @@
 
 
 /**
- 注册 在 home:// 协议下的路径， 如果为 abc , 则路由协议为 home://abc
+ 注册 在 axe://home/ 协议下的路径， 如果为 abc , 则路由协议为 axe://home/abc
  */
-@property (nonatomic,readonly,copy) NSString *pagePath;
+@property (nonatomic,readonly,copy) NSString *path;
 
 
 /**
- 已经注册在 axe://协议下的获取 viewController的协议地址 ， 如 axe://login/main
-    AXETabBarController 根据这个路由协议，去创建viewController，并进行配置。
+ 已经注册的视图路由 ， 如 axe://login/register
+    AXETabBarController 根据这个路由协议，去获取viewController，并进行配置。
  */
-@property (nonatomic,readonly,copy) NSString *vcRouteURL;
+@property (nonatomic,readonly,copy) NSString *viewRoute;
 
 
 /**
  实例方法
-
- @param pagePath <#pagePath description#>
- @param routeURL <#routeURL description#>
- @return <#return value description#>
+ @param path 页面路径
+ @param viewRoute 视图路由
+ @return 实例
  */
-+ (instancetype)itemWithPagePath:(NSString *)pagePath routURL:(NSString *)routeURL;
++ (instancetype)itemWithPath:(NSString *)path viewRoute:(NSString *)viewRoute;
 
 
 + (instancetype)new NS_UNAVAILABLE;

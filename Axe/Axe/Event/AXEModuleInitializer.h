@@ -18,8 +18,7 @@
  */
 @protocol AXEModuleInitializer<NSObject>
 /**
- 固定使用这个函数初始化。
-
+  初始化时，使用 init函数构建实例。
  */
 - (id)init;
 /**
@@ -44,13 +43,16 @@
     AXEMODULEINITIALIZE_REGISTER()
 
     - (void)AEXInitialize {
-        [AXEAutoRemoveEvent registerAsyncListenerForEventName:AXEEventModulesBeginInitializing handler:^(NSDictionary *info) {
-            NSLog(@"hello world");
-        } priority:LoginModulePriority inSerialQueue:YES];
+         [AXEAutoreleaseEvent registerSyncListenerForEventName:AXEEventModulesBeginInitializing handler:^(AXEData *payload) {
+         [[AXERouter sharedRouter] registerPath:@"ios/test" withViewRoute:^UIViewController *(AXERouteRequest *request) {
+         return [[TestViewController alloc] init];
+         }];
+         } priority:AXEEventDefaultPriority];
     }
     @end
- *  这样做的好处，就是可以更加有效地管理模块的初始化， 将必要的模块优先初始化，将不必须的模块延后和异步初始化。
- *  同时也没有过度依赖load函数
+ 
+ *  可以更加有效地管理模块的初始化， 通过优先级来控制初始化顺序，将不必须的模块延后和异步初始化。
+ *  同时实现模块的自注册。
  */
 @interface AXEModuleInitializerManager : NSObject
 

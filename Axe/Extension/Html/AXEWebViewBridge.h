@@ -13,6 +13,8 @@
 #import "AXEEvent.h"
 #import "AXEEventUserInterfaceState.h"
 #import "AXERouter.h"
+#import "AXEViewController.h"
+
 // wkWebview和uiwebview的 jsbridge 接口相同， 使用同样的方式去调用。
 @protocol AXEWebViewJavaScriptBridge<NSObject>
 - (void)registerHandler:(NSString*)handlerName handler:(WVJBHandler)handler;
@@ -26,20 +28,14 @@
 
 
 /**
-  桥接 axe的三大组件与webview。 桥接使用 WebviewJavaScriptBridge, 为js添加一下方法 ：
-
- // TODO 加一个 NSData 和 NSDate 两种类型。。
- window.axe.route(URL,data {object 类型},handler);
- window.axe.sharedData.getObjectForKey(key)
- // 在 js中 对data的操作，与 原生代码中正好相反， 原生代码中，设置不需要指明类型，而读取时 需要指明类型。 而js中设置需要指明类型，而读取时不需要指明类型。
+  桥接 axe的三大组件与webview。 桥接使用 WebviewJavaScriptBridge,
+    请查看 axe-js项目
+    https://github.com/axe-org/axe-js
  
- window.axe.sharedData.setModel(model,key)
- window.axe.sharedData.removeItem(key)
- window.axe.event.post(name,data)
- window.axe.event.register(name,handler)
- 
+ * 三大组件中， router 和 event 支持各种形式的h5页面。
+    但是event 比较特殊， 容易发生 重复注册 和 内存泄漏问题， 目前只适配了基于Vue的单页面应用。
  */
-@interface AXEWebViewBridge : NSObject <AXEEventUserInterfaceContainer>
+@interface AXEWebViewBridge : NSObject
 
 
 /**
@@ -55,20 +51,7 @@
 
 @property (nonatomic,readonly,strong) id<AXEWebViewJavaScriptBridge> javascriptBridge;
 
-@property (nonatomic,readonly,strong) AXEEventUserInterfaceState *AXEContainerState;
 
-@property (nonatomic,weak) UIViewController *webviewController;
-
-
-/**
-  如果是路由跳转过来的，可能会拥有回调.
- */
-@property (nonatomic,copy) AXERouterCallbackBlock routeCallback;
-
-/**
-  路由跳转时， 所带的参数。 javascript 通过
-   axe.router.source 来判断是否是有路由跳转过来，是否带有参数，是否带有回调。
- */
-@property (nonatomic,strong) AXEData *routeParams;
+@property (nonatomic,weak) AXEViewController *webviewController;
 
 @end

@@ -12,7 +12,7 @@
 #import "AXEEXTScope.h"
 
 /**
-    事件回调block。 参数info 与 NSNotification 所带信息相同。
+    事件回调block。
  */
 typedef void(^AXEEventHandlerBlock)(AXEData *payload);
 
@@ -38,7 +38,7 @@ extern NSInteger const AXEEventDefaultPriority;
 @protocol AXEEventUserInterfaceContainer;
 /**
  * 事件管理， 简化通知机制，支持block ，同时提供同步、异步、以及优先级控制等。
- *   使用block的监听，最重要的是要注意 对象的持有问题。 对于持久监听，建议使用 @weakify 和 @strongify宏。
+ *  使用block的监听，最重要的是要注意 对象的持有问题。 对于持久监听，建议使用 @weakify 和 @strongify宏。
  *  @code
  
      id foo = [[NSObject alloc] init];
@@ -49,6 +49,8 @@ extern NSInteger const AXEEventDefaultPriority;
         @strongify(foo, bar);
  
      }];
+ 
+  * 
  */
 @interface AXEEvent : NSObject
 
@@ -74,7 +76,7 @@ extern NSInteger const AXEEventDefaultPriority;
 /**
   将 NSNotification的通知转换为 AXEEvent通知。
   需要注意的是， 这里附带的用户信息， 在 NSNotification中发送的是 NSDictionary
-  转换成 AXEData , 然后存在 @"userInfo"中。
+  转换存储在 AXEData中， key为 "userInfo"
  
  @param notificationName 原通知名称。
  */
@@ -82,8 +84,9 @@ extern NSInteger const AXEEventDefaultPriority;
 
 
 /**
- 注册监听 。 默认是注册同步监听。
-  如果在一个事件回调中添加对这个事件的监听，显然只能在下次生效。
+ 注册同步监听， 使用默认优先级。
+ 同步监听会在当前发送通知的线程执行。
+ 如果在一个事件回调中添加对这个事件的监听，显然只能在下次生效。
  @param name 名称
  @param handler 回调
  @return 释放器
@@ -93,8 +96,8 @@ extern NSInteger const AXEEventDefaultPriority;
 
 
 /**
-  注册监听。 监听为同步监听。
-
+ 注册同步监听。
+ 
  @param name 名称
  @param handler 回调
  @param priority 优先级， 高优先级任务优先处理， 同优先级会根据添加顺序决定。
@@ -107,29 +110,38 @@ extern NSInteger const AXEEventDefaultPriority;
 
 
 /**
- 注册监听。 异步监听
-
+ 注册 异步序列监听。 异步监听分两种 序列与并发， 序列监听回调会在一个异步gcd的queue中按照优先级依次执行。
+ 不推荐做耗时的操作，会阻塞其他事件的处理。
  @param name 名称
  @param handler 回调
  @param priority 优先级
- @param isSerial 是否串行 。 串行，则多个监听会依次执行。 为NO表示并行,即创建单独线程执行。
-                 建议对于 耗时操作，不要使用串行，使用并行以创建单独线程，避免阻塞其他事件监听。
- @return 释放器
+ @return 释放器。
  */
-+ (id<AXEListenerDisposable>)registerAsyncListenerForEventName:(NSString *)name
-                                                       handler:(AXEEventHandlerBlock)handler
-                                                      priority:(NSInteger)priority
-                                                 inSerialQueue:(BOOL)isSerial;
++ (id<AXEListenerDisposable>)registerSerialListenerForEventName:(NSString *)name
+                                                        handler:(AXEEventHandlerBlock)handler
+                                                       priority:(NSInteger)priority;
 
 
 /**
-  注册监听。 称之为UI事件监听。 执行在主线程中。
-    该监听的特点是， 执行在主线程中。 供那些需要在回调中执行UI操作的任务。
-    注意， 对于UI操作，我们约束，如果当前页面不在前台，则不执行，而是保留事件，直到容器回到前台时，才执行事件回调。
+ 注册异步并发监听， 会新建一个 default优先级的gcd来执行回调。
+ 异步并发的监听，可以做一些比较耗时的操作，毕竟是单独的queue.
+ @param name 名称
+ @param handler 回调
+ @return 释放器
+ */
++ (id<AXEListenerDisposable>)registerConcurrentListenerForEventName:(NSString *)name
+                                                            handler:(AXEEventHandlerBlock)handler;
+
+/**
+ UI事件监听。（纠结命名）
+ 该监听的特点是:
+ 1. 执行在主线程中。 供那些需要在回调中执行UI操作的任务。
+ 2. 与界面绑定 。UI监听会监控当前界面的状态， 如果界面不在前台，则推迟回调的执行， 直到界面重新回到前台。
+ 3. 当界面在后台时，对于同名的事件，只会记录和响应最后一次的数据。 保证通知内容保存最新 !!!
  @param name 名称
  @param handler 回调
  @param priority 优先级
- @param container 所在容器 , 通过协议AXEUIContainer来进行约束， 简单实现了对 UIViewController的封装， 也可以自行实现并接入。
+ @param container 所在容器 , 通过协议AXEUIContainer来进行 界面切后台切换的监控。 可以直接使用util中的 AXEViewController
  @return 释放器。
  */
 + (id<AXEListenerDisposable>)registerUIListenerForEventName:(NSString *)name
@@ -153,5 +165,5 @@ UIKIT_EXTERN NSNotificationName const UIApplicationWillEnterForegroundNotificati
 UIKIT_EXTERN NSNotificationName const UIApplicationDidBecomeActiveNotification;
 UIKIT_EXTERN NSNotificationName const UIApplicationWillResignActiveNotification;
 UIKIT_EXTERN NSNotificationName const UIApplicationWillTerminateNotification;
-
+// NSNotification附带的userInfo ,以该检测转存到 AXEData中。
 extern NSString *const AXEEventNotificationUserInfoKey;

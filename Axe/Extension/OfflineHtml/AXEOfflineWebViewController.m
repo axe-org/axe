@@ -14,29 +14,26 @@
 @interface AXEOfflineWebViewController()<OPOfflineDownloadDelegate>
 
 @property (nonatomic,copy) NSString *module;
-@property (nonatomic,copy) NSString *subpath;
+@property (nonatomic,copy) NSString *path;
+@property (nonatomic,copy) NSString *page;
 @property (nonatomic,strong) NSURL *localURL;// 最终的本地路径。
 @property (nonatomic,weak) AXEOfflineDownloadView *downloadView;// 下载进度。
 @end
 
 @implementation AXEOfflineWebViewController
 
-+ (instancetype)webViewControllerWithSubPath:(NSString *)subpath inModule:(NSString *)module {
-    return [self webViewControllerWithSubPath:subpath inModule:module params:nil callback:nil];
-}
 
-+ (instancetype)webViewControllerWithSubPath:(NSString *)subpath
-                                    inModule:(NSString *)module
-                                      params:(AXEData *)params
-                                    callback:(AXERouterCallbackBlock)callback {
-    NSParameterAssert([subpath isKindOfClass:[NSString class]]);
++ (instancetype)webViewControllerWithFilePath:(NSString *)path
+                                         page:(NSString *)page
+                                     inModule:(NSString *)module {
+    NSParameterAssert([path isKindOfClass:[NSString class]]);
     NSParameterAssert([module isKindOfClass:[NSString class]]);
-    NSParameterAssert(!params || [params isKindOfClass:[AXEData class]]);
+    NSParameterAssert(!page || [page isKindOfClass:[NSString class]]);
     
-    AXEOfflineWebViewController *webVC = [AXEOfflineWebViewController webViewControllerWithURL:nil postParams:params callback:callback];
-    webVC.subpath = subpath;
+    AXEOfflineWebViewController *webVC = [[self alloc] init];
+    webVC.path = path;
+    webVC.page = page;
     webVC.module = module;
-    
     return webVC;
 }
 
@@ -61,16 +58,19 @@
         module.delegate = self;
         dispatch_async(dispatch_get_main_queue(), ^{
             self->_downloadView = [AXEOfflineDownloadView showInView:self.view];
-            [self->_downloadView setRetryButtonTitle:@"重试" withBlock:^{
+            [self->_downloadView setErrorHandlerButtonTitle:@"重试" withBlock:^{
                 [self checkUpdate];
             }];
         });
         return;
     }
     // 否则，就可以直接加载页面了。
-    NSString *str = [module.path stringByAppendingPathComponent:_subpath];
-    str = [@"file://" stringByAppendingString:str];
-    _localURL = [NSURL URLWithString:str];
+    NSString *url = [NSString stringWithFormat:@"file://%@/%@", module.path, _path];
+    if (_page) {
+        // 推荐单页面应用。
+        url = [url stringByAppendingFormat:@"#/%@",_page];
+    }
+    _localURL = [NSURL URLWithString:url];
     [self.webView loadRequest:[NSURLRequest requestWithURL:_localURL]];
 }
 
@@ -84,9 +84,12 @@
 
 - (void)moduleDidFinishDownload:(OPOfflineModule *)module {
     [_downloadView didFinishLoadSuccess];
-    NSString *str = [module.path stringByAppendingPathComponent:_subpath];
-    str = [@"file://" stringByAppendingString:str];
-    _localURL = [NSURL URLWithString:str];
+    NSString *url = [NSString stringWithFormat:@"file://%@/%@", module.path, _path];
+    if (_page) {
+        // 推荐单页面应用。
+        url = [url stringByAppendingFormat:@"#/%@",_page];
+    }
+    _localURL = [NSURL URLWithString:url];
     [self.webView loadRequest:[NSURLRequest requestWithURL:_localURL]];
 }
 
@@ -97,41 +100,76 @@
 #pragma mark - router register
 
 + (void)registerUIWebVIewForOfflineHtml {
-    [[AXERouter sharedRouter] registerProtocol:@"ophttp" withRouterBlock:^(UIViewController *fromVC, AXEData *params, AXERouterCallbackBlock callback, NSString *url) {
+    [[AXERouter sharedRouter] registerProtocol:@"ophttp" withJumpRoute:^(AXERouteRequest *request) {
         UINavigationController *navigation;
-        if ([fromVC isKindOfClass:[UINavigationController class]]) {
-            navigation = (UINavigationController *)fromVC;
-        }else if(fromVC.navigationController) {
-            navigation = fromVC.navigationController;
+        if ([request.fromVC isKindOfClass:[UINavigationController class]]) {
+            navigation = (UINavigationController *)request.fromVC;
+        }else if(request.fromVC.navigationController) {
+            navigation = request.fromVC.navigationController;
         }
         if (navigation) {
             // 对于 跳转路由， 自动在执行回调时关闭页面。
-            if (callback) {
+            if (request.callback) {
                 UIViewController *topVC = navigation.topViewController;
-                AXERouterCallbackBlock autoCloseCallback = ^(AXEData *data) {
+                AXERouteCallbackBlock originCallback = request.callback;
+                AXERouteCallbackBlock autoCloseCallback = ^(AXEData *data) {
                     [navigation popToViewController:topVC animated:YES];
-                    callback(data);
+                    originCallback(data);
                 };
-                callback = autoCloseCallback;
+                request.callback = autoCloseCallback;
             }
             // 解析URL
-            NSString *path = [url substringFromIndex:9];// ophttp:// 9
-            NSRange ranage = [path rangeOfString:@"/"];
-            NSString *module = [path substringToIndex:ranage.location];
-            NSString *subpath = [path substringFromIndex:ranage.location + 1];
-            AXEOfflineWebViewController *controller = [AXEOfflineWebViewController webViewControllerWithSubPath:subpath inModule:module params:params callback:callback];
+            NSURLComponents *urlComponets = [NSURLComponents componentsWithString:request.currentURL];
+            NSString *module = urlComponets.host;
+            if (!module) {
+                AXELogWarn(@"当前URL 设置出错！ %@",request.currentURL);
+                return;
+            }
+            NSString *page = urlComponets.path;
+            NSString *path = module;
+            if (page.length > 1) {
+                path = [module stringByAppendingString:page];
+                page = [page substringFromIndex:1];
+            } else {
+                AXELogWarn(@"当前URL 设置出错！ %@",request.currentURL);
+                return;
+            }
+            request.module = module;
+            request.path = path;
+            request.page = page;
+            // filePath 固定为 index.html.
+            AXEOfflineWebViewController *controller = [AXEOfflineWebViewController webViewControllerWithFilePath:@"index.html" page:page inModule:module];
             controller.hidesBottomBarWhenPushed = YES;
+            controller.routeRequest = request;
             [navigation pushViewController:controller animated:YES];
         }else {
-            AXELogWarn(@"当前 fromVC 设置有问题，无法进行跳转 ！！！fromVC : %@",fromVC);
+            AXELogWarn(@"当前 fromVC 设置有问题，无法进行跳转 ！！！fromVC : %@",request.fromVC);
         }
     }];
-    [[AXERouter sharedRouter] registerProtocol:@"ophttp" withRouteForVCBlock:^UIViewController *(NSString *url, AXEData *params, AXERouterCallbackBlock callback) {
-        NSString *path = [url substringFromIndex:9];// ophttp:// 9
-        NSRange ranage = [path rangeOfString:@"/"];
-        NSString *module = [path substringToIndex:ranage.location];
-        NSString *subpath = [path substringFromIndex:ranage.location + 1];
-        return [AXEOfflineWebViewController webViewControllerWithSubPath:subpath inModule:module params:params callback:callback];
+    [[AXERouter sharedRouter] registerProtocol:@"ophttp" withViewRoute:^UIViewController *(AXERouteRequest *request) {
+        // 解析URL
+        NSURLComponents *urlComponets = [NSURLComponents componentsWithString:request.currentURL];
+        NSString *module = urlComponets.host;
+        if (!module) {
+            AXELogWarn(@"当前URL 设置出错！ %@",request.currentURL);
+            return nil;
+        }
+        NSString *page = urlComponets.path;
+        NSString *path = module;
+        if (page.length > 1) {
+            path = [module stringByAppendingString:page];
+            page = [page substringFromIndex:1];
+        } else {
+            AXELogWarn(@"当前URL 设置出错！ %@",request.currentURL);
+            return nil;
+        }
+        request.module = module;
+        request.path = path;
+        request.page = page;
+        // filePath 固定为 index.html.
+        AXEOfflineWebViewController *controller = [AXEOfflineWebViewController webViewControllerWithFilePath:@"index.html" page:page inModule:module];
+        controller.routeRequest = request;
+        return controller;
     }];
 }
 @end

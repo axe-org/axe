@@ -7,9 +7,12 @@
 //
 
 #import "AXEDynamicRouter.h"
-#import "AXERouterRequest.h"
+#import "AXERouteRequest.h"
 #import "Axe.h"
 #import "AXEDefines.h"
+
+
+
 
 static NSString *const SavedDynamicSettingKey = @"AXE_SavedDynamicSettingKey";
 static NSString *const SavedLastAPPVersionKey = @"AXE_DynamicRouter_LastVersion";
@@ -61,40 +64,57 @@ static NSString *const SavedLastAPPVersionKey = @"AXE_DynamicRouter_LastVersion"
         if (saved) {
             // 检测版本是否变更。
             NSString *lastAppVersion = [[NSUserDefaults standardUserDefaults] objectForKey:SavedLastAPPVersionKey];
-            if ([_appVersion isEqualToString:lastAppVersion]) {
-                _dynamicSetting = saved;
+            if ([self->_appVersion isEqualToString:lastAppVersion]) {
+                self->_dynamicSetting = saved;
             } else {
-                _dynamicSetting = [setting copy];
-                [[NSUserDefaults standardUserDefaults] setObject:_appVersion forKey:SavedLastAPPVersionKey];
+                self->_dynamicSetting = [setting copy];
+                [[NSUserDefaults standardUserDefaults] setObject:self->_dynamicSetting forKey:SavedDynamicSettingKey];
+                [[NSUserDefaults standardUserDefaults] setObject:self->_appVersion forKey:SavedLastAPPVersionKey];
             }
         } else {
-            _dynamicSetting = [setting copy];
-            [[NSUserDefaults standardUserDefaults] setObject:_appVersion forKey:SavedLastAPPVersionKey];
+            self->_dynamicSetting = [setting copy];
+            [[NSUserDefaults standardUserDefaults] setObject:self->_dynamicSetting forKey:SavedDynamicSettingKey];
+            [[NSUserDefaults standardUserDefaults] setObject:self->_appVersion forKey:SavedLastAPPVersionKey];
         }
         if (serverURL) {
             // 如果设置了URL ,设置监听
-            _serverURL = [NSURL URLWithString:serverURL];
-            [AXEEvent registerAsyncListenerForEventName:UIApplicationWillEnterForegroundNotification handler:^(AXEData *payload) {
+            self->_serverURL = [NSURL URLWithString:serverURL];
+            [AXEEvent registerSerialListenerForEventName:UIApplicationWillEnterForegroundNotification handler:^(AXEData *payload) {
                 [self checkUpdate];
-            } priority:AXEEventDefaultPriority inSerialQueue:YES];
+            } priority:AXEEventDefaultPriority];
             [self checkUpdate];
         }
         // 动态路由设置。
-        [[AXERouter sharedRouter] addPreprocess:^(AXERouterRequest *request) {
-            NSString *redirectPath = [_dynamicSetting objectForKey:request.protocol];
-            if (redirectPath) {
-                redirectPath = [redirectPath stringByAppendingString:request.pagePath];
-                // 需要重定向， 但是特殊处理一下 http和https.
-                NSURL *url = [NSURL URLWithString:redirectPath];
-                if ([url.scheme isEqualToString:@"http"] || [url.scheme isEqualToString:@"https"]) {
-                    // 对于http的请求，我们要拼接原始 URL的参数。
-                    NSURLComponents *urlComponents = [NSURLComponents componentsWithString:request.sourceURL];
-                    if (urlComponents.query) {
-                        redirectPath = [redirectPath stringByAppendingFormat:@"?%@",urlComponents.query];
-                    }
+        [[AXERouter sharedRouter] addPreprocess:^(AXERouteRequest *request) {
+            if ([request.protocol isEqualToString:AXEStatementRouterProtocol]) {
+                // 如果是声明路由则处理。
+                NSURLComponents *urlComponets = [NSURLComponents componentsWithString:request.currentURL];
+                NSString *module = urlComponets.host;
+                if (!module) {
+                    AXELogWarn(@"当前URL 设置出错！ %@",request.currentURL);
+                    return;
                 }
-                request.currentURL = redirectPath;
+                NSString *page = urlComponets.path;
+                NSString *path = module;
+                if (page.length > 1) {
+                    path = [module stringByAppendingString:page];
+                    page = [page substringFromIndex:1];
+                }
+                request.module = module;
+                request.path = path;
+                request.page = page;
+                
+                NSString *redirectPath = [self->_dynamicSetting objectForKey:request.module];
+                if (redirectPath) {
+                    redirectPath = [redirectPath stringByAppendingString:request.page];
+                    AXELogTrace(@"动态路由进行重定向 ： %@ => %@", request.currentURL,redirectPath);
+                    request.currentURL = redirectPath;
+                } else {
+                    AXELogWarn(@"当前启用动态路由，但是 %@ 并没有查找到映射规则，路由处理失败！！", request);
+                    request.valid = NO;
+                }
             }
+            
         }];
     });
 }
@@ -140,7 +160,8 @@ static NSString *const SavedLastAPPVersionKey = @"AXE_DynamicRouter_LastVersion"
                 if (dynamicSetting[@"error"]) {
                     AXELogWarn(@" 服务器报错 ： %@", dynamicSetting[@"error"]);
                 } else {
-                    _dynamicSetting = dynamicSetting;
+                    self->_dynamicSetting = dynamicSetting;
+                    AXELogTrace(@"更新动态路由规则： %@", dynamicSetting);
                     // 本地存储
                     [[NSUserDefaults standardUserDefaults] setObject:dynamicSetting forKey:SavedDynamicSettingKey];
                     [[NSUserDefaults standardUserDefaults] synchronize];
@@ -152,3 +173,6 @@ static NSString *const SavedLastAPPVersionKey = @"AXE_DynamicRouter_LastVersion"
 }
 
 @end
+
+// axe + s , s 表示 statement ,声明。
+NSString *AXEStatementRouterProtocol = @"axes";

@@ -11,7 +11,7 @@
 
 
 /**
-  事件
+  event
  */
 @interface AXEReactEventModule : NSObject<RCTBridgeModule>
 

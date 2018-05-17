@@ -12,9 +12,12 @@
 @implementation AXEEventListener
 
 - (void)dispose {
+    _handler = nil;
     [_queue delete:self];
-    if (_containerState) {
-        [_containerState cleanStoredEvents];
+    _queue = nil;
+    if (_containerStatus) {
+        [_containerStatus cleanStoredEvents];
+        _containerStatus = nil;
     }
 }
 
@@ -41,7 +44,7 @@
 }
 
 - (void)insert:(AXEEventListener *)item {
-    @synchronized(_list) {
+    @synchronized(self) {
         NSInteger index = 0;
         for (AXEEventListener *last in _list) {
             if (last.priority < item.priority) {
@@ -54,7 +57,7 @@
 }
 
 - (void)delete:(AXEEventListener *)item {
-    @synchronized(_list) {
+    @synchronized(self) {
         [_list removeObject:item];
     }
     if (_list.count == 0) {
@@ -64,7 +67,7 @@
 
 - (void)enumerateListenersUsingBlock:(void (^)(AXEEventListener *))block {
     NSArray<AXEEventListener *> *list;
-    @synchronized(_list) {
+    @synchronized(self) {
         list = [_list copy];
     }
     [list enumerateObjectsUsingBlock:^(AXEEventListener * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {

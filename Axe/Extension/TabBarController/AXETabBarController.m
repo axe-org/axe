@@ -9,23 +9,19 @@
 #import "AXETabBarController.h"
 #import "Axe.h"
 #import "AxeDefines.h"
+#import "AXERouteRequest.h"
 
 
-static NSMutableArray *itemList = nil;
+static NSMutableArray<AXETabBarItem *> *itemList = nil;
 static void (^customDecorateBlock)(AXETabBarController *) = nil;
+static Class NavigationControllerClass = NULL;
 
 @interface AXETabBarController ()
-
-
-/**
-  路由记录。
- */
-@property (nonatomic,strong) NSArray<NSString *> *routeURLs;
 
 @end
 
 
-static Class NavigationControllerClass = NULL;
+
 
 @implementation AXETabBarController
 
@@ -35,13 +31,10 @@ static Class NavigationControllerClass = NULL;
 
 + (void)registerTabBarItem:(AXETabBarItem *)barItem {
     NSParameterAssert([barItem isKindOfClass:[AXETabBarItem class]]);
-    NSParameterAssert([barItem.pagePath isKindOfClass:[NSString class]]);
-    NSParameterAssert([barItem.vcRouteURL isKindOfClass:[NSString class]]);
     
     if (!itemList) {
         itemList = [[NSMutableArray alloc] initWithCapacity:10];
     }
-    
     [itemList addObject:barItem];
 }
 
@@ -53,30 +46,35 @@ static Class NavigationControllerClass = NULL;
     customDecorateBlock = [block copy];
 }
 
-+ (instancetype)TabBarController {
-    if (!itemList.count) {
-        AXELogWarn(@"[AXETabBarController tabBarController]： 当前没有设置任何的子界面!!!");
-    }
-    [AXEEvent postEventName:AXEEventTabBarModuleInitializing];
-    if (NULL == NavigationControllerClass) {
-        NavigationControllerClass = [UINavigationController class];
-    }
-    AXETabBarController *controller = [[AXETabBarController alloc] init];
-    return controller;
++ (instancetype)sharedTabBarController {
+    static AXETabBarController *instance;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        if (!itemList.count) {
+            AXELogWarn(@"[AXETabBarController tabBarController]： 当前没有设置任何的子界面!!!");
+        }
+        if (NULL == NavigationControllerClass) {
+            NavigationControllerClass = [UINavigationController class];
+        }
+        instance = [[AXETabBarController alloc] init];
+    });
+    return instance;
 }
 
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.view.backgroundColor = [UIColor whiteColor];
     NSMutableArray *controllerList = [[NSMutableArray alloc] initWithCapacity:10];
     NSMutableArray *validItemList = [[NSMutableArray alloc] initWithCapacity:10];
     NSInteger index = 0;
     for (AXETabBarItem *item in itemList) {
         AXEData *data = [AXEData dataForTransmission];
-        [data setData:@(index) forKey:AXETabBarRouteFlagKey];
-        UIViewController *controller = [[AXERouter sharedRouter] viewControllerForRouterURL:item.vcRouteURL params:data finishBlock:nil];
+        [data setData:@(index) forKey:AXETabBarRouterIndexKey];
+        [data setData:item.path forKey:AXETabBarRouterPathKey];
+        UIViewController *controller = [[AXERouter sharedRouter] viewForURL:item.viewRoute withParams:data finishBlock:nil];
         if (!controller) {
-            AXELogWarn(@"[AXETabBarController viewDidLoad] : 当前 routeURL ： %@ ，未能正确返回ViewController！！！",item.vcRouteURL);
+            AXELogWarn(@" 当前 routeURL ： %@ ，未能正确返回ViewController！！！",item.viewRoute);
         }else {
             index ++;
             if (![controller isKindOfClass:[UINavigationController class]]) {
@@ -89,12 +87,11 @@ static Class NavigationControllerClass = NULL;
         }
     }
     if (controllerList.count) {
-        AXELogTrace(@"[AXETabBarController viewDidLoad] : 初始化成功，当前tab页数量为 %@",@(controllerList.count));
+        AXELogTrace(@"初始化成功，当前tab页数量为 %@",@(controllerList.count));
     }else {
-        AXELogWarn(@"[AXETabBarController viewDidLoad] : 当前tab页数量为0，请检测是否配置错误!!!");
+        AXELogWarn(@"当前tab页数量为0，请检测是否配置错误!!!");
     }
     self.viewControllers = controllerList;
-    NSMutableArray *routeURLs = [[NSMutableArray alloc] initWithCapacity:10];
     for (NSInteger i = 0; i < controllerList.count; i ++) {
         UIViewController *controller = controllerList[i];
         AXETabBarItem *item = validItemList[i];
@@ -108,28 +105,16 @@ static Class NavigationControllerClass = NULL;
         if (item.selectedIcon) {
             controller.tabBarItem.selectedImage = item.selectedIcon;
         }
-        [routeURLs addObject:[NSString stringWithFormat:@"%@://%@",AXETabBarRouterDefaultProtocolName,item.pagePath]];
+        __weak AXETabBarController *wself = self;
+        [[AXERouter sharedRouter] registerPath:[NSString stringWithFormat:@"%@/%@", AXETabBarRouterDefaultProtocolName, item.path] withJumpRoute:^(AXERouteRequest *request) {
+            [wself backToIndex:i fromViewController:request.fromVC];
+        }];
     }
-    _routeURLs = routeURLs;
     
     if (customDecorateBlock) {
         customDecorateBlock(self);
         customDecorateBlock = nil;
     }
-    [[AXERouter sharedRouter] registerProtocol:AXETabBarRouterDefaultProtocolName withRouterBlock:^(UIViewController *fromVC, AXEData *params, AXERouterCallbackBlock callback, NSString *sourceURL) {
-        NSInteger index = 0;
-        for (; index < self->_routeURLs.count; index ++) {
-            if ([sourceURL isEqualToString:self->_routeURLs[index]]) {
-                break;
-            }
-        }
-        if (index < self->_routeURLs.count) {
-            // 则找到页面
-            [self backToIndex:index fromViewController:fromVC];
-        }else {
-            AXELogWarn(@"AXETabBarController 路由未找到支持的跳转 %@ !!!",sourceURL);
-        }
-    }];
 }
 
 - (void)backToIndex:(NSInteger)index fromViewController:(UIViewController *)fromVC {
@@ -162,6 +147,5 @@ static Class NavigationControllerClass = NULL;
 
 NSString *AXETabBarRouterDefaultProtocolName = @"home";
 
-NSString *const AXEEventTabBarModuleInitializing = @"AXEEventTabBarModuleInitializing";
-NSString *const AXETabBarRouteFlagKey = @"AXETabBarRouteFlagKey";
-
+NSString *const AXETabBarRouterIndexKey = @"index";
+NSString *const AXETabBarRouterPathKey = @"path";

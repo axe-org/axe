@@ -11,31 +11,41 @@
 
 
 /**
-  实现了 opreact 协议的， 离线包的 rnviewcontroller. 以加载离线包的RN页面。
+  实现了 oprn 协议的， 离线包的 rnviewcontroller. 以加载离线包的RN页面。
+ 
+    当前实现react-native的离线包 是针对单页面应用 ， 所以我们约定了
+ 1. 基于原生导航栏的多页面应用。
+ 2. bundle文件名为 index.bundle
+ 3. URL oprn://module/page  module对应的是离线包的模块， 而page 对应的是 AppRegistry注册的页面。
  */
 @interface AXEOfflineReactViewController : AXEReactViewController
 
 
 /**
   实例方法。
-
- @param subpath 子路径
- @param module 模块名
- @param params 参数
- @param callback 回调
+ @param path bunlde文件的相对路径，默认为 'bundle.js'
+ @param moduleName 通过AppRegistry注册的模块名，
+ @param offlineModule 离线包的模块名。
  @return 返回创建vc.
  */
-+ (instancetype)controllerWithSubpath:(NSString *)subpath
-                               Module:(NSString *)module
-                               params:(AXEData *)params
-                             callback:(AXERouterCallbackBlock)callback;
++ (instancetype)controllerWithBundlePath:(NSString *)path
+                              moduleName:(NSString *)moduleName
+                         inOfflineModule:(NSString *)offlineModule;
+
+// 离线包的模块名。
+@property (nonatomic,readonly,copy) NSString *offlineModule;
 
 /**
- 注册协议为 opreact://
- 一般形式的路径为 opreact://moudleA/index.bundle?_moduleName=login
+ 注册协议为 oprn://
+ 一般形式的路径为 oprn://moudleA/login
  
- 对于react 页面跳转， 要求在 AXEData或者URL中标明 moduleName ， 以正确展示页面。
-
+ 则实际解析的URL为 ：
+ file:///path/to/module/bundle.js
+ 
  */
 + (void)registerOfflineReactProtocol;
+
 @end
+
+// oprn
+extern NSString *const AXEOfflineReactProtocol;

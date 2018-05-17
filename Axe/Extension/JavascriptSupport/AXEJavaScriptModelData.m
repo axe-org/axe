@@ -61,6 +61,7 @@
     
     if ([_axe_dictionary objectForKey:key]) {
         if (object == nil) {
+            // 设置值为空时， 我们实际设置的是 NSNull类型，通过NSNull以记住完成的model结构。
             [_axe_dictionary setObject:[NSNull null] forKey:key];
         }else {
             if ([object isKindOfClass:[NSString class]] || [object isKindOfClass:[NSNumber class]]
@@ -76,6 +77,7 @@
     }
 }
 
+// 通过 OC的动态性，将JavaScriptModel 伪装成一个 model类型， 进行get set操作。
 - (NSMethodSignature *)methodSignatureForSelector:(SEL)selector {
     NSString *selectorName = NSStringFromSelector(selector);
     if ([selectorName hasPrefix:@"set"] && selectorName.length > 4) {
@@ -84,7 +86,6 @@
         ivarName = [ivarName lowercaseString];
         id item = [_axe_dictionary objectForKey:ivarName];
         if (item) {
-            // 如果找到方法。
             NSMethodSignature *signature = [AXEJavaScriptModelWrapper instanceMethodSignatureForSelector:@selector(setObject:forKey:)];
             return signature;
         }
@@ -93,7 +94,6 @@
         NSString *ivarName = selectorName;
         id item = [_axe_dictionary objectForKey:ivarName];
         if (item ) {
-            // 如果找到方法。
             NSMethodSignature *signature = [AXEJavaScriptModelWrapper instanceMethodSignatureForSelector:@selector(objectForKey:)];
             return signature;
         }
@@ -112,6 +112,7 @@
             if (item) {
                 // 如果找到方法。
                 invocation.selector = @selector(setObject:forKey:);
+                // 0: self, 1:cmd, 2:value , 3:ivarName/key
                 [invocation setArgument:&ivarName atIndex:3];
                 [invocation invoke];
             }
@@ -120,7 +121,6 @@
             NSString *ivarName = selectorName;
             id item = [_axe_dictionary objectForKey:ivarName];
             if (item ) {
-                // 如果找到方法。
                 invocation.selector = @selector(objectForKey:);
                 [invocation setArgument:&ivarName atIndex:2];
                 [invocation invoke];

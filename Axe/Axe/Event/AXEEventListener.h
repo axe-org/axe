@@ -59,14 +59,14 @@
 
 
 /**
-  使用 主线程， UI监听。
+  UI监听 。
  */
-@property (nonatomic,assign) BOOL useUIThread;
+@property (nonatomic,assign) BOOL userInterface;
 
 /**
    用于判断UI状态。 设置为 weak ， 当界面消失时， 会自动释放监听。
  */
-@property (nonatomic,weak) AXEEventUserInterfaceState *containerState;
+@property (nonatomic,weak) AXEEventUserInterfaceStatus *containerStatus;
 
 /**
   当前监听所在的队列，用于 dispose

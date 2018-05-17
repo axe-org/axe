@@ -12,39 +12,31 @@
 
 /**
   使用 wkwebview实现的离线包的 webviewController.
+ 
+ 我们推荐使用单页面应用 ：
+ 1.是单页面应用， 使用router， 页面通过 #/page 访问。
+ 2.固定页面入口为 index.html文件， 放在根目录下。
  */
 @interface AXEOfflineWKWebViewController : AXEWKWebViewController
 
 
 /**
- 创建离线wkwebviewController.
+ 创建离线webviewController
  
- @param subpath 指的是具体路径 , 需要注意 ， 离线包不是web服务器，不支持自动填写index.html的功能，所以路径一定要写全。
- @param module 指的是离线模块名， 即OfflinePackage中的moduleName.
- @return 创建VC
+ @param path 入口文件， 固定为 index.html
+ @param page 页面. 设置表示使用 #/page，通过路由访问具体页面。
+ @param module 离线包模块。
  */
-+ (instancetype)webViewControllerWithSubPath:(NSString *)subpath inModule:(NSString *)module;
-
-
-/**
- 创建vc
- 
- @param subpath 具体路径， 获取到本地路径后，会拼接起来，生成最终的路径
- @param module 离线模块名
- @param params 参数
- @param callback 回调
- @return 返回VC
- */
-+ (instancetype)webViewControllerWithSubPath:(NSString *)subpath
-                                    inModule:(NSString *)module
-                                      params:(AXEData *)params
-                                    callback:(AXERouterCallbackBlock)callback;
++ (instancetype)webViewControllerWithFilePath:(NSString *)path
+                                         page:(NSString *)page
+                                     inModule:(NSString *)module;
 
 
 
 /**
- 注册 UIWebview 用于处理离线的网页请求。
- 注册的协议为 ophttp://
+ 注册 UIWebview 用于处理离线的网页请求。 该实现 只支持单页面应用
+ 注册的协议为 ophttp://moduleName/pageName
+ 解析后 ， 通过 file:///path/to/index.html#/pageName 来访问页面。
  */
 + (void)registerWKWebVIewForOfflineHtml;
 
