@@ -20,7 +20,8 @@ Axe is all the reinforcement this army needs.
 	// 路由跳转
 	[self jumpTo:@"axes://login/register"];
 	// 视图路由
-	UIViewController *controller = [[AXERouter sharedRouter] viewForURL:item.viewRoute withParams:data finishBlock:nil];
+	UIViewController *controller = [[AXERouter sharedRouter] viewForURL:item.viewRoute
+		 withParams:data finishBlock:nil];
 	// 带参数， 带回调
 	AXEData *data = [AXEData dataForTransmission];
 	[data setData:@"12345678" forKey:@"account"];
