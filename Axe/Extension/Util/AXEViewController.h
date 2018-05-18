@@ -13,12 +13,11 @@
 
 /**
   UIViewController 基类，使 webview、react和原生都使用同一个基类，以便于之后的扩展。
- 
-  我们没有声明 continuation class ， 所以要对 AXEViewController 扩展时就方便很多。
  */
 @interface AXEViewController : UIViewController<AXEEventUserInterfaceContainer>
 
 
+// 使用该方法实例化。
 - (instancetype)init;
 
 
@@ -44,7 +43,6 @@
 - (void)jumpTo:(NSString *)url withParams:(AXEData *)params finishBlock:(AXERouteCallbackBlock)block;
 
 - (void)jumpTo:(NSString *)url;
-
 
 
 /**
