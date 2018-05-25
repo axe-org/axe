@@ -2,6 +2,12 @@
 
 Axe is all the reinforcement this army needs.
 
+快速了解 ：
+
+* [demo-app](https://github.com/axe-org/demo-app)
+* [组件开发管理平台 Demo](https://demo.axe-org.cn)
+* [文档](https://axe-org.cn) (待填坑。。。)
+
 ## Axe 框架
 
 `Axe`是一个iOS的业务组件化框架，通过三大基础组件，来规定所有业务组件之间的交互方式， 三大基础组件为 ： 
