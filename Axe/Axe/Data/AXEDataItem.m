@@ -6,17 +6,17 @@
 //  Copyright © 2018年 罗贤明. All rights reserved.
 //
 
-#import "AXEBaseData.h"
+#import "AXEDataItem.h"
 
 
-@interface AXEBaseData()
+@interface AXEDataItem()
 @property (nonatomic,strong) id value;
 @end
 
-@implementation AXEBaseData
+@implementation AXEDataItem
 
 + (instancetype)dataWithValue:(id)value {
-    AXEBaseData *data = [[self alloc] init];
+    AXEDataItem *data = [[self alloc] init];
     data.value = value;
     return data;
 }

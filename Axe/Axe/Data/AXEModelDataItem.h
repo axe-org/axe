@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "AXEBaseData.h"
+#import "AXEDataItem.h"
 
 
 
@@ -16,7 +16,7 @@
  
   model 协议， 存储的model类型，需要满足这个协议，以进行 序列化和反序列化。
  */
-@protocol AXEDataModelProtocol <NSObject>
+@protocol AXESerializableModelProtocol <NSObject>
 
 /**
   使用一个json来 重置model。
@@ -34,7 +34,7 @@
 /**
   model类型数据。
  */
-@interface AXEModelTypeData : AXEBaseData
+@interface AXEModelDataItem : AXEDataItem
 
 
 
@@ -44,7 +44,7 @@
  @param value model
  @return 实例。
  */
-+ (instancetype)modelDataWithValue:(id<AXEDataModelProtocol>)value;
++ (instancetype)modelDataWithValue:(id<AXESerializableModelProtocol>)value;
 
 @end
 

@@ -39,9 +39,9 @@ Axe is all the reinforcement this army needs.
 	//数据共享
 	// 设置数据
 	UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
-	[[AXEData sharedData] setData:image forKey:@"image"];
+	[[AXEDataCenter sharedDataCenter] setData:image forKey:@"image"];
     // 读取数据
-	 UIImage *image = [[AXEData sharedData] imageForKey:@"image"];
+	 UIImage *image = [[AXEDataCenter sharedDataCenter] imageForKey:@"image"];
 	 
 	// 事件通知
 	// 注册
@@ -55,7 +55,7 @@ Axe is all the reinforcement this army needs.
 		}
 	}];
 	// 发送通知
-	[[AXEData sharedData] removeDataForKey:@"userInfo"];
+	[[AXEDataCenter sharedDataCenter] removeDataForKey:@"userInfo"];
 	AXEData *data = [AXEData dataForTransmission];
 	[data setBool:NO forKey:@"login"];
 	[AXEEvent postEventName:@"LoginStatusChange" withPayload:data];

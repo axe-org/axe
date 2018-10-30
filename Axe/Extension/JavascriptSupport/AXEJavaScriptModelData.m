@@ -8,14 +8,14 @@
 
 #import "AXEJavaScriptModelData.h"
 #import <objc/runtime.h>
-#import "AXEDefines.h"
+#import "AXELog.h"
 
 
 /**
   封装真实数据， 同时提供get set 接口，供外部调用， 以模拟真实的model类型。
    TODO 添加 performToSelector支持， 以提高稳定性。
  */
-@interface AXEJavaScriptModelWrapper : NSObject <AXEDataModelProtocol>
+@interface AXEJavaScriptModelWrapper : NSObject <AXESerializableModelProtocol>
 
 
 + (instancetype)modelWithDictionary:(NSDictionary *)dictionary;

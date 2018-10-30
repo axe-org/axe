@@ -9,7 +9,7 @@
 #import "AXEWKWebViewController.h"
 #import "Axe.h"
 #import "AXEWebViewBridge.h"
-#import "AXEDefines.h"
+#import "AXELog.h"
 #import "WKWebViewJavascriptBridge.h"
 
 @interface AXEWKWebViewController()<AXEEventUserInterfaceContainer>

@@ -10,7 +10,7 @@
 #import "AXEOfflineDownloadView.h"
 #import "OPOfflineManager.h"
 #import "AXEReactControllerWrapper.h"
-#import "AXEDefines.h"
+#import "AXELog.h"
 
 // 同时我们也规定，入口文件名，也固定 ，为 bundle.js
 static NSString *const AXEDefaultBundleName = @"bundle.js";

@@ -12,16 +12,16 @@
 
 /**
     扩展 AXEData ,以支持 JavaScript中使用 AXEData.
+ TODO 修改命名为 serialzation.
  */
 @interface AXEData (JavaScriptSupport)
-
 
 /**
   设置 JavaScriptData
  从 JS传入的是 NSDictionary类型的数据，其中声明了数据的具体类型， 然后转换成原生对应的类型。
  @param data 数据
  */
-- (void)setJavascriptData:(NSDictionary *)data forKey:(NSString *)key;
+- (void)setJavascriptDataItem:(NSDictionary *)data forKey:(NSString *)key;
 
 
 /**
@@ -31,6 +31,14 @@
  */
 - (NSDictionary *)javascriptDataForKey:(NSString *)key;
 
+
+/**
+  将一个 dataItem进行序列化。
+
+ @param item 具体对象
+ @return 返回一个序列化后的结果，可以在所有Axe系统中进行传递。
+ */
++ (NSDictionary *)serializeJSONFromDataItem:(AXEDataItem *)item;
 
 
 /**

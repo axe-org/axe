@@ -10,7 +10,7 @@
 #import "AXERouteRequest.h"
 #import "AXERouteDefinition.h"
 #import "AXERouteProtocolDefinition.h"
-#import "AXEDefines.h"
+#import "AXELog.h"
 
 @interface AXERouter()
 // 跳转路由
@@ -107,6 +107,11 @@ static NSTimeInterval const RouteMinInterval = 0.3;
     }
     _lastJumpTime = now;
     
+    id<AXEOperationTracker> tracker = AXEGetOperationTracker();
+    if ([tracker respondsToSelector:@selector(routerWillJumpRoute:withPayload:)]) {
+        [tracker routerWillJumpRoute:url withPayload:params];
+    }
+    
     AXERouteRequest *request = [AXERouteRequest requestWithSourceURL:url params:params callback:block fromVC:fromVC];
     [_preprocesses enumerateObjectsUsingBlock:^(AXERoutePreprocessBlock  _Nonnull preprocess, NSUInteger idx, BOOL * _Nonnull stop) {
         preprocess(request);
@@ -157,9 +162,14 @@ static NSTimeInterval const RouteMinInterval = 0.3;
     }
 }
 
-- (UIViewController *)viewForURL:(NSString *)url withParams:(AXEData *)params finishBlock:(AXERouteCallbackBlock)block {
+- (__kindof UIViewController *)viewForURL:(NSString *)url withParams:(AXEData *)params finishBlock:(AXERouteCallbackBlock)block {
     NSParameterAssert([url isKindOfClass:[NSString class]]);
     NSParameterAssert(!params || [params isKindOfClass:[AXEData class]]);
+    
+    id<AXEOperationTracker> tracker = AXEGetOperationTracker();
+    if ([tracker respondsToSelector:@selector(routerWillViewRoute:withPayload:)]) {
+        [tracker routerWillViewRoute:url withPayload:params];
+    }
     
     AXERouteRequest *request = [AXERouteRequest requestWithSourceURL:url params:params callback:block fromVC:nil];
     [_preprocesses enumerateObjectsUsingBlock:^(AXERoutePreprocessBlock  _Nonnull preprocess, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -207,7 +217,7 @@ static NSTimeInterval const RouteMinInterval = 0.3;
     }
 }
 
-- (UIViewController *)viewForURL:(NSString *)url {
+- (__kindof UIViewController *)viewForURL:(NSString *)url {
     return [self viewForURL:url withParams:nil finishBlock:nil];
 }
 

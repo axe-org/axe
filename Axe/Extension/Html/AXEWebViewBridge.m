@@ -9,8 +9,8 @@
 #import "AXEWebViewBridge.h"
 #import "WebViewJavascriptBridge.h"
 #import "WKWebViewJavascriptBridge.h"
-#import "AXEDefines.h"
-#import "AXEBasicTypeData.h"
+#import "AXELog.h"
+#import "AXEBasicDataItem.h"
 #import "AXEJavaScriptModelData.h"
 #import "AXEData+JavaScriptSupport.h"
 #import "AXEEvent.h"
@@ -58,21 +58,21 @@
     // 设置共享数据数据
     [_javascriptBridge registerHandler:@"axe_data_set" handler:^(id data, WVJBResponseCallback responseCallback) {
         if ([data isKindOfClass:[NSDictionary class]]) {
-            [[AXEData sharedData] setJavascriptData:data forKey:[data objectForKey:@"key"]];
+            [[AXEDataCenter sharedDataCenter] setJavascriptDataItem:data forKey:[data objectForKey:@"key"]];
         } else {
             AXELogWarn(@"axe_data_set 应该传入 Object/NSDictionary 类型数据");
         }
     }];
     [_javascriptBridge registerHandler:@"axe_data_remove" handler:^(id data, WVJBResponseCallback responseCallback) {
         if ([data isKindOfClass:[NSString class]]) {
-            [[AXEData sharedData] removeDataForKey:data];
+            [[AXEDataCenter sharedDataCenter] removeDataForKey:data];
         } else {
             AXELogWarn(@"axe_data_remove 应该传入 string 类型数据");
         }
     }];
     [_javascriptBridge registerHandler:@"axe_data_get" handler:^(id data, WVJBResponseCallback responseCallback) {
         if ([data isKindOfClass:[NSString class]]) {
-            NSDictionary *value = [[AXEData sharedData] javascriptDataForKey:data];
+            NSDictionary *value = [[AXEDataCenter sharedDataCenter] javascriptDataForKey:data];
             if (value) {
                 responseCallback(value);
             }else {

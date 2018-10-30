@@ -9,9 +9,7 @@
 #import "AXEDynamicRouter.h"
 #import "AXERouteRequest.h"
 #import "Axe.h"
-#import "AXEDefines.h"
-
-
+#import "AXELog.h"
 
 
 static NSString *const SavedDynamicSettingKey = @"AXE_SavedDynamicSettingKey";
@@ -73,8 +71,6 @@ static NSString *const SavedLastAPPVersionKey = @"AXE_DynamicRouter_LastVersion"
             }
         } else {
             self->_dynamicSetting = [setting copy];
-            [[NSUserDefaults standardUserDefaults] setObject:self->_dynamicSetting forKey:SavedDynamicSettingKey];
-            [[NSUserDefaults standardUserDefaults] setObject:self->_appVersion forKey:SavedLastAPPVersionKey];
         }
         if (serverURL) {
             // 如果设置了URL ,设置监听

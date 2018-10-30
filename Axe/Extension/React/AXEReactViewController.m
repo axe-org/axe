@@ -8,7 +8,7 @@
 
 #import "AXEReactViewController.h"
 #import <React/RCTRootView.h>
-#import "AXEDefines.h"
+#import "AXELog.h"
 #import "Axe.h"
 #import "AXEReactControllerWrapper.h"
 

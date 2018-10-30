@@ -11,7 +11,7 @@
 /**
   数据类型基类。
  */
-@interface AXEBaseData : NSObject
+@interface AXEDataItem : NSObject
 
 /**
   存放的实际数据内容

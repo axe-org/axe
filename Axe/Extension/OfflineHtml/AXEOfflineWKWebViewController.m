@@ -9,7 +9,7 @@
 #import "AXEOfflineWKWebViewController.h"
 #import "OPOfflineManager.h"
 #import "AXEOfflineDownloadView.h"
-#import "AXEDefines.h"
+#import "AXELog.h"
 
 @interface AXEOfflineWKWebViewController()<OPOfflineDownloadDelegate>
 

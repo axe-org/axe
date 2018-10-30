@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "AXEBaseData.h"
+#import "AXEDataItem.h"
 
 @class UIImage;
 // 基础数据类型， 再继续细分。
@@ -28,7 +28,7 @@ typedef NS_ENUM(NSUInteger, AXEDataBasicType) {
 /**
   基础数据类型的data
  */
-@interface AXEBasicTypeData : AXEBaseData
+@interface AXEBasicDataItem : AXEDataItem
 
 
 /**

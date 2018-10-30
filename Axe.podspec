@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name                      = "Axe"
-  s.version                   = "0.1.0"
+  s.version                   = "0.2.0-alpha.0"
   s.summary                   = "Axe is all the reinforcement this army needs"
   s.homepage                  = "https://github.com/axe-org/axe"
   s.license                   = { :type => "MIT"}
@@ -9,14 +9,20 @@ Pod::Spec.new do |s|
   s.source                    = { :git => "https://github.com/axe-org/axe.git", :tag => s.version}
   s.subspec "Core" do |ss|
     ss.source_files           = "Axe/Axe/Axe.h"
+    ss.subspec "Base" do |sss|
+      sss.source_files        = "Axe/Axe/Base/*.{h,m}"
+    end
     ss.subspec "Router" do |sss|
-      sss.source_files        = "Axe/Axe/Router/*.{h,m}","Axe/Axe/AXEDefines.h"
+      sss.source_files        = "Axe/Axe/Router/*.{h,m}"
+      sss.dependency          "Axe/Core/Base"
     end
     ss.subspec "Event" do |sss|
-      sss.source_files        = "Axe/Axe/Event/*.{h,m}","Axe/Axe/AXEDefines.h"
+      sss.source_files        = "Axe/Axe/Event/*.{h,m}"
+      sss.dependency          "Axe/Core/Base"
     end
     ss.subspec "Data" do |sss|
-      sss.source_files        = "Axe/Axe/Data/*.{h,m}","Axe/Axe/AXEDefines.h"
+      sss.source_files        = "Axe/Axe/Data/*.{h,m}"
+      sss.dependency          "Axe/Core/Base"
     end
   end
   s.subspec "TabBarController" do |ss|

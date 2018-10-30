@@ -9,7 +9,7 @@
 #import "AXEEvent.h"
 #import "AXEEventListener.h"
 #import "AXEEventUserInterfaceState+Event.h"
-#import "AXEDefines.h"
+#import "AXELog.h"
 
 NSInteger const AXEEventDefaultPriority = 1;
 
@@ -158,12 +158,17 @@ NSInteger const AXEEventDefaultPriority = 1;
 #pragma mark - post
 
 + (void)postEventName:(NSString *)name {
-    return [[AXEEvent sharedInstance] dispatchEventName:name withPayload:nil];
+    return [AXEEvent postEventName:name withPayload:nil];
 }
 
 + (void)postEventName:(NSString *)name withPayload:(AXEData *)payload {
     NSParameterAssert([name isKindOfClass:[NSString class]]);
     NSParameterAssert(!payload || [payload isKindOfClass:[AXEData class]]);
+    
+    id<AXEOperationTracker> tracker = AXEGetOperationTracker();
+    if ([tracker respondsToSelector:@selector(eventWillPost:withPayload:)]) {
+        [tracker eventWillPost:name withPayload:payload];
+    }
     
     [[AXEEvent sharedInstance] dispatchEventName:name withPayload:payload];
 }

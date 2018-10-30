@@ -84,7 +84,7 @@ typedef UIViewController *(^AXEProtoclViewRouterBlock)(AXERouteRequest *request)
  @param url URL
  @return 返回 UIViewController， 需要注意 ， 如果路由没有注册，这里返回空值时， 要考虑崩溃处理问题。
  */
-- (UIViewController *)viewForURL:(NSString *)url;
+- (__kindof UIViewController *)viewForURL:(NSString *)url;
 
 
 /**
@@ -95,7 +95,7 @@ typedef UIViewController *(^AXEProtoclViewRouterBlock)(AXERouteRequest *request)
  @param block 回调
  @return 返回 UIViewController.
  */
-- (UIViewController *)viewForURL:(NSString *)url withParams:(AXEData *)params finishBlock:(AXERouteCallbackBlock)block;
+- (__kindof UIViewController *)viewForURL:(NSString *)url withParams:(AXEData *)params finishBlock:(AXERouteCallbackBlock)block;
 
 #pragma mark - register
 

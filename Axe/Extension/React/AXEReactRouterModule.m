@@ -12,7 +12,7 @@
 #import "AXEReactViewController.h"
 #import "AXEReactControllerWrapper.h"
 #import <React/RCTBridge.h>
-#import "AXEDefines.h"
+#import "AXELog.h"
 
 @interface AXEReactRouterModule()
 

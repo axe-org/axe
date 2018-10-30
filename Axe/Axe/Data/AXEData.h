@@ -6,9 +6,9 @@
 //  Copyright © 2018年 罗贤明. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import "AXEBaseData.h"
-@class UIImage;
+#import <UIKit/UIKit.h>
+#import "AXEDataItem.h"
+
 
 /**
  Data : 数据模块， 解决跨模块数据传递的问题。
@@ -33,11 +33,6 @@
         Model类型的放置 ： 要视该 Model的管理模块的数量，如果一个Model只由一个模块创建，则应该归该模块所有。 如果这个Model可以由多个模块创建，或者所有模块都依赖（如用户信息相关的Model）, 则应该放到 公共业务部分。
  */
 @interface AXEData : NSObject
-
-/**
-  公共数据。 单例。
- */
-+ (instancetype)sharedData;
 
 
 /**
@@ -76,7 +71,7 @@
  @param key 键值
  @return 如果当前有数据，则返回。一定要判断数据类型，避免处理出错。
  */
-- (AXEBaseData *)dataForKey:(NSString *)key;
+- (AXEDataItem *)dataForKey:(NSString *)key;
 
 /**
   根据键值， 获取一个 NSNumber
