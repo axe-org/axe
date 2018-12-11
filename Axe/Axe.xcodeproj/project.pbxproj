@@ -52,12 +52,14 @@
 		283B8AD82053D6C000681FA0 /* AXEWebViewBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 283B8AD62053D6C000681FA0 /* AXEWebViewBridge.m */; };
 		283B8B112054F9BE00681FA0 /* AXEData.h in Headers */ = {isa = PBXBuildFile; fileRef = 283B8B0F2054F9BE00681FA0 /* AXEData.h */; };
 		283B8B122054F9BE00681FA0 /* AXEData.m in Sources */ = {isa = PBXBuildFile; fileRef = 283B8B102054F9BE00681FA0 /* AXEData.m */; };
-		283B8B152054F9EA00681FA0 /* AXEBaseData.h in Headers */ = {isa = PBXBuildFile; fileRef = 283B8B132054F9EA00681FA0 /* AXEBaseData.h */; };
-		283B8B162054F9EA00681FA0 /* AXEBaseData.m in Sources */ = {isa = PBXBuildFile; fileRef = 283B8B142054F9EA00681FA0 /* AXEBaseData.m */; };
-		283B8B192054FA6B00681FA0 /* AXEBasicTypeData.h in Headers */ = {isa = PBXBuildFile; fileRef = 283B8B172054FA6B00681FA0 /* AXEBasicTypeData.h */; };
-		283B8B1A2054FA6B00681FA0 /* AXEBasicTypeData.m in Sources */ = {isa = PBXBuildFile; fileRef = 283B8B182054FA6B00681FA0 /* AXEBasicTypeData.m */; };
-		283B8B1D2054FAA500681FA0 /* AXEModelTypeData.h in Headers */ = {isa = PBXBuildFile; fileRef = 283B8B1B2054FAA500681FA0 /* AXEModelTypeData.h */; };
-		283B8B1E2054FAA500681FA0 /* AXEModelTypeData.m in Sources */ = {isa = PBXBuildFile; fileRef = 283B8B1C2054FAA500681FA0 /* AXEModelTypeData.m */; };
+		285813C721B0B634008197F6 /* AXEDataCenter.h in Headers */ = {isa = PBXBuildFile; fileRef = 285813BF21B0B633008197F6 /* AXEDataCenter.h */; };
+		285813C821B0B634008197F6 /* AXEDataCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 285813C021B0B634008197F6 /* AXEDataCenter.m */; };
+		285813C921B0B634008197F6 /* AXEDataItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 285813C121B0B634008197F6 /* AXEDataItem.h */; };
+		285813CA21B0B634008197F6 /* AXEModelDataItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 285813C221B0B634008197F6 /* AXEModelDataItem.h */; };
+		285813CB21B0B634008197F6 /* AXEDataItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 285813C321B0B634008197F6 /* AXEDataItem.m */; };
+		285813CC21B0B634008197F6 /* AXEModelDataItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 285813C421B0B634008197F6 /* AXEModelDataItem.m */; };
+		285813CD21B0B634008197F6 /* AXEBasicDataItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 285813C521B0B634008197F6 /* AXEBasicDataItem.h */; };
+		285813CE21B0B634008197F6 /* AXEBasicDataItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 285813C621B0B634008197F6 /* AXEBasicDataItem.m */; };
 		288244252096DF88003DDBFD /* AXEDynamicRouter.m in Sources */ = {isa = PBXBuildFile; fileRef = 288244232096DF88003DDBFD /* AXEDynamicRouter.m */; };
 		288244262096DF88003DDBFD /* AXEDynamicRouter.h in Headers */ = {isa = PBXBuildFile; fileRef = 288244242096DF88003DDBFD /* AXEDynamicRouter.h */; };
 		28AE4C232057B9EB00EF052F /* AXEData+JavaScriptSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 28AE4C1F2057B9EB00EF052F /* AXEData+JavaScriptSupport.m */; };
@@ -140,12 +142,14 @@
 		283B8AD62053D6C000681FA0 /* AXEWebViewBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AXEWebViewBridge.m; sourceTree = "<group>"; };
 		283B8B0F2054F9BE00681FA0 /* AXEData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AXEData.h; sourceTree = "<group>"; };
 		283B8B102054F9BE00681FA0 /* AXEData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AXEData.m; sourceTree = "<group>"; };
-		283B8B132054F9EA00681FA0 /* AXEBaseData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AXEBaseData.h; sourceTree = "<group>"; };
-		283B8B142054F9EA00681FA0 /* AXEBaseData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AXEBaseData.m; sourceTree = "<group>"; };
-		283B8B172054FA6B00681FA0 /* AXEBasicTypeData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AXEBasicTypeData.h; sourceTree = "<group>"; };
-		283B8B182054FA6B00681FA0 /* AXEBasicTypeData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AXEBasicTypeData.m; sourceTree = "<group>"; };
-		283B8B1B2054FAA500681FA0 /* AXEModelTypeData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AXEModelTypeData.h; sourceTree = "<group>"; };
-		283B8B1C2054FAA500681FA0 /* AXEModelTypeData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AXEModelTypeData.m; sourceTree = "<group>"; };
+		285813BF21B0B633008197F6 /* AXEDataCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AXEDataCenter.h; sourceTree = "<group>"; };
+		285813C021B0B634008197F6 /* AXEDataCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AXEDataCenter.m; sourceTree = "<group>"; };
+		285813C121B0B634008197F6 /* AXEDataItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AXEDataItem.h; sourceTree = "<group>"; };
+		285813C221B0B634008197F6 /* AXEModelDataItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AXEModelDataItem.h; sourceTree = "<group>"; };
+		285813C321B0B634008197F6 /* AXEDataItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AXEDataItem.m; sourceTree = "<group>"; };
+		285813C421B0B634008197F6 /* AXEModelDataItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AXEModelDataItem.m; sourceTree = "<group>"; };
+		285813C521B0B634008197F6 /* AXEBasicDataItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AXEBasicDataItem.h; sourceTree = "<group>"; };
+		285813C621B0B634008197F6 /* AXEBasicDataItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AXEBasicDataItem.m; sourceTree = "<group>"; };
 		288244232096DF88003DDBFD /* AXEDynamicRouter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AXEDynamicRouter.m; sourceTree = "<group>"; };
 		288244242096DF88003DDBFD /* AXEDynamicRouter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AXEDynamicRouter.h; sourceTree = "<group>"; };
 		28AE4C1F2057B9EB00EF052F /* AXEData+JavaScriptSupport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AXEData+JavaScriptSupport.m"; sourceTree = "<group>"; };
@@ -274,14 +278,16 @@
 		283B899320502C0300681FA0 /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				285813C521B0B634008197F6 /* AXEBasicDataItem.h */,
+				285813C621B0B634008197F6 /* AXEBasicDataItem.m */,
+				285813BF21B0B633008197F6 /* AXEDataCenter.h */,
+				285813C021B0B634008197F6 /* AXEDataCenter.m */,
+				285813C121B0B634008197F6 /* AXEDataItem.h */,
+				285813C321B0B634008197F6 /* AXEDataItem.m */,
+				285813C221B0B634008197F6 /* AXEModelDataItem.h */,
+				285813C421B0B634008197F6 /* AXEModelDataItem.m */,
 				283B8B0F2054F9BE00681FA0 /* AXEData.h */,
 				283B8B102054F9BE00681FA0 /* AXEData.m */,
-				283B8B132054F9EA00681FA0 /* AXEBaseData.h */,
-				283B8B142054F9EA00681FA0 /* AXEBaseData.m */,
-				283B8B172054FA6B00681FA0 /* AXEBasicTypeData.h */,
-				283B8B182054FA6B00681FA0 /* AXEBasicTypeData.m */,
-				283B8B1B2054FAA500681FA0 /* AXEModelTypeData.h */,
-				283B8B1C2054FAA500681FA0 /* AXEModelTypeData.m */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -431,6 +437,7 @@
 			files = (
 				282B5B8220CE801F00FF33D3 /* AXERouteDefinition.h in Headers */,
 				281850482062A2C900284A29 /* AXEOfflineReactViewController.h in Headers */,
+				285813C921B0B634008197F6 /* AXEDataItem.h in Headers */,
 				283B8B112054F9BE00681FA0 /* AXEData.h in Headers */,
 				282B5B8320CE801F00FF33D3 /* AXERouteProtocolDefinition.h in Headers */,
 				28185024206012BE00284A29 /* AXEOfflineWebViewController.h in Headers */,
@@ -441,16 +448,15 @@
 				283B89AF205125D800681FA0 /* AXEEventListener.h in Headers */,
 				28AE4C362058070200EF052F /* AXEReactEventModule.h in Headers */,
 				28AE4C32205806F200EF052F /* AXEReactDataModule.h in Headers */,
-				283B8B152054F9EA00681FA0 /* AXEBaseData.h in Headers */,
-				283B8B192054FA6B00681FA0 /* AXEBasicTypeData.h in Headers */,
 				28AE4C252057B9EB00EF052F /* AXEData+JavaScriptSupport.h in Headers */,
 				283B89BC20517C6700681FA0 /* AXEEXTScope.h in Headers */,
 				283B8AC92053C42700681FA0 /* AXETabBarItem.h in Headers */,
-				283B8B1D2054FAA500681FA0 /* AXEModelTypeData.h in Headers */,
 				283B89A72051218900681FA0 /* AXEAutoreleaseEvent.h in Headers */,
 				283B89B720516CF600681FA0 /* AXEEventUserInterfaceState.h in Headers */,
 				283B899B20502CBB00681FA0 /* AXERouter.h in Headers */,
+				285813C721B0B634008197F6 /* AXEDataCenter.h in Headers */,
 				28185028206012E400284A29 /* AXEOfflineWKWebViewController.h in Headers */,
+				285813CD21B0B634008197F6 /* AXEBasicDataItem.h in Headers */,
 				283B8AD72053D6C000681FA0 /* AXEWebViewBridge.h in Headers */,
 				283B89B32051261600681FA0 /* AXEModuleInitializer.h in Headers */,
 				283B8ACF2053CBF400681FA0 /* AXEWebViewController.h in Headers */,
@@ -460,6 +466,7 @@
 				282B5B8520CE801F00FF33D3 /* AXERouteRequest.h in Headers */,
 				28AE4C3A2058071500EF052F /* AXEReactRouterModule.h in Headers */,
 				28C9234E2084A4D200713EE3 /* AXEReactControllerWrapper.h in Headers */,
+				285813CA21B0B634008197F6 /* AXEModelDataItem.h in Headers */,
 				283B898920502B4F00681FA0 /* Axe.h in Headers */,
 				28AE4C2A2057C10600EF052F /* AXEReactViewController.h in Headers */,
 				281850402061F12500284A29 /* AXEViewController.h in Headers */,
@@ -611,9 +618,9 @@
 				283B8AD82053D6C000681FA0 /* AXEWebViewBridge.m in Sources */,
 				A6FCCC1A2181B76600D9D17E /* AXELog.m in Sources */,
 				28185029206012E400284A29 /* AXEOfflineWKWebViewController.m in Sources */,
+				285813CC21B0B634008197F6 /* AXEModelDataItem.m in Sources */,
 				281850412061F12500284A29 /* AXEViewController.m in Sources */,
 				283B899C20502CBB00681FA0 /* AXERouter.m in Sources */,
-				283B8B1A2054FA6B00681FA0 /* AXEBasicTypeData.m in Sources */,
 				283B89A82051218900681FA0 /* AXEAutoreleaseEvent.m in Sources */,
 				283B89B0205125D800681FA0 /* AXEEventListener.m in Sources */,
 				283B89B42051261600681FA0 /* AXEModuleInitializer.m in Sources */,
@@ -625,14 +632,15 @@
 				282B5B8620CE801F00FF33D3 /* AXERouteRequest.m in Sources */,
 				282B5B8420CE801F00FF33D3 /* AXERouteDefinition.m in Sources */,
 				283B8ACA2053C42700681FA0 /* AXETabBarController.m in Sources */,
-				283B8B1E2054FAA500681FA0 /* AXEModelTypeData.m in Sources */,
-				283B8B162054F9EA00681FA0 /* AXEBaseData.m in Sources */,
 				28AE4C372058070200EF052F /* AXEReactEventModule.m in Sources */,
 				28AE4C232057B9EB00EF052F /* AXEData+JavaScriptSupport.m in Sources */,
 				281850452061F76300284A29 /* AXEOfflineDownloadView.m in Sources */,
+				285813C821B0B634008197F6 /* AXEDataCenter.m in Sources */,
 				283B8AD42053CC0400681FA0 /* AXEWKWebViewController.m in Sources */,
 				281850492062A2C900284A29 /* AXEOfflineReactViewController.m in Sources */,
+				285813CE21B0B634008197F6 /* AXEBasicDataItem.m in Sources */,
 				288244252096DF88003DDBFD /* AXEDynamicRouter.m in Sources */,
+				285813CB21B0B634008197F6 /* AXEDataItem.m in Sources */,
 				28AE4C3B2058071500EF052F /* AXEReactRouterModule.m in Sources */,
 				28AE4C33205806F200EF052F /* AXEReactDataModule.m in Sources */,
 				283B89B820516CF600681FA0 /* AXEEventUserInterfaceState.m in Sources */,

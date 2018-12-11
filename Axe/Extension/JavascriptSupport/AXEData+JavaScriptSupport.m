@@ -35,7 +35,7 @@
 
 @implementation AXEData(JavaScriptSupport)
 
-- (void)setJavascriptData:(NSDictionary *)data forKey:(NSString *)key{
+- (void)setJavascriptDataItem:(NSDictionary *)data forKey:(NSString *)key{
     if ([data isKindOfClass:[NSDictionary class]] && [key isKindOfClass:[NSString class]]) {
         NSString *value = [data objectForKey:@"value"];
         NSString *type = [data objectForKey:@"type"];
@@ -53,12 +53,12 @@
                 return;
             }
             saved = [AXEBasicDataItem basicDataWithArray:list];
-        }else if ([type isEqualToString:@"Object"]) {
+        }else if ([type isEqualToString:@"Map"]) { // Dictionary == Map
             NSData *valueData = [value dataUsingEncoding:NSUTF8StringEncoding];
             NSError *error;
             NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:valueData options:0 error:&error];
             if (error || ![dic isKindOfClass:[NSDictionary class]]) {
-                AXELogWarn(@" 设置AXEData， 设定类型为Object,但是当前数据格式校验错误 。 数据为 %@",data);
+                AXELogWarn(@" 设置AXEData， 设定类型为Map,但是当前数据格式校验错误 。 数据为 %@",data);
                 return;
             }
             saved = [AXEBasicDataItem basicDataWithDictionary:dic];
@@ -150,6 +150,10 @@
             javascriptData[@"type"] = @"String";
             javascriptData[@"value"] = item.value;
         }else if (type == AXEDataBasicTypeArray) {
+            if (![NSJSONSerialization isValidJSONObject:item.value]) {
+                AXELogWarn(@" javascript 所需要的 Array类型，必须能转换为json， 当前json转换出错 ");
+                return nil;
+            }
             javascriptData[@"type"] = @"Array";
             NSError *error;
             NSData *jsonData = [NSJSONSerialization dataWithJSONObject:item.value options:0 error:&error];
@@ -159,11 +163,15 @@
             }
             javascriptData[@"value"] = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
         }else if (type == AXEDataBasicTypeDictionary) {
-            javascriptData[@"type"] = @"Object";
+            if (![NSJSONSerialization isValidJSONObject:item.value]) {
+                AXELogWarn(@" javascript 所需要的 Map类型，必须能转换为json， 当前json转换出错 ");
+                return nil;
+            }
+            javascriptData[@"type"] = @"Map";
             NSError *error;
             NSData *jsonData = [NSJSONSerialization dataWithJSONObject:item.value options:0 error:&error];
             if (error) {
-                AXELogWarn(@" javascript 所需要的 Object类型，必须能转换为json， 当前json转换出错 %@",error);
+                AXELogWarn(@" javascript 所需要的 Map类型，必须能转换为json， 当前json转换出错 %@",error);
                 return nil;
             }
             javascriptData[@"value"] = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
@@ -221,7 +229,7 @@
     if ([javascriptData isKindOfClass:[NSDictionary class]]) {
         AXEData *data = [AXEData dataForTransmission];
         [javascriptData enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-            [data setJavascriptData:obj forKey:key];
+            [data setJavascriptDataItem:obj forKey:key];
         }];
         return data;
     }
